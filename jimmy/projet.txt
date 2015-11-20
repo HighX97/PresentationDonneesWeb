@@ -1,0 +1,14 @@
+//https://angular-ui.github.io/bootstrap/
+
+Projet: Visualisation de donnés géolocalisées
+	 - Gérer des filtres sur les données
+	 	Par example, si elles sont contenus dans une collection d'objects: 
+	 		[{p1: v1, p2: v2}]
+	 	Pouvoir choisir n'importe qu'elle combinaison d'attributs et faire afficher les informations sous format textuel.
+	- Même chose mais rendu 2D
+		-Affichage d'information sur un clic
+		-Coleur du marquer
+		-Difficulte 
+		Animation souhaitables
+
+
