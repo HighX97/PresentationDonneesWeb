@@ -1,0 +1,50 @@
+<!doctype html>
+<html ng-app="app">
+<head>
+	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.min.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular-route.min.js"></script>
+</head>
+<body>
+
+	<ng-view></ng-view>
+
+	<script type="text/ng-template" id="/helloGlobal.tpl">
+		<div>
+			<label>Hello {{yourName}}! </label>
+		</div>
+	</script>
+
+	<script type="text/ng-template" id="/hello.tpl">
+		<div>
+			<label>Name:</label>
+			<input type="text" ng-model="yourName" placeholder="Enter a name here">
+			<h1>Hello {{yourName}}! </h1>
+		</div>
+	</script>
+
+
+	<script type="text/javascript">
+		var app = angular.module('app',['ngRoute']);
+
+		app.controller('controleur1', function($scope){
+			$scope.yourName = "Sizzla Kalenji ?";
+		});
+
+		app.controller('controleur2', function($scope){
+			$scope.yourName = "Chronixx";
+		});
+
+		app.config(['$routeProvider', function($routeProvider){
+			$routeProvider
+				.when('/nom',{
+					controller:'controleur1',
+					templateUrl:'/hello.tpl'
+				})
+				.otherwise({
+					controller:'controleur2',
+					templateUrl:'/helloGlobal.tpl'
+				});
+		}]);
+	</script>
+</body>
+</html>
