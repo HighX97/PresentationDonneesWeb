@@ -1,0 +1,56 @@
+<!doctype html>
+<html ng-app="app">
+<head>
+	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.min.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular-route.min.js"></script>
+</head>
+<body>
+
+	<b> Gestion d'un club de ? : </b></br></br>
+	
+	<ng-view></ng-view>
+
+	<script type="text/javascript">
+		var app = angular.module('app',['ngRoute'])
+
+		//Cette fonction serait appelée au démarrage de l'application:
+		app.run(function($rootScope,$location,$routeParams) {});
+
+		app.controller('controleur', function ($scope,$http) {});
+		
+		app.controller('controleurMembres',function ($scope,$http) {
+			console.log("Dans controleurMembres");
+			$http.get('http://localhost:8891/listeMembres/'+$routeParams.nom).then(function(reponse){
+				$scope.membres = reponse.data;
+				// Affichage de contrôle
+				for (var i=0; i< $scope.membres) {
+					console.log($scope.membres[i].nom+" "+$scope.membres[i].prenom);
+				}
+			});
+		});
+
+		app.controller('controleurMembresParLeNom', function ($scope,$http,$routeParams) {
+			console.log("Dans controleurMembresParLeNom");
+			$http.get('http://localhost:8891/listeMembres/'+$routeParams.nom).then(function(reponse) {
+				$scope.membres = reponse.data;
+			});
+		});
+
+		app.config(function ($routeProvider) {
+			$routeProvider
+				.when('/listeMembres',{
+					controller:'controleurMembres',
+					templateUrl:'TEMPLATES/listeMembres.html'
+				})
+				.when('/listeMembres/:nom',{
+					controller: 'controleurMembresParLeNom',
+					templateUrl:'TEMPLATES/listeMembres.html'
+				})
+				.when('/',{
+					controller:'controleur',
+					templateUrl:'TEMPLATES/accueil.html'
+				});
+		});	
+	</script>
+</body>
+</html>
