@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" ng-app="app">
+<html lang="en" >
 <head>
     <meta charset="utf-8">
     <title>PDW Projet - MUNOZ Jimmy</title>
@@ -12,12 +12,17 @@
     <link href='bower_components/colorbox/example3/colorbox.css' rel='stylesheet'>
     <link href='bower_components/responsive-tables/responsive-tables.css' rel='stylesheet'>
     <link href='bower_components/bootstrap-tour/build/css/bootstrap-tour.min.css' rel='stylesheet'>
-    
+    <script src="bower_components/jquery/jquery.min.js"></script>
+    <script>
+        $.noConflict();
+    </script>
+
     <!-- Angular http://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.min.js -->
     <script src="js/angular.min.js"></script>
     <!-- Angular http://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular-route.min.js -->
     <script src="js/angular-route.min.js"></script>
-
+    <script src="js/d3/d3.min.js" charset="utf-8"></script>
+    
     <!-- The HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
     <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -46,7 +51,7 @@
         </div>
     </div>
     <!-- topbar ends -->
-    <div class="ch-container">
+    <div class="ch-container" ng-app="app">
         <div class="row">
 
             <!-- left menu starts -->
@@ -58,16 +63,20 @@
                         </div>
                         <ul class="nav nav-pills nav-stacked main-menu">
                             <li class="nav-header">Main</li>
-                            <li><a class="ajax-link" href="index.html"><i class="glyphicon glyphicon-home"></i><span> Dashboard</span></a>
+                            <li>
+                                <a class="ajax-link" href="#/"><i class="glyphicon glyphicon-home"></i><span> Home</span></a>
                             </li>
-
-                            <li><a class="ajax-link" href="form.html">
-                                <i class="glyphicon glyphicon-edit"></i><span> Forms</span></a>
+                            <li><a class="ajax-link" href="#/1D">
+                                <i class="glyphicon glyphicon-edit"></i><span> 1D</span></a>
                             </li>
                             <li class="nav-header hidden-md">Sample Section</li>
                             <li>
-                                <a class="ajax-link" href="table.html">
-                                <i class="glyphicon glyphicon-align-justify"></i><span> Tables</span></a>
+                                <a class="ajax-link" href="#/2D">
+                                 <i class="glyphicon glyphicon-globe"></i><span> 2D </span></a>
+                            </li>
+                            <li>
+                                <a class="ajax-link" href="#/3D">
+                                 <i class="glyphicon glyphicon-eye-open"></i><span> 3D</span></a>
                             </li>
                         </ul>
                     </div>
@@ -79,79 +88,21 @@
                 <div>
                     <ul class="breadcrumb">
                         <li>
-                            <a href="#">Home</a>
+                            <a href="#">Project</a>
                         </li>
                         <li>
-                            <a href="#">Dashboard</a>
+                            <a href="#" >{{selectedAction}}</a>
                         </li>
                     </ul>
                 </div>
                 <div class=" row">
 
                 </div>
-
-                <div class="row">
-                    <div class="box col-md-12">
-                        <div class="box-inner">
-                            <div class="box-header well">
-                                <h2><i class="glyphicon glyphicon-info-sign"></i> Introduction</h2>
-
-                                <div class="box-icon">
-                                    <a href="#" class="btn btn-setting btn-round btn-default">
-                                        <i class="glyphicon glyphicon-cog"></i>
-                                    </a>
-                                    <a href="#" class="btn btn-minimize btn-round btn-default">
-                                        <i class="glyphicon glyphicon-chevron-up"></i>
-                                    </a>
-                                    <a href="#" class="btn btn-close btn-round btn-default">
-                                        <i class="glyphicon glyphicon-remove"></i>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="box-content row">
-                                <div class="col-lg-7 col-md-12">
-                                    <h1>Projet de Présentation de Données Web</h1>
-                                    <br/>
-                                    <small>Angular, NodeJs, 3DJS, Jquery, Boostrap, MongoDb, Json, Rest.</small>
-                                    <br/>
-                                    <p>
-                                    Description
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="box col-md-12">
-                        <div class="box-inner">
-                            <div class="box-header well">
-                                <h2><i class="glyphicon glyphicon-edit"></i> Filters</h2>
-
-                                <div class="box-icon">
-                                    <a href="#" class="btn btn-setting btn-round btn-default">
-                                        <i class="glyphicon glyphicon-cog"></i>
-                                    </a>
-                                    <a href="#" class="btn btn-minimize btn-round btn-default">
-                                        <i class="glyphicon glyphicon-chevron-up"></i>
-                                    </a>
-                                    <a href="#" class="btn btn-close btn-round btn-default">
-                                        <i class="glyphicon glyphicon-remove"></i>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="box-content row">
-                                <div class="col-lg-7 col-md-12">
-                                    Filters:
-                                    <br/>
-                                    views
-                                    <ng-view></ng-view>
-                                    
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <!-- Jimmy: Main view to load the templates-->
+                <div>
+                    main view
+                    <ng-view></ng-view>
+                    
                 </div>
 
                 <div class="row">
@@ -169,54 +120,10 @@
 
 </div><!--/.fluid-container-->
 
-<script type="text/javascript">
-
-var app = angular.module('app', ['ngRoute']);
-
-
-//Cette fonction serait appelée au démarrage de l'application :
-app.run(function($rootScope, $location, $routeParams){ });
-
-
-app.controller('controleur', function($scope, $http){});
-
-app.controller('controleurMembres', function($scope, $http){
-    console.log("Dans controleurMembres");
-    $http.get('http://localhost:8888/listeMembres').then(function(response){
-        $scope.membres = response.data;
-        //Affichage de contrôle
-        for (var i = 0; i < $scope.membres.length; i++){
-            console.log($scope.membres[i].nom + " " + $scope.membres[i].prenom);
-        }
-    });
-});
-app.controller('controleurMembresParLeNom', function($scope, $http, $routeParams){
-    console.log("Dans controleurMembresParLeNom");
-    $http.get('http://localhost:8888/listeMembres/' + $routeParams.nom).then(function(response){
-        $scope.membres = response.data;
-    });
-});
-
-    /*
-    */
-app.config(function ($routeProvider){
-    console.log("app config");
-    $routeProvider
-        .when('/listeMembres', {
-            controller: 'controleurMembres',
-            templateUrl: 'templates/listeMembres.html'
-        })
-        .when('/listeMembres/:nom', {
-            controller: 'controleurMembresParLeNom',
-            templateUrl: 'templates/listeMembres.html'
-        })
-        .when('/', {
-            controller: 'controleur',
-            templateUrl: 'templates/accueil.html'
-        });
-});
-</script>
-
+<!-- Jimmy angular project functions  -->
+<script src="js/project/angular_main.js"></script>
+<!-- Jimmy jquery and Other functions  -->
+<script src="js/project/jquery_main.js"></script>
 
 
 </body>
