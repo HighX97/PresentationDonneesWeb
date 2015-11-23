@@ -1,3 +1,7 @@
+Git:
+https://github.com/HighX97/PresentationDonneesWeb
+
+
 ---Mongodb----
 
 Start Mongodb:
@@ -51,3 +55,7 @@ http://www.w3schools.com/angular/angular_filters.asp
 
 D3 tutorial:
 https://www.dashingd3js.com/svg-basic-shapes-and-d3js
+
+----Json---
+Test
+http://jsonlint.com/
