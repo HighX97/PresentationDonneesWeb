@@ -19,24 +19,62 @@ app.controller('controleur', function($scope, $http){});
 app.controller('controller1D', function($scope, $http, $rootScope){
     $rootScope.selectedAction = "1D";
     console.log("Dans controller1D");
+    /*
+    $scope.sendFilterForm = function(form){//https://docs.angularjs.org/api/ng/directive/ngSubmit
+        //console.log(this.formData);//Serialize Angular
+        console.log( jQuery("#form_filter_1D").serialize() );//Serialize Angular
+        //$scope.people = Restangular.all('data.json/:user').post($scope.user);
+        // REST ANGULAR
+        //http://arian-celina.com/implementing-rest-services-in-angularjs-using-restangular/
+    } 
+    */
+
     $http.get('http://localhost:8888/getJsonData').then(function(response){
-        //Affichage de contrôle
-        var allData = response.data;
-        /*
-        var sportsData = [];
-        for (i in allData.city.test_data){
-            sportsData.push(allData.city.test_data[i]);
-        }
-        */
-        $scope.test_data = allData.root.city.test_data;
+        //createAllFilters(allData, "filters_content");//Jquery Id
+        var filtersData = toObject(getFilterData(response.data));//Jimmy: toObject used to Cast a Array to a Object
+        //console.log("   Filters:");
+        //console.log($scope.filtersData);
+        
+        $scope.filtersData = filtersData;
+        $rootScope.city = response.data.city;
+        $rootScope.practice = response.data.practice;
     });
+});
+
+//https://docs.angularjs.org/guide/forms
+app.controller('filterController', function($scope, $http, $rootScope){
+//app.controller('filterController', ['$scope', function($scope){
+    $scope.sendFilterForm = function(){//https://docs.angularjs.org/api/ng/directive/ngSubmit
+        //console.log(this.formData);//Serialize Angular
+        var formData = jQuery("#form_filter_1D").serialize();
+        
+        //console.log( formData );//Serialize Angular
+        //$scope.people = Restangular.all('data.json/:user').post($scope.user);
+        // REST ANGULAR
+        //http://arian-celina.com/implementing-rest-services-in-angularjs-using-restangular/
+
+        //https://docs.angularjs.org/api/ng/service/$http
+        //$http.post('http://localhost:8888/getJsonData', jQuery("#form_filter_1D").serializeArray() ).then(function(response){
+        $http.get('http://localhost:8888/getJsonData?' + formData ).then(function(response){
+            $rootScope.filtered = formData;
+            $rootScope.city = response.data.city;
+            $rootScope.practice = response.data.practice;
+            //console.log("   practice:");
+            //console.log($rootScope.practice);
+        });
+    }  
+//}]);
 });
 
 app.controller('controller2D', function($scope, $http, $rootScope){
     $rootScope.selectedAction = "2D";
     console.log("Dans controller2D");
-    $http.get('http://localhost:8888/getJsonData').then(function(response){
-
+    $http.get('http://localhost:8888/filter1D').then(function(response){
+        //Affichage de contrôle
+        createAllFilters(response.data);
+        console.log(response.data);
+        $scope.city = response.data.city;
+        $scope.practice = response.data.practice;
     });
 });
 
