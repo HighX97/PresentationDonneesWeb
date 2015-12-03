@@ -1,0 +1,133 @@
+{
+    "city": "Montpellier",
+    "practice": [ 
+        {
+            "nameActivity": "run",
+            "practice_date": "2015-11-23",
+            "hourActivity": 18,
+            "minActivity": 18,
+            "practiceLocation": {
+                "x1": 10,
+                "y1": 30
+            },
+            "practiceUsers": [
+                {
+                    "nameUser": "Jimmy",
+                    "genreUser": "male",
+                    "ageUser": 28,
+                    "resultsUser": {
+                        "result_seconds": 3600
+                    }
+                }
+            ]
+        },
+        {
+            "nameActivity": "soccer",
+            "practice_date": "2015-11-26",
+            "hourActivity": 20,
+            "minActivity": 20,
+            "practiceLocation": {
+                "x1": 10,
+                "y1": 30
+            },
+            "practiceUsers": [
+                {
+                    "nameUser": "Yu",
+                    "genreUser": "male",
+                    "ageUser": 26,
+                    "resultsUser": {
+                        "result_seconds": 7200
+                    }
+                },
+                {
+                    "nameUser": "Loïc",
+                    "genreUser": "male",
+                    "ageUser": 24,
+                    "resultsUser": {
+                        "result_seconds": 7200
+                    }
+                },
+                {
+                    "nameUser": "Eric",
+                    "genreUser": "male",
+                    "ageUser": 24,
+                    "resultsUser": {
+                        "result_seconds": 7200
+                    }
+                },
+                {
+                    "nameUser": "Jean",
+                    "genreUser": "male",
+                    "ageUser": 24,
+                    "resultsUser": {
+                        "result_seconds": 7200
+                    }
+                },
+                {
+                    "nameUser": "Mosi",
+                    "genreUser": "male",
+                    "ageUser": 29,
+                    "resultsUser": {
+                        "result_seconds": 7200
+                    }
+                }
+            ]
+        },
+        {
+            "nameActivity": "taekwondo",
+            "practice_date": "2015-11-24",
+            "hourActivity": 18,
+            "minActivity": 18,
+            "practiceLocation": {
+                "x1": 0,
+                "y1": 20
+            },
+            "practiceUsers": [
+                {
+                    "nameUser": "Jimmy",
+                    "genreUser": "male",
+                    "ageUser": 28,
+                    "resultsUser": {
+                        "result_seconds": 1000
+                    }
+                },
+                {
+                    "nameUser": "Loïc",
+                    "genreUser": "male",
+                    "ageUser": 24,
+                    "resultsUser": {
+                        "result_seconds": 1800
+                    }
+                }
+            ]
+        },
+        {
+            "nameActivity": "dance",
+            "practice_date": "2015-11-24",
+            "hourActivity": 18,
+            "minActivity": 18,
+            "practiceLocation": {
+                "x1": 50,
+                "y1": 30
+            },
+            "practiceUsers": [
+                {
+                    "nameUser": "Chahinaz",
+                    "genreUser": "female",
+                    "ageUser": 22,
+                    "resultsUser": {
+                        "result_seconds": 1800
+                    }
+                },
+                {
+                    "nameUser": "Ikbal",
+                    "genreUser": "female",
+                    "ageUser": 22,
+                    "resultsUser": {
+                        "result_seconds": 1800
+                    }
+                }
+            ]
+        }
+    ]
+}

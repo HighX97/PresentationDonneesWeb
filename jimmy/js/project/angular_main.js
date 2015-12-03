@@ -56,8 +56,11 @@ app.controller('filterController', function($scope, $http, $rootScope){
 
         //https://docs.angularjs.org/api/ng/service/$http
         //$http.post('http://localhost:8888/getJsonData', jQuery("#form_filter_1D").serializeArray() ).then(function(response){
-        $http.get('http://localhost:8888/getJsonData?' + formData ).then(function(response){
+        $http.get('http://localhost:8888/getDataMongoDb?' + formData ).then(function(response){
+        //$http.get('http://localhost:8888/getJsonData?' + formData ).then(function(response){
             $rootScope.filtered = formData;
+            response.data = ( response.data[0] !== undefined )? response.data[0]: response.data;//Jimmy: filter to use only a object
+            //console.log(response.data);
             $rootScope.city = response.data.city;
             $rootScope.practice = response.data.practice;
             //console.log("   practice:");
@@ -82,7 +85,8 @@ app.controller('controller2D', function($scope, $http, $rootScope){
 app.controller('controller3D', function($scope, $http, $rootScope){
     $rootScope.selectedAction = "3D";
     console.log("Dans controller3D");
-    $http.get('http://localhost:8888/getJsonData').then(function(response){
+    $http.get('http://localhost:8888/getDataMongoDb').then(function(response){
+    //$http.get('http://localhost:8888/getJsonData').then(function(response){
         
     });
 });

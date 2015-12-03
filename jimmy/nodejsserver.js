@@ -23,69 +23,103 @@ var app = express();
 var dbName = "pdwsports";
 
 var MongoClient = require('mongodb').MongoClient;
+var urlDb = 'mongodb://localhost:27017/' + dbName;
 var assert = require('assert');
 var ObjectId = require('mongodb').ObjectID;
 
 function testConnectionMongo()
 {
 	//Connect using the MongoClient to a running mongod instance by specifying the MongoDB uri. For example, the following code connects to a MongoDB instance that runs on the localhost interface on port 27017 and switch to the test database.
-	var url = 'mongodb://localhost:27017/' + dbName;
-	MongoClient.connect(url, function(err, db) {
+	MongoClient.connect(urlDb, function(err, db) {
 	  assert.equal(null, err);
-	  console.log("Connected correctly to server.");
+	  if (err) {
+	    console.log('Unable to connect to the mongoDB server. Error:', err);
+	  }
+	  else {
+	  	console.log("Connected correctly to server.");
+	  }
 	  db.close();
 	});	
 }
 
-function getDataMongo()
+function getDataFromMongo()
 {
-	//var 
+	var JsonData = [];
+	
+	MongoClient.connect(urlDb, function (err, db) {
+		if (err) {
+			console.log('Unable to connect to the mongoDB server. Error:', err);
+		}
+		else 
+		{
+			//console.log(db);
+			console.log('Connection established to', urlDb);
+			// Get the documents collection
+			var collection = db.collection('sportsdata');
+			collection.find().toArray(function (err, result) {
+		      if (err) {
+		        console.log(err);
+		      } else if (result.length) {
+		        //console.log('Found:', result);
+		        JsonData.push(result);
+		        //console.log(JsonData);
+		      } else {
+		        console.log('No document(s) found with defined "find" criteria!');
+		      }
+		      //Close connection
+		      db.close();
+		    });
+			return JsonData;
+		}
+	});
+	return JsonData;
 }
 
 
 app.get('/getDataMongoDb', function(req, res){
 	console.log("serveur Node : /getDataMongoDb");
+	//console.log("params");
+	//console.log(req.params);
+	console.log("query");
+	console.log(req.query);
+
+	var objectQuery = req.query;
+	objectQuery = mapParamsToMongoUrlPath(objectQuery);
+
 	res.setHeader('Access-Control-Allow-Origin', '*');
 	res.setHeader('Content-Type', 'application/json');
 	//https://docs.mongodb.org/getting-started/node/query/
-	var url = 'mongodb://localhost:27017/' + dbName;
-	var JsonData = [];
-	
-	var findSportsData = function(db, callback) {
-		//var cursor = db.collection('sportsdata').find( );//Collection -> sportsdata
-		/*
-		var cursor = db.collection('sportsdata').find( ).toArray();//Collection -> sportsdata
-   		console.log(cursor);
-   		var tmpJsonData = [];
-   		cursor.each( function(err, doc) {
-		    assert.equal(err, null);
-		    if (doc != null) {
-		        console.dir(doc);
-		        //console.dir(doc);
-		        //tmpJsonData.pop(doc);
-		    } 
-		    else {
-		    	callback();
-		    }
-		});
-		*/
-		var allDataArray = db.collection('sportsdata').find( ).toArray();
-		//https://docs.mongodb.org/manual/reference/method/cursor.toArray/
-		var json = JSON.stringify(allDataArray);
-		console.log(json);
-		console.log(allDataArray);
-		res.end(json);
-   		//JsonData = tmpJsonData;
-   	};
-	MongoClient.connect(url, function(err, db) {
-	  	assert.equal(null, err);
-	  	findSportsData(db, function() {
-	    	db.close();
-	  	});	
+	//var JsonData = getDataFromMongo();
+	MongoClient.connect(urlDb, function (err, db) {
+		if (err) {
+			console.log('Unable to connect to the mongoDB server. Error:', err);
+		}
+		else 
+		{
+			var collection = db.collection('sportsdata');
+			//console.log(db);
+			console.log('Connection established to', urlDb);
+			// Get the documents collection
+			collection.find( objectQuery ).toArray(function (err, result) {
+		      if (err) {
+		        console.log(err);
+		        res.send([]);
+		      } else if (result.length) {
+		        console.log('Found query :');
+		        console.log('db.sportsdata.find( ' + JSON.stringify(objectQuery) + ' )');
+		        res.send(result);
+		        //console.log(JsonData);
+		      } else {
+		        console.log('No document(s) found query: ' + JSON.stringify(objectQuery) );
+		        console.log('db.sportsdata.find( ' + JSON.stringify(objectQuery) + ' )');
+		        //db.sportsdata.find( {"practice.practice_sportsmans.sportman_genre":"female"} )
+		        res.send([]);
+		      }
+		      //Close connection
+		      db.close();
+		    });
+		}
 	});
-	//var json = JSON.stringify(JsonData);
-	//res.end(json);
-	
 });
 
 app.get('/getJsonData', function(req, res){
@@ -100,7 +134,7 @@ app.get('/getJsonData', function(req, res){
 	redable.on('error', function(error){
 		console.log("error : /getJsonData");
 		//console.log(error);
-		res.end("[]");
+		res.send("[]");
 	});
 });
 
@@ -113,7 +147,7 @@ app.get('/listeMembres', function(req, res){
 		redable.pipe(res);
 	});
 	redable.on('error', function(){
-		res.end("[]");
+		res.send("[]");
 	});
 });
 
@@ -134,7 +168,42 @@ app.get('/listeMembres/:nom', function(req, res){
 	res.setHeader('Content-type', 'application/json');
 	var json = JSON.stringify(listePersonnes);
 	console.log(" -> json : " + json);
-	res.end(json);
+	res.send(json);
 });
+
+//Jimmy: try to map the request params into the json path
+//If the <field> is in an embedded document or an array, use dot notation to access the field.
+// https://docs.mongodb.org/manual/reference/method/db.collection.find/
+function mapParamsToMongoUrlPath(objParams)
+{
+	var newObjectParams = {};
+	var objSchema = {
+		"city": "city",
+		"practice": "practice",
+		"sport-activity": "practice.sport-activity",
+		"practice_date": "practice.practice_date",
+		"practice_hour": "practice.practice_hour",
+		"practice_location": "practice.practice_location",
+		"x1": "practice.practice_location.x1",
+		"y1": "practice.practice_location.y1",
+		"practice_sportsmans": "practice.practice_sportsmans",
+		"sportman_name": "practice.practice_sportsmans.sportman_name",
+		"sportman_genre": "practice.practice_sportsmans.sportman_genre",
+		"sportman_age": "practice.practice_sportsmans.sportman_age",
+		"sportman_results": "practice.practice_sportsmans.sportman_results",
+		"result_seconds": "practice.practice_sportsmans.sportman_results.result_seconds"
+	};
+	for( i in objParams){
+		if( objSchema[i] != undefined ){
+			newObjectParams[objSchema[i]] = objParams[i];
+		}
+		else{
+			newObjectParams[i] = objParams[i];
+		}
+	}
+	//console.log(objParams);
+	//console.log(newObjectParams);
+	return newObjectParams;
+}
 
 app.listen(8888);

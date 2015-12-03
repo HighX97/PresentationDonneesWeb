@@ -1,122 +1,129 @@
 {
-	"root": {
-		"city": {
-			"name": "Montpellier",
-			"test_data": [
-				{
-					"sport": "Taekwondo",
-					"nom": "test1",
-					"time": "1433422229",
-					"zone": "Europe/Paris",
-					"locaton": {
-						"latitude": "88.909090",
-						"longitude": "-1.909090"
-					},
-					"sportists":[
-						{
-							"name": "Jimmy Munoz",
-							"params": {
-								"genre": "male",
-								"age": 28
-							},
-							"results":{
-								"time": {
-									"unit": "minuts",
-									"result": "2400"
-								},
-								"others": [
-									{
-										"unit": "meters",
-										"result": "100"
-									}
-								]
-							}
-						},
-						{
-							"name": "Loïc Ortolé",
-							"params": {
-								"genre": "male",
-								"age": 24
-							},
-							"results":{
-								"time": {
-									"unit": "minuts",
-									"result": "2400"
-								},
-								"others": [
-									{
-										"unit": "meters",
-										"result": "100"
-									}
-								]
-							}
-						}
-					]
-				},
-				{
-					"sport": "Football",
-					"nom": "test2",
-					"time": "1433422229",
-					"zone": "Europe/Paris",
-					"locaton": {
-						"latitude": "90.909090",
-						"longitude": "-1.909090"
-					},
-					"sportists":[
-						{
-							"name": "Yu",
-							"params": {
-								"genre": "male",
-								"age": 23
-							},
-							"results":{
-								"time": {
-									"unit": "minuts",
-									"result": "2400"
-								},
-								"others": [
-									{
-										"unit": "meters",
-										"result": "100"
-									}
-								]
-							}
-						}
-					]
-
-				},
-				{
-					"sport": "Football",
-					"nom": "test3",
-					"time": "1433422229",
-					"zone": "Europe/Paris",
-					"locaton": {
-						"latitude": "90.909090",
-						"longitude": "-1.909090"
-					},
-					"sportists":[
-						{
-							"name": "Christophe",
-							"params": {
-								"genre": "male",
-								"age": 22
-							},
-							"results":{
-								"time": {
-									"unit": "minuts",
-									"result": "2400"
-								},
-								"others": [
-									{
-										"unit": "meters",
-										"result": "100"
-									}
-								]
-							}
-						}
-					]
-				}
-			]
-		}
-	}
+    "city": "Montpellier",
+    "practice": [ 
+        {
+            "sport-activity": "run",
+            "practice_date": "2015-11-23",
+            "practice_hour": "18:00",
+            "practice_location": {
+                "x1": 10,
+                "y1": 30
+            },
+            "practice_sportsmans": [
+                {
+                    "sportman_name": "Jimmy",
+                    "sportman_genre": "male",
+                    "sportman_age": 28,
+                    "sportman_results": {
+                        "result_seconds": 3600
+                    }
+                }
+            ]
+        },
+        {
+            "sport-activity": "soccer",
+            "practice_date": "2015-11-26",
+            "practice_hour": "20:00",
+            "practice_location": {
+                "x1": 10,
+                "y1": 30
+            },
+            "practice_sportsmans": [
+                {
+                    "sportman_name": "Yu",
+                    "sportman_genre": "male",
+                    "sportman_age": 26,
+                    "sportman_results": {
+                        "result_seconds": 7200
+                    }
+                },
+                {
+                    "sportman_name": "Loïc",
+                    "sportman_genre": "male",
+                    "sportman_age": 24,
+                    "sportman_results": {
+                        "result_seconds": 7200
+                    }
+                },
+                {
+                    "sportman_name": "Eric",
+                    "sportman_genre": "male",
+                    "sportman_age": 24,
+                    "sportman_results": {
+                        "result_seconds": 7200
+                    }
+                },
+                {
+                    "sportman_name": "Jean",
+                    "sportman_genre": "male",
+                    "sportman_age": 24,
+                    "sportman_results": {
+                        "result_seconds": 7200
+                    }
+                },
+                {
+                    "sportman_name": "Mosi",
+                    "sportman_genre": "male",
+                    "sportman_age": 29,
+                    "sportman_results": {
+                        "result_seconds": 7200
+                    }
+                }
+            ]
+        },
+        {
+            "sport-activity": "taekwondo",
+            "practice_date": "2015-11-24",
+            "practice_hour": "18:00",
+            "practice_location": {
+                "x1": 0,
+                "y1": 20
+            },
+            "practice_sportsmans": [
+                {
+                    "sportman_name": "Jimmy",
+                    "sportman_genre": "male",
+                    "sportman_age": 28,
+                    "sportman_results": {
+                        "result_seconds": 1000
+                    }
+                },
+                {
+                    "sportman_name": "Loïc",
+                    "sportman_genre": "male",
+                    "sportman_age": 24,
+                    "sportman_results": {
+                        "result_seconds": 1800
+                    }
+                }
+            ]
+        },
+        {
+            "sport-activity": "dance",
+            "practice_date": "2015-11-24",
+            "practice_hour": "18:00",
+            "practice_location": {
+                "x1": 50,
+                "y1": 30
+            },
+            "practice_sportsmans": [
+                {
+                    "sportman_name": "Chahinaz",
+                    "sportman_genre": "female",
+                    "sportman_age": 22,
+                    "sportman_results": {
+                        "result_seconds": 1800
+                    }
+                },
+                {
+                    "sportman_name": "Ikbal",
+                    "sportman_genre": "female",
+                    "sportman_age": 22,
+                    "sportman_results": {
+                        "result_seconds": 1800
+                    }
+                }
+            ]
+        }
+    ]
 }
