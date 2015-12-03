@@ -6,6 +6,7 @@ https://github.com/HighX97/PresentationDonneesWeb
 
 Start Mongodb:
 https://docs.mongodb.org/manual/tutorial/install-mongodb-on-os-x/
+/usr/local/bin/mongodb/bin
 
 /usr/local/bin/mongodb/bin/mongod
 
