@@ -8,7 +8,12 @@ Start Mongodb:
 https://docs.mongodb.org/manual/tutorial/install-mongodb-on-os-x/
 /usr/local/bin/mongodb/bin
 
+Server
 /usr/local/bin/mongodb/bin/mongod
+Terminal
+/usr/local/bin/mongodb/bin/mongo
+
+/usr/local/bin/mongodb/bin/mongoimport
 
 Data Path:
 /data/db
@@ -30,6 +35,39 @@ obj -({name:'jimmy', pays:'France'})
 
 db.personnes.save(obj);
 db.personnes.find();
+
+Comands:
+# Create 
+
+# Shows all dbs
+> show dbs
+# Select Db
+use dbname
+# Shows the collections 
+> show collections
+
+# Import
+> /usr/local/bin/mongodb/bin/mongoimport --db test --collection restaurants --drop --file /Applications/XAMPP/xamppfiles/htdocs/projectpdw/jimmy/json/ex_json_mongo.json
+
+> /usr/local/bin/mongodb/bin/mongoimport --db pdwsports --collection sportsdata --drop --file /Applications/XAMPP/xamppfiles/htdocs/projectpdw/jimmy/json/sportData2.json
+
+# Use  DataBase
+use pdwsports
+
+
+Select 
+https://docs.mongodb.org/manual/reference/method/db.collection.find/
+
+db.collection.find()
+
+db.sportsdata.find()
+
+db.sportsdata.find( {sport-activity : "run"} )
+
+
+
+
+
 
 
 ---Angular----

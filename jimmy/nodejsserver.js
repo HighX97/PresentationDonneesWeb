@@ -21,11 +21,11 @@ app.get('/getJsonData', function(req, res){
 	res.setHeader('Content-Type', 'application/json');
 	var redable = fs.createReadStream(jsonPath + 'sportData2.json');
 	redable.on('open', function(){
-		//console.log("open : /getJsonData");
+		console.log("open : /getJsonData");
 		redable.pipe(res);
 	});
 	redable.on('error', function(error){
-		//console.log("error : /getJsonData");
+		console.log("error : /getJsonData");
 		//console.log(error);
 		res.end("[]");
 	});
