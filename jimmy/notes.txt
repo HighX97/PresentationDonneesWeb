@@ -62,8 +62,16 @@ db.collection.find()
 
 db.sportsdata.find()
 
-db.sportsdata.find( {sport-activity : "run"} )
+db.sportsdata.find( {"city" : "Montpellier"} )
 
+db.sportsdata.find( {"city" : "Montpellier"}, {"sport-activity": "run"} )
+
+db.sportsdata.find( {"practice.sport-activity" : "run"} )
+
+
+--- NodeJS ---
+
+https://docs.mongodb.org/getting-started/node/client/
 
 
 

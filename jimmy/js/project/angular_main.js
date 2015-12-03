@@ -29,7 +29,8 @@ app.controller('controller1D', function($scope, $http, $rootScope){
     } 
     */
 
-    $http.get('http://localhost:8888/getJsonData').then(function(response){
+    //$http.get('http://localhost:8888/getJsonData').then(function(response){
+    $http.get('http://localhost:8888/getDataMongoDb').then(function(response){
         //createAllFilters(allData, "filters_content");//Jquery Id
         var filtersData = toObject(getFilterData(response.data));//Jimmy: toObject used to Cast a Array to a Object
         //console.log("   Filters:");
