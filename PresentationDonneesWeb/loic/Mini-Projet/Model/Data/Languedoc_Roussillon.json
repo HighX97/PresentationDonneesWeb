@@ -1,4 +1,6 @@
-{"Départements":
+{
+"libelleRegion":"Languedoc_Roussillon",
+"Départements":
 	[
     {"numero":11, "libelleDepartement":"Aude"},
     {"numero":30, "libelleDepartement":"Gard"},

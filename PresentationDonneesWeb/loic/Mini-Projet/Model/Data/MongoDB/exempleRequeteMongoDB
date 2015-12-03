@@ -1,0 +1,31 @@
+//IMPORT
+mongoimport --db PresentationDW --collection LanguedocRoussillon --drop --file Languedoc_Roussillon.json
+
+//LAUNCH
+mongo | mongod
+
+//SHOW DATA BASES
+> show dbs
+PresentationDW  0.078GB
+admin           (empty)
+local           0.078GB
+test            (empty)
+
+//CHOOSE DATA BASE
+> use PresentationDW
+switched to db PresentationDW
+
+//SHOW COLLECTIONS
+> show collections
+LanguedocRoussillon
+system.indexes
+
+
+//QUERY
+> db.RegionLanguedoc.find({"libelleRegion":"Langedoc_Roussillon"},{"Départements": { $elemMatch: { numero: 30 } },_id:0;libelleDepartement:1 })
+
+{ "Départements" : [ { "numero" : 30, "libelleDepartement" : "Gard" } ] }
+
+>db.RegionLanguedoc.find({"libelleRegion":"Langedoc_Roussillon"}
+,{"Départements": { $elemMatch: { "communes": {$elemMatch : {codeInsee :{$eq :34001}} } }},_id:0 })
+
