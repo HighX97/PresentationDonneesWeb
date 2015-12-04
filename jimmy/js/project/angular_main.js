@@ -48,6 +48,11 @@ app.controller('filterController', function($scope, $http, $rootScope){
     $scope.sendFilterForm = function(){//https://docs.angularjs.org/api/ng/directive/ngSubmit
         //console.log(this.formData);//Serialize Angular
         var formData = jQuery("#form_filter_1D").serialize();
+       
+        //encodeURIComponent();
+        //router.get('/api/v1/gameRefined/:from_datepicker:to_datepicker:from_timepicker:to_timepicker:selectLevel', game.getAllRefined);
+
+        //formData = formData.replace("?",);
         
         //console.log( formData );//Serialize Angular
         //$scope.people = Restangular.all('data.json/:user').post($scope.user);
