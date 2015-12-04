@@ -171,6 +171,45 @@ app.get('/listeMembres/:nom', function(req, res){
 	res.send(json);
 });
 
+// http://localhost:8888/testLoic
+app.get('/testLoic', function(req, res){
+	console.log("/testLoic");
+	var dbNameLoic = "PresentationDW_Split";
+	var urlDbLoic = 'mongodb://localhost:27017/' + dbNameLoic;
+	var objectQuery = { "nameRg":"Languedoc_Roussillon" };
+	res.setHeader('Access-Control-Allow-Origin', '*');
+	res.setHeader('Content-type', 'application/json');
+
+	MongoClient.connect(urlDbLoic, function (err, db) {
+		if (err) {
+			console.log('Unable to connect to the mongoDB server. Error:', err);
+		}
+		else 
+		{
+			var collection = db.collection('Departement');
+			console.log('Connection established to', urlDb);
+			collection.find( objectQuery ).toArray(function (err, result) {
+		      if (err) {
+		        console.log(err);
+		        res.send([]);
+		      } else if (result.length) {
+		        console.log('Found query :');
+		        console.log('db.Departement.find( ' + JSON.stringify(objectQuery) + ' )');
+		        res.send(result);
+		        //console.log(JsonData);
+		      } else {
+		        console.log('No document(s) found query: ' + JSON.stringify(objectQuery) );
+		        console.log('db.Departement.find( ' + JSON.stringify(objectQuery) + ' )');
+		        res.send([]);
+		      }
+		      //Close connection
+		      db.close();
+		    });
+		}
+	});
+	//res.send({'test': ''});
+});
+
 //Jimmy: try to map the request params into the json path
 //If the <field> is in an embedded document or an array, use dot notation to access the field.
 // https://docs.mongodb.org/manual/reference/method/db.collection.find/
@@ -205,5 +244,10 @@ function mapParamsToMongoUrlPath(objParams)
 	//console.log(newObjectParams);
 	return newObjectParams;
 }
+
+
+
+
+
 
 app.listen(8888);

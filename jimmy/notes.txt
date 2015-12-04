@@ -51,6 +51,8 @@ use dbname
 
 > /usr/local/bin/mongodb/bin/mongoimport --db pdwsports --collection sportsdata --drop --file /Applications/XAMPP/xamppfiles/htdocs/projectpdw/jimmy/json/sportData2.json
 
+> /usr/local/bin/mongodb/bin/mongoimport --db pdwsports --collection sportsdata --drop --file /Applications/XAMPP/xamppfiles/htdocs/projectpdw/PresentationDonneesWeb/loic/Mini-Projet/Model/Data/City.json
+
 # Use  DataBase
 use pdwsports
 
