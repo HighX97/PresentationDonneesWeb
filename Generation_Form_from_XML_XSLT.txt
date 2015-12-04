@@ -1,0 +1,48 @@
+et en XML
+
+<musee nom="Frabre">
+	<salle nom="Salle1">
+		<oeuvre auteur="" ...>
+		</oeuvre>
+		...
+	</salle>
+	...
+</musee>
+
+Comment générer des formulaires à partir de XML ?
+
+XSLT (Extensible StyleSheet Language Transofrmation)
+Langage déclaratif:
+
+Interpréteur XSLT (intallé dans le naviagteur) @INPUT: XML, feuilleDeStyle_XSLT ===> @OUTPUT: HTML
+
+
+
+Exemple d'une feuille de style XSLT qui va afficher les noms des balises et leurs attributs ?
+
+<xsl xmlns="..." encoding="utf8" version="1.0">
+  <xsl : output method="html"/>
+  <xsl : template mach="/">
+    <html> <body> Voici e contenu du XML
+    <xsl : apply-templates select=”//*“ />
+    </html> </body>
+     …
+  </xsl : template>
+  <xsl : template mach="*">
+    <xsl : value-of select=”name()“ />
+    <xsl : apply-templates select=”@*“ />
+     …
+  </xsl : template>
+  <xsl : template mach="*[begin(name())=‘a’]">
+    <xsl : value-of select=”name()“ />
+    <xsl : apply-templates select=”@*“ />
+     …
+  </xsl : template>
+  <xsl : template mach="@*">
+    <xsl : value-of select=”name()“ />
+    <xsl : value-of select=”.“ />
+     …
+  </xsl : template>
+</xsl>
+
+Si aucun template ne repond, alors les templates par défauts prennent la main.
