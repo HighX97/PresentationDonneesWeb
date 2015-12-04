@@ -1,6 +1,12 @@
 //IMPORT
 mongoimport --db PresentationDW --collection LanguedocRoussillon --drop --file Languedoc_Roussillon.json
 
+mongoimport --db PresentationDW_Split --collection Region --drop --file Region.json --jsonArray
+mongoimport --db PresentationDW_Split --collection Departement --drop --file Departement.json --jsonArray
+mongoimport --db PresentationDW_Split --collection City --drop --file City.json --jsonArray
+mongoimport --db PresentationDW_Split --collection Quarter --drop --file Quarter.json --jsonArray
+mongoimport --db PresentationDW_Split --collection SubQuarter --drop --file SubQuarter.json --jsonArray
+
 mongoimport -d PresentationDW -c LanguedocRoussillon --file Languedoc_Roussillon.json --jsonArray
 
 //LAUNCH
