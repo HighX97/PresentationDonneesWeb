@@ -1,6 +1,7 @@
 /*
 cd /Applications/XAMPP/xamppfiles/htdocs/projectpdw/jimmy/
 
+sudo npm install nodejs npm
 
 sudo npm install -g express
 npm install --save kerberos mongodb
