@@ -30,7 +30,8 @@ app.controller('controller1D', function($scope, $http, $rootScope){
     */
 
     //$http.get('http://localhost:8888/getJsonData').then(function(response){
-    $http.get('http://localhost:8888/getDataMongoDb').then(function(response){
+    $http.get('http://localhost:8888/getDataFromMongoLoic').then(function(response){
+    //$http.get('http://localhost:8888/getDataMongoDb').then(function(response){
         //createAllFilters(allData, "filters_content");//Jquery Id
         var filtersData = toObject(getFilterData(response.data));//Jimmy: toObject used to Cast a Array to a Object
         //console.log("   Filters:");
@@ -42,13 +43,15 @@ app.controller('controller1D', function($scope, $http, $rootScope){
     });
 });
 
+
+
 //https://docs.angularjs.org/guide/forms
 app.controller('filterController', function($scope, $http, $rootScope){
 //app.controller('filterController', ['$scope', function($scope){
     $scope.sendFilterForm = function(){//https://docs.angularjs.org/api/ng/directive/ngSubmit
         //console.log(this.formData);//Serialize Angular
         var formData = jQuery("#form_filter_1D").serialize();
-       
+        
         //encodeURIComponent();
         //router.get('/api/v1/gameRefined/:from_datepicker:to_datepicker:from_timepicker:to_timepicker:selectLevel', game.getAllRefined);
 

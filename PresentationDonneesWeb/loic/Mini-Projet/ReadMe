@@ -1,9 +1,0 @@
-Projet : Visualisation de données géolocalisées
-
-1- Gérer des filtres sur les données (Angular):
-	Par exemple si elles sont contenues dans une collection d'objets
-	Pouvoir choisir n'importe quelle combinaison d'attributs
-	Faire afficher les informations sous format textuel
-
-2- Rendu 2D (Angluar ver D3)
-3- Rendu 3D (JavaScript)
