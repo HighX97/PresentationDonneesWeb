@@ -1,5 +1,5 @@
 //IMPORT
-mongoimport --db PresentationDW --collection LanguedocRoussillon --drop --file Languedoc_Roussillon.json
+mongoimport --db PresentationDW --collection LanguedocRoussillon --drop --file Languedoc_Roussillon.json --jsonArray
 
 mongoimport --db PresentationDW_Split --collection Region --drop --file Region.json --jsonArray
 mongoimport --db PresentationDW_Split --collection Departement --drop --file Departement.json --jsonArray
@@ -64,13 +64,29 @@ https://docs.mongodb.org/manual/reference/method/db.collection.find/#db.collecti
 > db.LanguedocRoussillon.find({"Départements.communes.codeInsee" : 34001},{_id:1,"libelleRegion":0, "Départements":0,"numero":0,"communes":0,"codeInsee":0,"codePostal":0,"libelleCommune":0,"quartiers":0,"code":0,"libelleCommuneQuartier":0,"sous-quartiers":0,"libelleSousQuartier":0})
 
 
-/SHOW ALL
+//SHOW ALL
 
 > db.LanguedocRoussillon.find({})
 
+> db.Region.find({})
+> db.Departement.find({})
+> db.City.find({})
+> db.Quarter.find({})
+> db.SubQuarter.find({})
+
+//Selection
+
+>db.LanguedocRoussillon.find({"nameRg" : "Languedoc_Roussillon"})
+
+>db.LanguedocRoussillon.find({"nameRg" : "Languedoc_Roussillon"}, {"Departements" : { $elemMatch: { "numDept": 11 }}})
+
+
+db.schools.find( { zipcode: "63109" },
+                 { students: { $elemMatch: { school: 102 } } } )
+
 > db.LanguedocRoussillon.find({"Départements.numero" : 11})
 
-> db.LanguedocRoussillon.find({"numero" : 11})
+> db.LanguedocRoussillon.find({"numDept" : 11})
 
 > db.LanguedocRoussillon.find({"codeInsee" :{$lt: 34002 }})
 
