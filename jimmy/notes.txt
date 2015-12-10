@@ -23,7 +23,7 @@ mongod --dbpath <path to data directory>
 
 Connection
 
-Create DB- coneecction:
+Create DB- connection:
 
 > use jimmydb
 switched to db jimmydb
@@ -51,7 +51,17 @@ use dbname
 
 > /usr/local/bin/mongodb/bin/mongoimport --db pdwsports --collection sportsdata --drop --file /Applications/XAMPP/xamppfiles/htdocs/projectpdw/jimmy/json/sportData2.json
 
-> /usr/local/bin/mongodb/bin/mongoimport --db pdwsports --collection sportsdata --drop --file /Applications/XAMPP/xamppfiles/htdocs/projectpdw/PresentationDonneesWeb/loic/Mini-Projet/Model/Data/City.json
+/usr/local/bin/mongodb/bin/mongoimport --db PresentationDW_Split --collection Region --drop --file /Applications/XAMPP/xamppfiles/htdocs/projectpdw/PresentationDonneesWeb/loic/Mini-Projet/Model/Data/Region.json --jsonArray
+
+
+/usr/local/bin/mongodb/bin/mongoimport --db PresentationDW_Split --collection Departement --drop --file /Applications/XAMPP/xamppfiles/htdocs/projectpdw/PresentationDonneesWeb/loic/Mini-Projet/Model/Data/Departement.json --jsonArray
+
+/usr/local/bin/mongodb/bin/mongoimport --db PresentationDW_Split --collection City --drop --file /Applications/XAMPP/xamppfiles/htdocs/projectpdw/PresentationDonneesWeb/loic/Mini-Projet/Model/Data/City.json --jsonArray
+
+/usr/local/bin/mongodb/bin/mongoimport --db PresentationDW_Split --collection Quarter --drop --file /Applications/XAMPP/xamppfiles/htdocs/projectpdw/PresentationDonneesWeb/loic/Mini-Projet/Model/Data/Quarter.json --jsonArray
+
+/usr/local/bin/mongodb/bin/mongoimport --db PresentationDW_Split --collection SubQuarter --drop --file /Applications/XAMPP/xamppfiles/htdocs/projectpdw/PresentationDonneesWeb/loic/Mini-Projet/Model/Data/SubQuarter.json --jsonArray
+
 
 # Use  DataBase
 use pdwsports

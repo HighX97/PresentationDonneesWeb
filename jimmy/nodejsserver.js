@@ -6,10 +6,13 @@ sudo npm install -g express
 npm install --save kerberos mongodb
 sudo npm install -g mongodb
 
+
 //https://docs.mongodb.org/getting-started/node/client/
 
 export NODE_PATH=/usr/local/lib/node_modules
 
+cd /usr/local/lib/node_modules
+sudo node nodejsserver.js
 
 // /usr/local/lib/node_modules/express
 */
@@ -73,6 +76,41 @@ function getDataFromMongo()
 		}
 	});
 	return JsonData;
+}
+
+//Jimmy: try to map the request params into the json path
+//If the <field> is in an embedded document or an array, use dot notation to access the field.
+// https://docs.mongodb.org/manual/reference/method/db.collection.find/
+function mapParamsToMongoUrlPath(objParams)
+{
+	var newObjectParams = {};
+	var objSchema = {
+		"city": "city",
+		"practice": "practice",
+		"sport-activity": "practice.sport-activity",
+		"practice_date": "practice.practice_date",
+		"practice_hour": "practice.practice_hour",
+		"practice_location": "practice.practice_location",
+		"x1": "practice.practice_location.x1",
+		"y1": "practice.practice_location.y1",
+		"practice_sportsmans": "practice.practice_sportsmans",
+		"sportman_name": "practice.practice_sportsmans.sportman_name",
+		"sportman_genre": "practice.practice_sportsmans.sportman_genre",
+		"sportman_age": "practice.practice_sportsmans.sportman_age",
+		"sportman_results": "practice.practice_sportsmans.sportman_results",
+		"result_seconds": "practice.practice_sportsmans.sportman_results.result_seconds"
+	};
+	for( i in objParams){
+		if( objSchema[i] != undefined ){
+			newObjectParams[objSchema[i]] = objParams[i];
+		}
+		else{
+			newObjectParams[i] = objParams[i];
+		}
+	}
+	//console.log(objParams);
+	//console.log(newObjectParams);
+	return newObjectParams;
 }
 
 
@@ -209,45 +247,5 @@ app.get('/testLoic', function(req, res){
 	});
 	//res.send({'test': ''});
 });
-
-//Jimmy: try to map the request params into the json path
-//If the <field> is in an embedded document or an array, use dot notation to access the field.
-// https://docs.mongodb.org/manual/reference/method/db.collection.find/
-function mapParamsToMongoUrlPath(objParams)
-{
-	var newObjectParams = {};
-	var objSchema = {
-		"city": "city",
-		"practice": "practice",
-		"sport-activity": "practice.sport-activity",
-		"practice_date": "practice.practice_date",
-		"practice_hour": "practice.practice_hour",
-		"practice_location": "practice.practice_location",
-		"x1": "practice.practice_location.x1",
-		"y1": "practice.practice_location.y1",
-		"practice_sportsmans": "practice.practice_sportsmans",
-		"sportman_name": "practice.practice_sportsmans.sportman_name",
-		"sportman_genre": "practice.practice_sportsmans.sportman_genre",
-		"sportman_age": "practice.practice_sportsmans.sportman_age",
-		"sportman_results": "practice.practice_sportsmans.sportman_results",
-		"result_seconds": "practice.practice_sportsmans.sportman_results.result_seconds"
-	};
-	for( i in objParams){
-		if( objSchema[i] != undefined ){
-			newObjectParams[objSchema[i]] = objParams[i];
-		}
-		else{
-			newObjectParams[i] = objParams[i];
-		}
-	}
-	//console.log(objParams);
-	//console.log(newObjectParams);
-	return newObjectParams;
-}
-
-
-
-
-
 
 app.listen(8888);
