@@ -43,9 +43,11 @@ function removeNotIncludeFilerKeys(filtersData, notIncludeFilerKeys)
     console.log("filtersData:");
     console.log(notIncludeFilerKeys);
     for(var key in notIncludeFilerKeys){
+        /*
         if(){
             
         }
+        */
     }
 
     return filtersData;
