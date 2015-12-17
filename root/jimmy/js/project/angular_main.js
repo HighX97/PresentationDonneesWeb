@@ -1,3 +1,20 @@
+var VERSION_TO_USE = "loic";
+//var version = "jimmy";
+
+
+var ARR_CONTROLLER_ULRS = {
+    'jimmy': {
+        '1D': 'http://localhost:8888/getDataMongoDb',
+        '2D': 'http://localhost:8888/getDataMongoDb',
+        '3D': 'http://localhost:8888/getDataMongoDb'
+    },
+    'loic': {
+        '1D': 'http://localhost:8888/getDataFromMongoLoic',
+        '2D': 'http://localhost:8888/getDataFromMongoLoic',
+        '3D': 'http://localhost:8888/getDataFromMongoLoic'
+    }
+};
+
 
 var app = angular.module('app', ['ngRoute']);//Creation del modulo y los modulos requeridos para la aplicaicón
 

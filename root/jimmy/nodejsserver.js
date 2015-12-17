@@ -17,7 +17,7 @@ sudo node nodejsserver.js
 
 // /usr/local/lib/node_modules/express
 */
-// node /Applications/XAMPP/xamppfiles/htdocs/projectpdw/jimmy/nodejsserver.js 
+// node /Applications/XAMPP/xamppfiles/htdocs/projectpdw/root/jimmy/nodejsserver.js 
 // Angular debug: https://addons.mozilla.org/en-US/firefox/addon/angscope-simple-angularjs-s/
 var http = require('http');//http://stackoverflow.com/questions/4720343/loading-basic-html-in-node-js
 var path = require('path');
@@ -34,7 +34,7 @@ var urlDb = 'mongodb://localhost:27017/' + dbName;
 var assert = require('assert');
 var ObjectId = require('mongodb').ObjectID;
 
-var httpPath = "/Applications/XAMPP/xamppfiles/htdocs/projectpdw/jimmy/";
+var httpPath = "";
 
 //localhost:8888/
 //Server Node.
