@@ -57,12 +57,27 @@
                     <br/>
                     <div style="">
                         <button class="btn btn-default" type="submit" onclick="draw3d(); return false;">Draw {{selectedAction}}</button>
-                        
-                        
                     </div>
-
-
                     <div id="div_content_3d" style="border: thin solid; color black; width: 600px; height: 400px;">
+                    </div>
+                    <style type="text/css">
+                        svg{
+                            position:relative;
+                            top:0px;
+                            left:0px;
+                        }
+                        .node {
+                          stroke: #fff;
+                          stroke-width: 1.5px;
+                        }
+
+                        .link {
+                          stroke: #999;
+                          stroke-opacity: .6;
+                        }
+                    </style>
+                    <div ng-controller="AppCtrl" style="display: block;" >
+                        <div sports-statistics></div>
                     </div>
                 </div>
             </div>
