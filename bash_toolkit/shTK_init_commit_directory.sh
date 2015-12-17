@@ -7,9 +7,9 @@
 
 for directory in `ls ../root`
 do
-  if [ ! -e ../root/$directory/commit ]
+  if [ ! -e ../root/$directory/COMMIT ]
   then
-    `mkdir ../root/$directory/commit` 
+    `mkdir ../root/$directory/COMMIT` 
   fi
   
 done
