@@ -1,3 +1,4 @@
+
 function getFilterData(jsonData, arrFilters)
 {
     var arrFilters = (arrFilters == undefined)? []: arrFilters;
@@ -36,23 +37,31 @@ function getFilterData(jsonData, arrFilters)
     return arrFilters;
 }
 
-function removeNotIncludeFilerKeys(filtersData, notIncludeFilerKeys)
+/**
+ * Methode to exclude the information not necesary in the filters 
+ * @param  {[type]}
+ * @param  {[type]}
+ * @return {[type]}
+ */
+function excludeFilerKeys(filtersData, notIncludeFilerKeys)
 {
-    console.log("filtersData:");
-    console.log(filtersData);
-    console.log("filtersData:");
-    console.log(notIncludeFilerKeys);
+    //console.log("notIncludeFilerKeys:"); // ["_id", "x1", "y1"]
+    //console.log(notIncludeFilerKeys);
     for(var key in notIncludeFilerKeys){
-        /*
-        if(){
-            
+        if( filtersData[notIncludeFilerKeys[key]] != undefined ){
+            delete filtersData[notIncludeFilerKeys[key]];
         }
-        */
     }
-
+    //console.log("filtersData:");
+    //console.log(filtersData);
     return filtersData;
 }
 
+/**
+ * Method to convert a array in object
+ * @param  {[type]}
+ * @return {[type]}
+ */
 function toObject(arr) {
     var rv = {};
     for (var i in arr){
@@ -61,7 +70,12 @@ function toObject(arr) {
     return rv;
 }
 
-
+/**
+ * Method to create the filters
+ * @param  {[type]}
+ * @param  {[type]}
+ * @return {[type]}
+ */
 function createAllFilters(testJson, idFilters)
 {
     var strFilters = "";

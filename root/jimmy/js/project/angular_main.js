@@ -1,7 +1,9 @@
-//var VERSION_TO_USE = "loic";
-var VERSION_TO_USE = "jimmy";
+//http://arian-celina.com/implementing-rest-services-in-angularjs-using-restangular/
+//https://docs.angularjs.org/guide/forms
+//https://docs.angularjs.org/api/ng/directive/ngSubmit
 
-
+/*****CONFIG*****/
+var VERSION_TO_USE = "jimmy"; //jimmy,loic
 var ARR_CONTROLLER_ULRS = {
     'jimmy': {
         '1D': 'http://localhost:8888/getDataMongoDb',
@@ -16,9 +18,8 @@ var ARR_CONTROLLER_ULRS = {
 };
 
 
-
 var app = angular.module('app', ['ngRoute']);//Creation del modulo y los modulos requeridos para la aplicaicón
-
+/*MENUS*/
 var listMenuPaths = {//Pending selectedAction
     "Home" : "#/"
     ,"1D" : "#/1D"
@@ -34,15 +35,13 @@ app.run(function($rootScope, $location, $routeParams){
     $rootScope.selectedAction = "Home";
 });
 
-
 app.controller('controleur', function($scope, $http){});
 
-//http://arian-celina.com/implementing-rest-services-in-angularjs-using-restangular/
 app.controller('controller1D', function($scope, $http, $rootScope){
     $rootScope.selectedAction = "1D";
     console.log("Dans controller1D");
     /*
-    $scope.sendFilterForm = function(form){//https://docs.angularjs.org/api/ng/directive/ngSubmit
+    $scope.sendFilterForm = function(form){
         //console.log(this.formData);//Serialize Angular
         console.log( jQuery("#form_filter_1D").serialize() );//Serialize Angular
         //$scope.people = Restangular.all('data.json/:user').post($scope.user);
@@ -50,10 +49,9 @@ app.controller('controller1D', function($scope, $http, $rootScope){
     } 
     */
     //$http.get('http://localhost:8888/getJsonData').then(function(response){
-    //$http.get('http://localhost:8888/getDataFromMongoLoic').then(function(response){
     $http.get(ARR_CONTROLLER_ULRS[VERSION_TO_USE]['1D']).then(function(response){
         var filtersData = toObject(getFilterData(response.data));//Jimmy: toObject used to Cast a Array to a Object
-        filtersData = removeNotIncludeFilerKeys(filtersData, notIncludeFilerKeys);
+        filtersData = excludeFilerKeys(filtersData, notIncludeFilerKeys);
         $scope.filtersData = filtersData;
         $rootScope.city = response.data.city;
         $rootScope.practice = response.data.practice;
@@ -62,37 +60,17 @@ app.controller('controller1D', function($scope, $http, $rootScope){
 
 
 
-//https://docs.angularjs.org/guide/forms
 app.controller('filterController', function($scope, $http, $rootScope){
-//app.controller('filterController', ['$scope', function($scope){
     $scope.sendFilterForm = function(){//https://docs.angularjs.org/api/ng/directive/ngSubmit
-        //console.log(this.formData);//Serialize Angular
         var formData = jQuery("#form_filters").serialize();
-        
-        //encodeURIComponent();
-        //router.get('/api/v1/gameRefined/:from_datepicker:to_datepicker:from_timepicker:to_timepicker:selectLevel', game.getAllRefined);
-
-        //formData = formData.replace("?",);
-        
-        //console.log( formData );//Serialize Angular
-        //$scope.people = Restangular.all('data.json/:user').post($scope.user);
-        // REST ANGULAR
-        //http://arian-celina.com/implementing-rest-services-in-angularjs-using-restangular/
-
-        //https://docs.angularjs.org/api/ng/service/$http
-        //$http.post('http://localhost:8888/getJsonData', jQuery("#form_filters").serializeArray() ).then(function(response){
         $http.get(ARR_CONTROLLER_ULRS[VERSION_TO_USE]['1D'] + '?' + formData ).then(function(response){
         //$http.get('http://localhost:8888/getJsonData?' + formData ).then(function(response){
             $rootScope.filtered = formData;
             response.data = ( response.data[0] !== undefined )? response.data[0]: response.data;//Jimmy: filter to use only a object
-            //console.log(response.data);
             $rootScope.city = response.data.city;
             $rootScope.practice = response.data.practice;
-            //console.log("   practice:");
-            //console.log($rootScope.practice);
         });
-    }  
-//}]);
+    } 
 });
 
 app.controller('controller2D', function($scope, $http, $rootScope){
@@ -100,6 +78,7 @@ app.controller('controller2D', function($scope, $http, $rootScope){
     console.log("Dans controller2D");
     $http.get(ARR_CONTROLLER_ULRS[VERSION_TO_USE]['1D']).then(function(response){
         var filtersData = toObject(getFilterData(response.data));//Jimmy: toObject used to Cast a Array to a Object
+        filtersData = excludeFilerKeys(filtersData, notIncludeFilerKeys);
         $scope.filtersData = filtersData;
         $rootScope.city = response.data.city;
         $rootScope.practice = response.data.practice;
@@ -111,14 +90,13 @@ app.controller('controller3D', function($scope, $http, $rootScope){
     console.log("Dans controller3D");
     $http.get(ARR_CONTROLLER_ULRS[VERSION_TO_USE]['1D']).then(function(response){
         var filtersData = toObject(getFilterData(response.data));//Jimmy: toObject used to Cast a Array to a Object
+        filtersData = excludeFilerKeys(filtersData, notIncludeFilerKeys);
         $scope.filtersData = filtersData;
         $rootScope.city = response.data.city;
         $rootScope.practice = response.data.practice;
     });
 });
 
-    /*
-    */
 app.config(function ($routeProvider){
     console.log("app config");
     $routeProvider
@@ -138,5 +116,4 @@ app.config(function ($routeProvider){
             controller: 'controleur',//Definición del controlador
             templateUrl: 'templates/home.html'//Template or templateUrl
         });
-
 });
