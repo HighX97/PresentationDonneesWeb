@@ -1,0 +1,134 @@
+Git:
+https://github.com/HighX97/PresentationDonneesWeb
+
+
+---Mongodb----
+
+Start Mongodb:
+https://docs.mongodb.org/manual/tutorial/install-mongodb-on-os-x/
+/usr/local/bin/mongodb/bin
+
+Server
+/usr/local/bin/mongodb/bin/mongod
+Terminal
+/usr/local/bin/mongodb/bin/mongo
+
+/usr/local/bin/mongodb/bin/mongoimport
+
+Data Path:
+/data/db
+
+mongod --dbpath <path to data directory>
+/usr/local/bin/mongodb/bin/mongod --dbpath /data/db
+
+Connection
+
+Create DB- connection:
+
+> use jimmydb
+switched to db jimmydb
+
+https://docs.mongodb.org/manual/core/data-modeling-introduction/
+
+//error
+obj -({name:'jimmy', pays:'France'})
+
+db.personnes.save(obj);
+db.personnes.find();
+
+Comands:
+# Create 
+
+# Shows all dbs
+> show dbs
+# Select Db
+use dbname
+# Shows the collections 
+> show collections
+
+# Import
+> /usr/local/bin/mongodb/bin/mongoimport --db test --collection restaurants --drop --file /Applications/XAMPP/xamppfiles/htdocs/projectpdw/jimmy/json/ex_json_mongo.json
+
+> /usr/local/bin/mongodb/bin/mongoimport --db pdwsports --collection sportsdata --drop --file /Applications/XAMPP/xamppfiles/htdocs/projectpdw/jimmy/json/sportData2.json
+
+/usr/local/bin/mongodb/bin/mongoimport --db PresentationDW_Split --collection Region --drop --file /Applications/XAMPP/xamppfiles/htdocs/projectpdw/loic/Mini-Projet/Model/Data/Region.json --jsonArray
+
+
+/usr/local/bin/mongodb/bin/mongoimport --db PresentationDW_Split --collection Departement --drop --file /Applications/XAMPP/xamppfiles/htdocs/projectpdw/loic/Mini-Projet/Model/Data/Departement.json --jsonArray
+
+/usr/local/bin/mongodb/bin/mongoimport --db PresentationDW_Split --collection City --drop --file /Applications/XAMPP/xamppfiles/htdocs/projectpdw/loic/Mini-Projet/Model/Data/City.json --jsonArray
+
+/usr/local/bin/mongodb/bin/mongoimport --db PresentationDW_Split --collection Quarter --drop --file /Applications/XAMPP/xamppfiles/htdocs/projectpdw/loic/Mini-Projet/Model/Data/Quarter.json --jsonArray
+
+/usr/local/bin/mongodb/bin/mongoimport --db PresentationDW_Split --collection SubQuarter --drop --file /Applications/XAMPP/xamppfiles/htdocs/projectpdw/loic/Mini-Projet/Model/Data/SubQuarter.json --jsonArray
+
+
+mongoimport --db PresentationDW_Split --collection Region --drop --file Region.json --jsonArray
+mongoimport --db PresentationDW_Split --collection Departement --drop --file Departement.json --jsonArray
+mongoimport --db PresentationDW_Split --collection City --drop --file City.json --jsonArray
+mongoimport --db PresentationDW_Split --collection Quarter --drop --file Quarter.json --jsonArray
+mongoimport --db PresentationDW_Split --collection SubQuarter --drop --file SubQuarter.json --jsonArray
+
+
+# Use  DataBase
+use pdwsports
+
+
+Select 
+https://docs.mongodb.org/manual/reference/method/db.collection.find/
+
+db.collection.find()
+
+db.sportsdata.find()
+
+db.sportsdata.find( {"city" : "Montpellier"} )
+
+db.sportsdata.find( {"city" : "Montpellier"}, {"sport-activity": "run"} )
+
+db.sportsdata.find( {"practice.sport-activity" : "run"} )
+
+
+http://stackoverflow.com/questions/3985214/retrieve-only-the-queried-element-in-an-object-array-in-mongodb-collection
+
+db.sportsdata.find( {"practice.sport-activity":"run"}, {"practice.sport-activity": 1} )
+
+{ "_id" : ObjectId("566005d06b2088e0830c7e5d"), "practice" : [ { "sport-activity" : "run" }, { "sport-activity" : "soccer" }, { "sport-activity" : "taekwondo" }, { "sport-activity" : "dance" } ] }
+
+
+--- NodeJS ---
+
+https://docs.mongodb.org/getting-started/node/client/
+
+
+
+
+
+
+---Angular----
+
+
+Links:
+Google Maps + D3	
+http://bl.ocks.org/mbostock/899711
+MogoDb tutorial:
+http://www.tutorialspoint.com/mongodb/mongodb_questions_answers.htm
+https://docs.mongodb.org/manual/?_ga=1.237974080.1532448744.1448190774
+
+
+Angular App Folders:
+http://images.google.fr/imgres?imgurl=http://clintberry.com/images/Screen-Shot-2013-04-23-at-7.23.24-PM.png&imgrefurl=http://clintberry.com/2013/modular-angularjs-application-design/&h=363&w=315&tbnid=Hfuqs-gH8Liu9M:&docid=uoHFRBA79jWYyM&ei=URVPVqy6JIe8OtG-m5AG&tbm=isch&iact=rc&uact=3&page=1&start=0&ndsp=22&ved=0ahUKEwjsprG4g5_JAhUHng4KHVHfBmIQrQMIJjAC
+
+Loïc:
+file:///Applications/XAMPP/xamppfiles/htdocs/projectpdw/loic/index.html
+
+Angular Tutorial:
+https://docs.angularjs.org/tutorial/step_02
+
+http://www.w3schools.com/angular/angular_filters.asp
+
+D3 tutorial:
+https://www.dashingd3js.com/svg-basic-shapes-and-d3js
+
+----Json---
+Test
+http://jsonlint.com/
