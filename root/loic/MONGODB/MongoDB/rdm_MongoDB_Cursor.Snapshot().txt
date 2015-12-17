@@ -1,0 +1,17 @@
+https://docs.mongodb.org/manual/reference/method/cursor.snapshot/#cursor-snapshot
+
+cursor.snapshot()
+
+    Append the snapshot() method to a cursor to toggle the “snapshot” mode. This ensures that the query will not return a document multiple times, even if intervening write operations result in a move of the document due to the growth in document size.
+
+    Warning
+
+        You must apply snapshot() to the cursor before retrieving any documents from the database.
+        You can only use snapshot() with unsharded collections.
+
+    The snapshot() does not guarantee isolation from insertion or deletions.
+
+    The snapshot() traverses the index on the _id field. As such, snapshot() cannot be used with sort() or hint().
+
+    Queries with results of less than 1 megabyte are effectively implicitly snapshotted.
+

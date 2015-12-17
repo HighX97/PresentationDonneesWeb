@@ -1,3 +1,5 @@
+var scene = {};
+
 function draw3d()
 {
     init3D();
@@ -49,8 +51,57 @@ function render3D()
     //camera = cameraH;
     camera = cameraV;
 
-
     renderer.render(scene, camera);
+}
+
+function addWall()
+{
+	/*
+	var longueur = Math.sqrt( ((x2 - x1) * pasLargueur) * ((x2 - x1) * pasLargueur) 
+		+ ((y2 - y1) * pasLargueur) * ((y2 - y1) * pasLargueur)
+	);
+	*/
+	var longueur = 10;
+	var hauteur = 15;
+	var largueur = 7;
+
+	geometry = new THREE.CubeGeometry( longueur, hauteur, largueur );
+
+
+	// instantiate a loader
+	var texture = new THREE.TextureLoader();
+	// load a resource
+	texture.load(
+		// resource URL
+		'assets/texture.jpg',
+		// Function when resource is loaded
+		function ( texture ) {
+			// do something with the texture
+			var material = new THREE.MeshBasicMaterial( {
+				map: texture
+			 } );
+		},
+		// Function called when download progresses
+		function ( xhr ) {
+			console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
+		},
+		// Function called when download errors
+		function ( xhr ) {
+			console.log( 'An error happened' );
+		}
+	);
+	var divisions = Math.round(longueur / 100);
+
+	//var texture = new THREE.ImageUtils.loadTexture('assets/texture.png');
+	//texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+	//texture.repeat.set( divisions, 1);
+	material = new THREE.MeshBasicMaterial( { map: texture } );
+	var material = new THREE.MeshBasicMaterial( {
+		map: texture
+	 } );
+
+	mesh = new THREE.Mesh( geometry, material );
+	scene.add( mesh );
 }
 
 //Jimmy: Add events using the keyboard

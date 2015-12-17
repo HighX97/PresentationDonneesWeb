@@ -1,6 +1,7 @@
 /*
 cd /Applications/XAMPP/xamppfiles/htdocs/projectpdw/jimmy/
 
+sudo npm install nodejs npm
 
 sudo npm install -g express
 npm install --save kerberos mongodb
@@ -18,9 +19,12 @@ sudo node nodejsserver.js
 */
 // node /Applications/XAMPP/xamppfiles/htdocs/projectpdw/jimmy/nodejsserver.js 
 // Angular debug: https://addons.mozilla.org/en-US/firefox/addon/angscope-simple-angularjs-s/
-var jsonPath = "json/";
+var http = require('http');//http://stackoverflow.com/questions/4720343/loading-basic-html-in-node-js
+var path = require('path');
 var express = require('express');
 var fs = require('fs');
+var ext = /[\w\d_-]+\.[\w\d]+$/;
+var jsonPath = "json/";
 var app = express();
 
 var dbName = "pdwsports";
@@ -29,6 +33,37 @@ var MongoClient = require('mongodb').MongoClient;
 var urlDb = 'mongodb://localhost:27017/' + dbName;
 var assert = require('assert');
 var ObjectId = require('mongodb').ObjectID;
+
+var httpPath = "/Applications/XAMPP/xamppfiles/htdocs/projectpdw/jimmy/";
+
+//localhost:8888/
+//Server Node.
+app.get('/', function(req, res){
+	//var html = fs.createReadStream('index.html');
+	res.writeHead(200, {'Content-Type': 'text/html'});
+	fs.createReadStream(httpPath + 	'index.html').pipe(res);
+	
+});
+
+/*
+http.createServer(function(req, res){
+    if (req.url === '/') {
+        res.writeHead(200, {'Content-Type': 'text/html'});
+        fs.createReadStream(httpPath +'index.html').pipe(res);
+    } else if (ext.test(req.url)) {
+        fs.exists(path.join(__dirname, req.url), function (exists) {
+            if (exists) {
+                res.writeHead(200, {'Content-Type': 'text/html'});
+                fs.createReadStream(httpPath +'index.html').pipe(res);
+            } else {
+                res.writeHead(404, {'Content-Type': 'text/html'});
+                fs.createReadStream(httpPath +'404.html').pipe(res);
+        });
+    } else {
+        //  add a RESTful service
+    }
+}).listen(8000);
+*/
 
 function testConnectionMongo()
 {
@@ -168,8 +203,11 @@ function mapParamsToMongoUrlPath(objParams)
 	return newObjectParams;
 }
 
-
+//app.get('/getDataMongoDb:criteres', function(req, res){
+//
 app.get('/getDataMongoDb', function(req, res){
+	//var parametres = req.params.criteres.split("&");
+
 	console.log("serveur Node : /getDataMongoDb");
 	//console.log("params");
 	//console.log(req.params);
@@ -178,6 +216,7 @@ app.get('/getDataMongoDb', function(req, res){
 
 	var objectQuery = req.query;
 	objectQuery = mapParamsToMongoUrlPath(objectQuery);
+	console.log(objectQuery);
 
 	res.setHeader('Access-Control-Allow-Origin', '*');
 	res.setHeader('Content-Type', 'application/json');
@@ -189,7 +228,8 @@ app.get('/getDataMongoDb', function(req, res){
 		}
 		else 
 		{
-			var collection = db.collection('sportsdata');
+			var collectionName = 'sportsdata';
+			var collection = db.collection(collectionName);
 			//console.log(db);
 			console.log('Connection established to', urlDb);
 			// Get the documents collection
@@ -199,12 +239,12 @@ app.get('/getDataMongoDb', function(req, res){
 		        res.send([]);
 		      } else if (result.length) {
 		        console.log('Found query :');
-		        console.log('db.sportsdata.find( ' + JSON.stringify(objectQuery) + ' )');
+		        console.log('db.' + collectionName + '.find( ' + JSON.stringify(objectQuery) + ' )');
 		        res.send(result);
 		        //console.log(JsonData);
 		      } else {
 		        console.log('No document(s) found query: ' + JSON.stringify(objectQuery) );
-		        console.log('db.sportsdata.find( ' + JSON.stringify(objectQuery) + ' )');
+		        console.log('db.' + collectionName + '.find( ' + JSON.stringify(objectQuery) + ' )');
 		        //db.sportsdata.find( {"practice.practice_sportsmans.sportman_genre":"female"} )
 		        res.send([]);
 		      }

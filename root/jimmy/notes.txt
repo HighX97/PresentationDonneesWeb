@@ -51,16 +51,23 @@ use dbname
 
 > /usr/local/bin/mongodb/bin/mongoimport --db pdwsports --collection sportsdata --drop --file /Applications/XAMPP/xamppfiles/htdocs/projectpdw/jimmy/json/sportData2.json
 
-/usr/local/bin/mongodb/bin/mongoimport --db PresentationDW_Split --collection Region --drop --file /Applications/XAMPP/xamppfiles/htdocs/projectpdw/PresentationDonneesWeb/loic/Mini-Projet/Model/Data/Region.json --jsonArray
+/usr/local/bin/mongodb/bin/mongoimport --db PresentationDW_Split --collection Region --drop --file /Applications/XAMPP/xamppfiles/htdocs/projectpdw/loic/Mini-Projet/Model/Data/Region.json --jsonArray
 
 
-/usr/local/bin/mongodb/bin/mongoimport --db PresentationDW_Split --collection Departement --drop --file /Applications/XAMPP/xamppfiles/htdocs/projectpdw/PresentationDonneesWeb/loic/Mini-Projet/Model/Data/Departement.json --jsonArray
+/usr/local/bin/mongodb/bin/mongoimport --db PresentationDW_Split --collection Departement --drop --file /Applications/XAMPP/xamppfiles/htdocs/projectpdw/loic/Mini-Projet/Model/Data/Departement.json --jsonArray
 
-/usr/local/bin/mongodb/bin/mongoimport --db PresentationDW_Split --collection City --drop --file /Applications/XAMPP/xamppfiles/htdocs/projectpdw/PresentationDonneesWeb/loic/Mini-Projet/Model/Data/City.json --jsonArray
+/usr/local/bin/mongodb/bin/mongoimport --db PresentationDW_Split --collection City --drop --file /Applications/XAMPP/xamppfiles/htdocs/projectpdw/loic/Mini-Projet/Model/Data/City.json --jsonArray
 
-/usr/local/bin/mongodb/bin/mongoimport --db PresentationDW_Split --collection Quarter --drop --file /Applications/XAMPP/xamppfiles/htdocs/projectpdw/PresentationDonneesWeb/loic/Mini-Projet/Model/Data/Quarter.json --jsonArray
+/usr/local/bin/mongodb/bin/mongoimport --db PresentationDW_Split --collection Quarter --drop --file /Applications/XAMPP/xamppfiles/htdocs/projectpdw/loic/Mini-Projet/Model/Data/Quarter.json --jsonArray
 
-/usr/local/bin/mongodb/bin/mongoimport --db PresentationDW_Split --collection SubQuarter --drop --file /Applications/XAMPP/xamppfiles/htdocs/projectpdw/PresentationDonneesWeb/loic/Mini-Projet/Model/Data/SubQuarter.json --jsonArray
+/usr/local/bin/mongodb/bin/mongoimport --db PresentationDW_Split --collection SubQuarter --drop --file /Applications/XAMPP/xamppfiles/htdocs/projectpdw/loic/Mini-Projet/Model/Data/SubQuarter.json --jsonArray
+
+
+mongoimport --db PresentationDW_Split --collection Region --drop --file Region.json --jsonArray
+mongoimport --db PresentationDW_Split --collection Departement --drop --file Departement.json --jsonArray
+mongoimport --db PresentationDW_Split --collection City --drop --file City.json --jsonArray
+mongoimport --db PresentationDW_Split --collection Quarter --drop --file Quarter.json --jsonArray
+mongoimport --db PresentationDW_Split --collection SubQuarter --drop --file SubQuarter.json --jsonArray
 
 
 # Use  DataBase
@@ -79,6 +86,13 @@ db.sportsdata.find( {"city" : "Montpellier"} )
 db.sportsdata.find( {"city" : "Montpellier"}, {"sport-activity": "run"} )
 
 db.sportsdata.find( {"practice.sport-activity" : "run"} )
+
+
+http://stackoverflow.com/questions/3985214/retrieve-only-the-queried-element-in-an-object-array-in-mongodb-collection
+
+db.sportsdata.find( {"practice.sport-activity":"run"}, {"practice.sport-activity": 1} )
+
+{ "_id" : ObjectId("566005d06b2088e0830c7e5d"), "practice" : [ { "sport-activity" : "run" }, { "sport-activity" : "soccer" }, { "sport-activity" : "taekwondo" }, { "sport-activity" : "dance" } ] }
 
 
 --- NodeJS ---
