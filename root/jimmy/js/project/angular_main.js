@@ -1,5 +1,5 @@
-var VERSION_TO_USE = "loic";
-//var version = "jimmy";
+//var VERSION_TO_USE = "loic";
+var VERSION_TO_USE = "jimmy";
 
 
 var ARR_CONTROLLER_ULRS = {
