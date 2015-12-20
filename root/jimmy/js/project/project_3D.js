@@ -67,7 +67,6 @@ function addWall()
 
 	geometry = new THREE.CubeGeometry( longueur, hauteur, largueur );
 
-
 	// instantiate a loader
 	var texture = new THREE.TextureLoader();
 	// load a resource

@@ -13,7 +13,9 @@ sudo npm install -g mongodb
 export NODE_PATH=/usr/local/lib/node_modules
 
 cd /usr/local/lib/node_modules
-sudo node nodejsserver.js
+node nodejsserver.js
+
+node /Applications/XAMPP/xamppfiles/htdocs/projectpdw/root/jimmy/nodejsserver.js
 
 // /usr/local/lib/node_modules/express
 */

@@ -94,18 +94,219 @@ app.controller('controller3D', function($scope, $http, $rootScope){
         $scope.filtersData = filtersData;
         $rootScope.city = response.data.city;
         $rootScope.practice = response.data.practice;
+
+        $rootScope.data3D = [
+            { "x_axis": 0.115, "y_axis": 0.197802197802198, "radius": 20, "color" : "#de6154", "id" : 01, "value" : 4, "text": "quartier_name_01"},
+            { "x_axis": 0.115, "y_axis": 0.351648351648352, "radius": 20, "color" : "#059788", "id" : 02, "value" : 4, "text": "quartier_name_02"},
+            { "x_axis": 0.148, "y_axis": 0.450549450549451, "radius": 20, "color" : "#0085c1", "id" : 03, "value" : 4, "text": "quartier_name_03"},
+            { "x_axis": 0.17, "y_axis": 0.582417582417582, "radius": 20, "color" : "#8ee35e", "id" : 04, "value" : 4, "text": "quartier_name_04"},
+            { "x_axis": 0.332, "y_axis": 0.225274725274725, "radius": 20, "color" : "#a7aebd", "id" : 05, "value" : 4, "text": "quartier_name_05"},
+            { "x_axis": 0.273, "y_axis": 0.352747252747253, "radius": 20, "color" : "#577355", "id" : 06, "value" : 4, "text": "quartier_name_06"},
+            { "x_axis": 0.345, "y_axis": 0.112087912087912, "radius": 20, "color" : "#97e007", "id" : 07, "value" : 4, "text": "quartier_name_07"},
+            { "x_axis": 0.33, "y_axis": 0.43956043956044, "radius": 20, "color" : "#855d6d", "id" : 08, "value" : 4, "text": "quartier_name_08"},
+            { "x_axis": 0.3, "y_axis": 0.538461538461538, "radius": 20, "color" : "#22b23d", "id" : 09, "value" : 4, "text": "quartier_name_09"},
+            { "x_axis": 0.29, "y_axis": 0.681318681318681, "radius": 20, "color" : "#efa199", "id" : 10, "value" : 4, "text": "quartier_name_10"},
+            { "x_axis": 0.38, "y_axis": 0.615384615384615, "radius": 20, "color" : "#dd91a6", "id" : 11, "value" : 4, "text": "quartier_name_11"},
+            { "x_axis": 0.425, "y_axis": 0.781318681318681, "radius": 20, "color" : "#a0187b", "id" : 12, "value" : 4, "text": "quartier_name_12"},
+            { "x_axis": 0.666, "y_axis": 0.434065934065934, "radius": 20, "color" : "#53b310", "id" : 13, "value" : 4, "text": "quartier_name_13"},
+            { "x_axis": 0.57, "y_axis": 0.647252747252747, "radius": 20, "color" : "#c2cea1", "id" : 14, "value" : 4, "text": "quartier_name_14"},
+            { "x_axis": 0.46, "y_axis": 0.381318681318681, "radius": 20, "color" : "#e378da", "id" : 15, "value" : 4, "text": "quartier_name_15"},
+            { "x_axis": 0.895, "y_axis": 0.406593406593407, "radius": 20, "color" : "#67cfaa", "id" : 16, "value" : 4, "text": "quartier_name_16"},
+            { "x_axis": 0.768, "y_axis": 0.447252747252747, "radius": 20, "color" : "#9078c9", "id" : 17, "value" : 4, "text": "quartier_name_17"},
+            { "x_axis": 0.81, "y_axis": 0.598901098901099, "radius": 20, "color" : "#f01bfd", "id" : 18, "value" : 4, "text": "quartier_name_18"},
+            { "x_axis": 0.646, "y_axis": 0.658241758241758, "radius": 20, "color" : "#3e36e1", "id" : 19, "value" : 4, "text": "quartier_name_19"},
+            { "x_axis": 0.531, "y_axis": 0.707692307692308, "radius": 20, "color" : "#a13a56", "id" : 20, "value" : 4, "text": "quartier_name_20"},
+            { "x_axis": 0.562, "y_axis": 0.553846153846154, "radius": 20, "color" : "#d5df64", "id" : 21, "value" : 4, "text": "quartier_name_21"},
+            { "x_axis": 0.545, "y_axis": 0.498901098901099, "radius": 20, "color" : "#5aa576", "id" : 22, "value" : 4, "text": "quartier_name_22"},
+            { "x_axis": 0.616, "y_axis": 0.502197802197802, "radius": 20, "color" : "#291e9e", "id" : 23, "value" : 4, "text": "quartier_name_23"},
+            { "x_axis": 0.579, "y_axis": 0.393406593406593, "radius": 20, "color" : "#2ba56c", "id" : 24, "value" : 4, "text": "quartier_name_24"},
+            { "x_axis": 0.492, "y_axis": 0.469230769230769, "radius": 20, "color" : "#b230c5", "id" : 25, "value" : 4, "text": "quartier_name_25"},
+            { "x_axis": 0.493, "y_axis": 0.568131868131868, "radius": 20, "color" : "#888879", "id" : 26, "value" : 4, "text": "quartier_name_26"},
+            { "x_axis": 0.423, "y_axis": 0.545054945054945, "radius": 20, "color" : "#f24992", "id" : 27, "value" : 4, "text": "quartier_name_27"},
+            { "x_axis": 0.421, "y_axis": 0.473626373626374, "radius": 20, "color" : "#c8f347", "id" : 28, "value" : 4, "text": "quartier_name_28"},
+            { "x_axis": 0.555, "y_axis": 0.268131868131868, "radius": 20, "color" : "#9d953a", "id" : 29, "value" : 4, "text": "quartier_name_29"}
+            
+        ];
     });
 });
 
+var width3D = (1000) * (2);
+var height3D = (910) * (2);
 
+app.directive('displayThirdDimension', function(){
+    var SCREEN_WIDTH = jQuery("#div_content_3d").width();
+    var SCREEN_HEIGHT = jQuery("#div_content_3d").width();
+
+    var container, stats;
+    var camera, scene, renderer;
+
+    var clock = new THREE.Clock();
+
+    init();
+    animate();
+
+   
+
+    function init() {
+        container = document.createElement( 'div' );
+        document.getElementById( 'div_content_3d' ).appendChild( container );
+        // CAMERA
+        /*
+        PerspectiveCamera( fov, aspect, near, far )
+
+        fov — Camera frustum vertical field of view.
+        aspect — Camera frustum aspect ratio.
+        near — Camera frustum near plane.
+        far — Camera frustum far plane.
+         */
+        camera = new THREE.PerspectiveCamera( 80, SCREEN_WIDTH / SCREEN_HEIGHT, 1, 10000 );
+        camera.position.set( 0, 1000, 300 );
+        //Jimmy: position to have space to rotate
+
+        // SCENE
+        scene = new THREE.Scene();
+        
+        // CONTROLS
+        controls = new THREE.OrbitControls( camera );
+        controls.maxPolarAngle = 0.8 * Math.PI / 2;
+        controls.enableZoom = false;
+
+        // LIGHTS
+        var light = new THREE.DirectionalLight( 0xaabbff, 0.3 );
+        light.position.x = 500;
+        light.position.y = 250;
+        light.position.z = 800;
+        scene.add( light );
+
+        // SKYDOME
+        var vertexShader = document.getElementById( 'vertexShader' ).textContent;
+        var fragmentShader = document.getElementById( 'fragmentShader' ).textContent;
+        var uniforms = {
+            topColor:    { type: "c", value: new THREE.Color( 0x0077ff ) },
+            bottomColor: { type: "c", value: new THREE.Color( 0xffffff ) },
+            offset:      { type: "f", value: 400 },
+            exponent:    { type: "f", value: 0.6 }
+        };
+        uniforms.topColor.value.copy( light.color );
+
+        var skyGeo = new THREE.SphereGeometry( 4000, 32, 15 );
+        var skyMat = new THREE.ShaderMaterial( {
+            uniforms: uniforms,
+            vertexShader: vertexShader,
+            fragmentShader: fragmentShader,
+            side: THREE.BackSide
+        } );
+
+        //Jimmy: Add Map Texture
+        var textureMap = THREE.ImageUtils.loadTexture('img/Montpellier_OSM_map_with_divisions.png')
+        material = new THREE.MeshBasicMaterial({map: textureMap});
+
+        if( true ){ //Jimmy: enable/disable SKY
+            var sky = new THREE.Mesh( skyGeo, skyMat );
+            scene.add( sky );
+        }
+
+        // RENDERER
+        renderer = new THREE.WebGLRenderer( { antialias: true } );
+        renderer.setPixelRatio( window.devicePixelRatio );
+        renderer.setSize( SCREEN_WIDTH, SCREEN_HEIGHT );
+        container.appendChild( renderer.domElement );
+
+        renderer.gammaInput = true;
+        renderer.gammaOutput = true;
+
+        // STATS
+        stats = new Stats();
+        container.appendChild( stats.domElement );
+
+
+        //Jimmy: Default plane
+        geometry = new THREE.CubeGeometry( width3D, 1, height3D );
+        mesh = new THREE.Mesh( geometry, material );
+        scene.add( mesh );
+
+        /*
+        
+        var columnTexture = THREE.ImageUtils.loadTexture('rocks.jpg');
+        columnTexture.wrapS = columnTexture.wrapT = THREE.RepeatWrapping;
+        columnTexture.repeat.set( 10, 1);
+         */
+        
+        var planeMat = new THREE.MeshLambertMaterial({color: 0x666699}); // color — Line color in hexadecimal. Default is 0xffffff.
+        materialColum = new THREE.MeshBasicMaterial({map: planeMat});
+
+        geometry = new THREE.CubeGeometry( 20, 500, 20 );
+        mesh = new THREE.Mesh( geometry, planeMat );
+        mesh.position.x = 0;
+        mesh.position.y = 100;
+        mesh.position.z = 150;
+        //scene.add( mesh );
+
+        var planeMat2 = new THREE.MeshLambertMaterial({color: 0x0085c1}); // color — Line color in hexadecimal. Default is 0xffffff.
+        materialColum = new THREE.MeshBasicMaterial({map: planeMat2});
+
+        geometry = new THREE.CubeGeometry( 20, 500, 20 );
+        mesh2 = new THREE.Mesh( geometry, planeMat2 );
+        mesh2.position.x = 0;
+        mesh2.position.y = 200;
+        mesh2.position.z = -100;
+        //scene.add( mesh2 );
+            
+        document.getElementById( 'div_content_3d' ).addEventListener( 'resize', onWindowResize, false );
+
+    }
+
+    function onWindowResize() {
+        camera.aspect = document.getElementById( 'div_content_3d' ).innerWidth / document.getElementById( 'div_content_3d' ).innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize( document.getElementById( 'div_content_3d' ).innerWidth, document.getElementById( 'div_content_3d' ).innerHeight );
+    }
+
+    //
+
+    function animate() {
+        requestAnimationFrame( animate );
+        renderer.render( scene, camera );
+        stats.update();
+    }
+
+    return {
+        restrict: 'A',
+        link: function (scope, element) {
+            
+            scope.$watch('data3D', function (data3D) {
+                console.log(data3D);
+                //width = 1000; //id ->div_content_2d.width
+                //height = 910; //id ->div_content_2d.heith
+                //Jimmy: For to create the graphs
+                for ( i in data3D ){
+                    
+                    coords3d = decode2DToPercentageCoordsTo3D( data3D[i]['x_axis'], width3D, data3D[i]['y_axis'], height3D);
+                    console.log(coords3d);
+
+                    //var planeMat = new THREE.MeshLambertMaterial({color: 0x666699}); // color — Line color in hexadecimal. Default is 0xffffff.
+                    var planeMat = new THREE.MeshLambertMaterial({color: data3D[i]['color'] }); // color — Line color in hexadecimal. Default is 0xffffff.
+                    materialColum = new THREE.MeshBasicMaterial({map: planeMat});
+
+                    geometry = new THREE.CubeGeometry( 20, 500, 20 );
+                    mesh = new THREE.Mesh( geometry, planeMat );
+                    mesh.position.x = coords3d['x'];
+                    mesh.position.y = coords3d['y'];
+                    mesh.position.z = coords3d['z'];
+                    scene.add( mesh );
+                }
+            });
+        }
+    }
+});
 
 // Directive contenant le code D3.js
 app.directive('sportsStatistics', function() {
     return {
         restrict: 'A',
         link: function (scope, element) {
-            var width = 450;
-            var height = 400;
+            var width = jQuery("#div_content_3d").width();
+            var height = jQuery("#div_content_3d").width();
             var color = d3.scale.category20();
             
             // On récupère les données présentent dans scope.grapheDatas
@@ -114,33 +315,33 @@ app.directive('sportsStatistics', function() {
             // Ex : suppression ou ajout de noeuds
             scope.$watch('grapheDatas', function (grapheDatas) {
                 var force = d3.layout.force()
-                .charge(-120)
-                .linkDistance(30)
-                .size([width, height])
-                .nodes(grapheDatas.nodes)
-                .links(grapheDatas.links)
-                .start();
+                    .charge(-120)
+                    .linkDistance(30)
+                    .size([width, height])
+                    .nodes(grapheDatas.nodes)
+                    .links(grapheDatas.links)
+                    .start();
                 
-                var svg = d3.select("body").append("svg")
-                .attr("width", width)
-                .attr("height", height);
+                var svg = d3.select("#div_content_3d").append("svg")
+                    .attr("width", width)
+                    .attr("height", height);
                 
                 var link = svg.selectAll(".link")
-                .data(grapheDatas.links)
-                .enter().append("line")
-                .attr("class", "link")
-                .style("stroke-width", function(d) { return Math.sqrt(d.value); });
+                    .data(grapheDatas.links)
+                    .enter().append("line")
+                    .attr("class", "link")
+                    .style("stroke-width", function(d) { return Math.sqrt(d.value); });
                 
                 var node = svg.selectAll(".node")
-                .data(grapheDatas.nodes)
-                .enter().append("circle")
-                .attr("class", "node")
-                .attr("r", 5)
-                .style("fill", function(d) { return color(d.group); })
-                .call(force.drag);
+                    .data(grapheDatas.nodes)
+                    .enter().append("circle")
+                    .attr("class", "node")
+                    .attr("r", 5)
+                    .style("fill", function(d) { return color(d.group); })
+                    .call(force.drag);
                 
                 node.append("title")
-                .text(function(d) { return d.name; });
+                    .text(function(d) { return d.name; });
                 
                 force.on("tick", function() {
                     link.attr("x1", function(d) { return d.source.x; })
