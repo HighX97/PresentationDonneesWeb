@@ -1,8 +1,0 @@
-<div id="divListeMembres">
-	Filtre: <input type="text" size="10" ng-model="search.nom" />
-	<ul>
-		<li ng-repeat="membre in members | filter: search">
-			<a href="#listeMembres/{{$index}}">{{membre.nom}} {{membre.prenom}}</a>
-		</li>
-	</ul>
-</div> 

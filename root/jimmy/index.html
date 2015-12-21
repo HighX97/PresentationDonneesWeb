@@ -29,8 +29,10 @@
     <script src="js/project/angular_main.js"></script>
     <!-- Jimmy jquery and Other functions  -->
     <script src="js/project/project_model.js"></script>
+    <!-- 
     <script src="js/project/project_2D.js"></script>
     <script src="js/project/project_3D.js"></script>
+    -->
     <!-- Jimmy 3d Plugins  -->
     <script src="js/d3/OrbitControls.js"></script>
     <script src="js/d3/Detector.js"></script>
@@ -99,6 +101,51 @@
                         </ul>
                     </div>
                 </div>
+                <div class=" row">
+                </div>
+                <div class="main-menu">
+                    Filters
+                    <!-- Filters -->
+                    <div class="row">
+                        <div class="box col-md-12">
+                            <div class="box-inner">
+                                <div class="box-header well">
+                                    <h2><i class="glyphicon glyphicon-edit"></i> Filters</h2>
+
+                                    <div class="box-icon">
+                                        <a href="#" class="btn btn-minimize btn-round btn-default">
+                                            <i class="glyphicon glyphicon-chevron-up"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                                <!-- App Filters -->
+                                <div class="box-content row" ng-app="app">
+                                    <!-- Form Filters  -->
+                                    <form ng-controller="filterController" id="form_filters" >
+                                        <!-- Angular  -->
+                                        <div class="row" ng-repeat="(filterKey, filterValue) in filtersData">
+                                            <div class='col-md-1' style='width: auto;' >
+                                                {{filterKey}}: <br>
+                                                <select  id='filter_select_{{filterKey}}' name='{{filterKey}}'>
+                                                    <option ng-repeat="filterRow in filterValue" value='{{filterRow}}'  >{{filterRow}}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-2" style="align: right;">
+                                                <button class="btn btn-default" type="submit" ng-click="sendFilterForm()" > Filter Data </button>
+                                            </div>
+                                            <div class="col-md-2" style="align: right;">
+                                                <button class="btn btn-default" type="reset"> Clear Filters </button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <!--/span-->
             <div id="content" class="col-lg-10 col-sm-10">
@@ -114,7 +161,6 @@
                     </ul>
                 </div>
                 <div class=" row">
-
                 </div>
                 <!-- Jimmy: Main view to load the templates-->
                 <div>

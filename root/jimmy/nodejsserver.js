@@ -13,9 +13,10 @@ sudo npm install -g mongodb
 export NODE_PATH=/usr/local/lib/node_modules
 
 cd /usr/local/lib/node_modules
-node nodejsserver.js
-
 node /Applications/XAMPP/xamppfiles/htdocs/projectpdw/root/jimmy/nodejsserver.js
+
+//node nodejsserver.js
+
 
 // /usr/local/lib/node_modules/express
 */
@@ -173,31 +174,36 @@ function getDataFromMongoLoic()
 //Jimmy: try to map the request params into the json path
 //If the <field> is in an embedded document or an array, use dot notation to access the field.
 // https://docs.mongodb.org/manual/reference/method/db.collection.find/
-function mapParamsToMongoUrlPath(objParams)
+function mapParamsToMongoUrlPath(collectionName, objParams)
 {
 	var newObjectParams = {};
 	var objSchema = {
-		"city": "city",
-		"practice": "practice",
-		"sport-activity": "practice.sport-activity",
-		"practice_date": "practice.practice_date",
-		"practice_hour": "practice.practice_hour",
-		"practice_location": "practice.practice_location",
-		"x1": "practice.practice_location.x1",
-		"y1": "practice.practice_location.y1",
-		"practice_sportsmans": "practice.practice_sportsmans",
-		"sportman_name": "practice.practice_sportsmans.sportman_name",
-		"sportman_genre": "practice.practice_sportsmans.sportman_genre",
-		"sportman_age": "practice.practice_sportsmans.sportman_age",
-		"sportman_results": "practice.practice_sportsmans.sportman_results",
-		"result_seconds": "practice.practice_sportsmans.sportman_results.result_seconds"
-	};
-	for( i in objParams){
-		if( objSchema[i] != undefined ){
-			newObjectParams[objSchema[i]] = objParams[i];
+		"sportsdata": {
+			"city": "city",
+			"practice": "practice",
+			"sport-activity": "practice.sport-activity",
+			"practice_date": "practice.practice_date",
+			"practice_hour": "practice.practice_hour",
+			"practice_location": "practice.practice_location",
+			"x1": "practice.practice_location.x1",
+			"y1": "practice.practice_location.y1",
+			"practice_sportsmans": "practice.practice_sportsmans",
+			"sportman_name": "practice.practice_sportsmans.sportman_name",
+			"sportman_genre": "practice.practice_sportsmans.sportman_genre",
+			"sportman_age": "practice.practice_sportsmans.sportman_age",
+			"sportman_results": "practice.practice_sportsmans.sportman_results",
+			"result_seconds": "practice.practice_sportsmans.sportman_results.result_seconds"
 		}
-		else{
-			newObjectParams[i] = objParams[i];
+	};
+	//var objSchema2 = generateObjectScheman(collectionName);
+	for( i in objParams){
+		if( objSchema[collectionName] != undefined ){
+			if( objSchema[collectionName][i] != undefined ){
+				newObjectParams[objSchema[collectionName][i]] = objParams[i];
+			}
+			else{
+				newObjectParams[i] = objParams[i];
+			}
 		}
 	}
 	//console.log(objParams);
@@ -217,7 +223,8 @@ app.get('/getDataMongoDb', function(req, res){
 	console.log(req.query);
 
 	var objectQuery = req.query;
-	objectQuery = mapParamsToMongoUrlPath(objectQuery);
+	var collectionName = 'sportsdata';
+	objectQuery = mapParamsToMongoUrlPath(collectionName, objectQuery);
 	console.log(objectQuery);
 
 	res.setHeader('Access-Control-Allow-Origin', '*');
@@ -230,7 +237,6 @@ app.get('/getDataMongoDb', function(req, res){
 		}
 		else 
 		{
-			var collectionName = 'sportsdata';
 			var collection = db.collection(collectionName);
 			//console.log(db);
 			console.log('Connection established to', urlDb);
