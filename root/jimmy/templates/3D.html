@@ -1,4 +1,4 @@
-<!-- Filters -->
+<!-- Filters 
 <div class="row">
     <div class="box col-md-12">
         <div class="box-inner">
@@ -11,18 +11,9 @@
                     </a>
                 </div>
             </div>
-            <!-- App Filters -->
             <div class="box-content row" ng-app="app">
                 <div class="col-lg-12 col-md-12">
-                    <!-- Form Filters  -->
                     <form ng-controller="filterController" id="form_filters" >
-                    <!-- 
-                    <form ng-submit="sendFilterForm()" id="form_filters" >
-                    -->
-                        <!-- JavaScript id -->
-                        <div class="row" id="filters_content">
-                        </div>
-                        <!-- Angular  -->
                         <div class="row">
                             <div class='col-md-1' style='width: auto;' ng-repeat="(filterKey, filterValue) in filtersData">
                                 {{filterKey}}: <br>
@@ -34,9 +25,12 @@
 
                         <div class="row">
                             <div class="col-md-2" style="align: right;">
-                                <button type="submit" ng-click="sendFilterForm()" > Filter Data </button>
-                                <button type="reset"> Clear Filters </button>
+                                <button class="btn btn-default" type="submit" ng-click="sendFilterForm()" > Filter Data </button>
                             </div>
+                            <div class="col-md-2" style="align: right;">
+                                <button class="btn btn-default" type="reset"> Clear Filters </button>
+                            </div>
+
                         </div>
                     </form>
                 </div>
@@ -44,6 +38,39 @@
         </div>
     </div>
 </div>
+-->
+<style type="text/css">
+    svg{
+        position:relative;
+        top:0px;
+        left:0px;
+    }
+    .node {
+      stroke: #fff;
+      stroke-width: 1.5px;
+    }
+
+    .link {
+      stroke: #999;
+      stroke-opacity: .6;
+    }
+</style>
+<style>
+    #div_content_3d {
+        background:#fff;
+        padding:0;
+        margin:0;
+        font-family:georgia;
+        text-align:center;
+    }
+    h1 { }
+    a { color:skyblue }
+    #stats { position: absolute; top:0; left: 0 }
+    
+    #stats #fps { background: transparent !important }
+    #stats #fps #fpsText { color: #abc !important }
+    #stats #fps #fpsGraph { display: none }
+</style>
 <!-- Content -->
 <div class="row">
     <div class="box col-md-12">
@@ -55,41 +82,11 @@
                 <div class="col-lg-7 col-md-12">
                     Design {{selectedAction}}
                     <br/>
+                    <!-- 
                     <div style="">
                         <button class="btn btn-default" type="submit" onclick="draw3d(); return false;">Draw {{selectedAction}}</button>
                     </div>
-                    <style type="text/css">
-                        svg{
-                            position:relative;
-                            top:0px;
-                            left:0px;
-                        }
-                        .node {
-                          stroke: #fff;
-                          stroke-width: 1.5px;
-                        }
-
-                        .link {
-                          stroke: #999;
-                          stroke-opacity: .6;
-                        }
-                    </style>
-                    <style>
-                        #div_content_3d {
-                            background:#fff;
-                            padding:0;
-                            margin:0;
-                            font-family:georgia;
-                            text-align:center;
-                        }
-                        h1 { }
-                        a { color:skyblue }
-                        #stats { position: absolute; top:0; left: 0 }
-                        
-                        #stats #fps { background: transparent !important }
-                        #stats #fps #fpsText { color: #abc !important }
-                        #stats #fps #fpsGraph { display: none }
-                    </style>
+                    -->
                     <!-- 
                     -->
                     <div style="position: relative; width: 1000px; height: 910px;">

@@ -102,11 +102,11 @@ function createAllFilters(testJson, idFilters)
     }
 }
 
-//all_filters
 
 
 jQuery( document ).ready(function( $ ) {
-
+    //Jimmy: Form filters event onChange
+    
     //console.log(jQuery("body"));
  	//draw2d();
 });

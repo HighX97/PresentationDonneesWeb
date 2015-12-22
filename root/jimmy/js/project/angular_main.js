@@ -50,7 +50,7 @@ app.controller('controller1D', function($scope, $http, $rootScope){
     $rootScope.selectedAction = "1D";
     console.log("Dans controller1D");
     /*
-    $scope.sendFilterForm = function(form){
+    $rootScope.sendFilterForm = function(form){
         //console.log(this.formData);//Serialize Angular
         console.log( jQuery("#form_filter_1D").serialize() );//Serialize Angular
         //$scope.people = Restangular.all('data.json/:user').post($scope.user);
@@ -71,7 +71,7 @@ app.controller('controller1D', function($scope, $http, $rootScope){
 
 app.controller('filterController', function($scope, $http, $rootScope){
     console.log("Dans filterController");
-    $scope.sendFilterForm = function(){//https://docs.angularjs.org/api/ng/directive/ngSubmit
+    $rootScope.sendFilterForm = function(){//https://docs.angularjs.org/api/ng/directive/ngSubmit
         var formData = jQuery("#form_filters").serialize();
         $http.get(ARR_CONTROLLER_ULRS[VERSION_TO_USE]['1D'] + '?' + formData ).then(function(response){
         //$http.get('http://localhost:8888/getJsonData?' + formData ).then(function(response){
@@ -156,7 +156,6 @@ function updateStatistics2D()
         { "x_axis": 0.423, "y_axis": 0.545054945054945, "radius": 20, "color" : "#f24992", "id" : 27, "value" : 4, "text": "quartier_name_27"},
         { "x_axis": 0.421, "y_axis": 0.473626373626374, "radius": 20, "color" : "#c8f347", "id" : 28, "value" : 4, "text": "quartier_name_28"},
         { "x_axis": 0.555, "y_axis": 0.268131868131868, "radius": 20, "color" : "#9d953a", "id" : 29, "value" : 4, "text": "quartier_name_29"}
-        
     ];
     
     
@@ -273,15 +272,50 @@ app.controller('controller3D', function($scope, $http, $rootScope){
     });
 });
 
+//all_filters
+/*
+
+function addEventFilters(){
+    jQuery('#form_filters select')
+      .change(function () {
+        var str = "";
+        jQuery( "select option:selected" ).each(function() {
+            str += jQuery( this ).text() + " ";
+        });
+        console.log(str);
+    })
+    .change();
+}
+ */
+
+//Jimmy: Angular Event onChange to send the filters 
+app.directive( 'filterReady', function( $parse ) {
+   return {
+       restrict: 'A',
+       link: function( $scope, elem, attrs ) {    
+            elem.change(function(){
+                $scope.$apply(function(){
+                    $scope.sendFilterForm();
+                    //sendFilterForm();
+                    //console.log(elem);
+                    //console.log(attrs);
+                    //var func = $parse(attrs.elemReady);
+                    //func($scope);
+                })
+            })
+            //addEventFilters();
+        }
+    }
+});
 
 
-app.directive('displayThirdDimension-', function(){
+app.directive('displayThirdDimension', function(){
     init3D();
     animate3D();
     return {
         restrict: 'A',
         link: function (scope, element) {
-            displayThirdDimension(scope)
+            //displayThirdDimension(scope)
         }
     }
 });
@@ -298,7 +332,6 @@ function displayThirdDimension(scope){
             coords3d = decode2DToPercentageCoordsTo3D( data3D[i]['x_axis'], width3D, data3D[i]['y_axis'], height3D);
             console.log(coords3d);
 
-            //var planeMat = new THREE.MeshLambertMaterial({color: 0x666699}); // color — Line color in hexadecimal. Default is 0xffffff.
             var planeMat = new THREE.MeshLambertMaterial({color: data3D[i]['color'] }); // color — Line color in hexadecimal. Default is 0xffffff.
             materialColum = new THREE.MeshBasicMaterial({map: planeMat});
 
@@ -314,7 +347,7 @@ function displayThirdDimension(scope){
 
 
 function init3D() {
-    var clock = new THREE.Clock();
+    clock = new THREE.Clock();
     container = document.createElement( 'div' );
     document.getElementById( 'div_content_3d' ).appendChild( container );
     // CAMERA

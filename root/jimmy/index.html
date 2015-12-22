@@ -104,7 +104,6 @@
                 <div class=" row">
                 </div>
                 <div class="main-menu">
-                    Filters
                     <!-- Filters -->
                     <div class="row">
                         <div class="box col-md-12">
@@ -119,19 +118,19 @@
                                     </div>
                                 </div>
                                 <!-- App Filters -->
-                                <div class="box-content row" ng-app="app">
+                                <div class="box-content" ng-app="app">
                                     <!-- Form Filters  -->
                                     <form ng-controller="filterController" id="form_filters" >
                                         <!-- Angular  -->
-                                        <div class="row" ng-repeat="(filterKey, filterValue) in filtersData">
+                                        <div class="row" ng-repeat="(filterKey, filterValue) in filtersData" >
                                             <div class='col-md-1' style='width: auto;' >
                                                 {{filterKey}}: <br>
-                                                <select  id='filter_select_{{filterKey}}' name='{{filterKey}}'>
+                                                <select multiple='multiple' id='filter_select_{{filterKey}}' name='{{filterKey}}' filter-ready=''>
                                                     <option ng-repeat="filterRow in filterValue" value='{{filterRow}}'  >{{filterRow}}</option>
                                                 </select>
                                             </div>
                                         </div>
-
+                                        <!-- 
                                         <div class="row">
                                             <div class="col-md-2" style="align: right;">
                                                 <button class="btn btn-default" type="submit" ng-click="sendFilterForm()" > Filter Data </button>
@@ -140,6 +139,7 @@
                                                 <button class="btn btn-default" type="reset"> Clear Filters </button>
                                             </div>
                                         </div>
+                                        -->
                                     </form>
                                 </div>
                             </div>
