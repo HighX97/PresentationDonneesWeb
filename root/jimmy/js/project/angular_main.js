@@ -6,11 +6,13 @@
 var VERSION_TO_USE = "jimmy"; //jimmy,loic
 var ARR_CONTROLLER_ULRS = {
     'jimmy': {
-        '1D': 'http://localhost:8888/getDataMongoDb',
-        '2D': 'http://localhost:8888/getDataMongoDb',
-        '3D': 'http://localhost:8888/getDataMongoDb'
+        'filters': 'http://localhost:8888/getDataMongoDb',
+        '1D': 'http://localhost:8888/getGroupedData',
+        '2D': 'http://localhost:8888/getGroupedData2D',
+        '3D': 'http://localhost:8888/getGroupedData2D'
     },
     'loic': {
+        'filters': 'http://localhost:8888/getDataFromMongoLoic',
         '1D': 'http://localhost:8888/getDataFromMongoLoic',
         '2D': 'http://localhost:8888/getDataFromMongoLoic',
         '3D': 'http://localhost:8888/getDataFromMongoLoic'
@@ -26,7 +28,8 @@ var listMenuPaths = {//Pending selectedAction
 };
 
 //Jimmy: Var with the json Keys that we can not show. -->getFilterData(jsonData, arrFilters, notIncludeFilerKeys)
-var notIncludeFilerKeys = ['_id', 'x1', 'y1'];
+var notIncludeFilerKeys = ['_id', 'xAxis', 'yAxis', 'color', 'nameCity', 'practiceDate', 'percentage', 'nbHour', 'nbHoursQ', 'percentageQ'];
+var notInclude1DKeys = ['_id', 'xAxis', 'yAxis', 'color', 'nameCity', 'nbHoursQ', 'percentageQ'];
 /*3D*/
 var SCREEN_WIDTH = jQuery("#div_content_3d").width();
 var SCREEN_HEIGHT = jQuery("#div_content_3d").width();
@@ -48,6 +51,7 @@ app.controller('controleur', function($scope, $http){});
 
 app.controller('controller1D', function($scope, $http, $rootScope){
     $rootScope.selectedAction = "1D";
+    $rootScope.formAction = "1D";
     console.log("Dans controller1D");
     /*
     $rootScope.sendFilterForm = function(form){
@@ -58,13 +62,26 @@ app.controller('controller1D', function($scope, $http, $rootScope){
     } 
     */
     //$http.get('http://localhost:8888/getJsonData').then(function(response){
-    $http.get(ARR_CONTROLLER_ULRS[VERSION_TO_USE]['1D']).then(function(response){
-        var filtersData = toObject(getFilterData(response.data));//Jimmy: toObject used to Cast a Array to a Object
-        filtersData = excludeFilerKeys(filtersData, notIncludeFilerKeys);
-        $rootScope.filtersData = filtersData;
-        $rootScope.city = response.data.city;
-        $rootScope.practice = response.data.practice;
+    if( $rootScope.filtersData == undefined ){
+        $http.get(ARR_CONTROLLER_ULRS[VERSION_TO_USE]['filters']).then(function(response){
+            var filtersData = toObject(getFilterData(response.data));//Jimmy: toObject used to Cast a Array to a Object
+            filtersData = excludeFilerKeys(filtersData, notIncludeFilerKeys);
+            $rootScope.filtersData = filtersData;
+            //$rootScope.city = response.data.city;
+            //$rootScope.practice = response.data.practice;
+        });
+    }
+    /*
+    
+    $scope.getContent = function(obj){
+         return obj.value + " " + obj.text;
+     }
+     */
+    /* EVENTS 1D */
+    angular.element(document).ready(function () {
+        $rootScope.sendFilterForm();//Jimmy: Call sendFilterForm() when document it's ready to always update the information
     });
+
 });
 
 
@@ -73,14 +90,62 @@ app.controller('filterController', function($scope, $http, $rootScope){
     console.log("Dans filterController");
     $rootScope.sendFilterForm = function(){//https://docs.angularjs.org/api/ng/directive/ngSubmit
         var formData = jQuery("#form_filters").serialize();
-        $http.get(ARR_CONTROLLER_ULRS[VERSION_TO_USE]['1D'] + '?' + formData ).then(function(response){
-        //$http.get('http://localhost:8888/getJsonData?' + formData ).then(function(response){
+        var formAction = $scope.formAction;//1D, 2D, 3D
+
+        $http.get(ARR_CONTROLLER_ULRS[VERSION_TO_USE][formAction] + '?' + formData ).then(function(response){
+            //$scope.city = resultData['data'][0].nameCity;
+            
+            //https://api.jquery.com/jquery.extend/
+            //Clone object http://heyjavascript.com/4-creative-ways-to-clone-objects/
+            $rootScope.data2D = jQuery.extend(true, [], response.data);
             $rootScope.filtered = formData;
-            response.data = ( response.data[0] !== undefined )? response.data[0]: response.data;//Jimmy: filter to use only a object
-            $rootScope.city = response.data.city;
-            $rootScope.practice = response.data.practice;
+            resultData = prepareDisplayData(response.data);
+            $rootScope.titres = resultData['titres'];
+            $rootScope.practice = resultData['data'];
+            switch(formAction){
+                case '2D':
+                case '3D':
+                case '1D':
+                default:
+                    break;
+            }
+            updateStatistics2D($rootScope);
         });
     } 
+
+    $rootScope.resetForm = function ()
+    {
+        jQuery("#form_filters")[0].reset();
+        $rootScope.sendFilterForm()
+    }
+
+    /* EVENTS FILTER FORM  -> Directives filterReady, clearFilters*/
+
+});
+//Jimmy: Angular Event onChange to send the filters 
+app.directive( 'filterReady', function( $parse ) {
+   return {
+       restrict: 'A',
+       link: function( $scope, elem, attrs ) {    
+            elem.change(function(){
+                $scope.$apply(function(){
+                    $scope.sendFilterForm();
+                })
+            });
+        }
+    }
+});
+
+//Jimmy: Angular Event onChange to send the filters 
+app.directive( 'clearFilters', function( $parse ) {
+   return {
+       restrict: 'A',
+       link: function( $scope, elem, attrs ) {    
+            elem.click(function(){
+                $scope.resetForm();
+            })
+        }
+    }
 });
 
 /*2D*/
@@ -109,91 +174,145 @@ function decode2DToPercentageCoordsTo3D(per_coord_x, new_px_coord_x, per_coord_y
     return result;
 }
 
+//: Jimmy: colors -> http://www.color-hex.com/random.php
+var jsonCircles = [
+    {   "activity": "run",  "practiceDate": ("2014-04-30T14:00:00.000Z"),    "radius": 20, "nbHour": 1,    "nameQuarter": "Boutonnet", "nameSubQuarter": "Montpellier Centre", "nameCity": "Montpellier",  "genre": "M",   "xAxis": 0.46056810727991854,   "yAxis": 0.37543859649122807,   "color": "#291e9e"  },
+    {   "activity": "soccer",   "practiceDate": ("2010-05-30T15:00:00.000Z"),    "radius": 20, "nbHour": 1,    "nameQuarter": "Aiguelongues",  "nameSubQuarter": "Hopitaux Facultes",  "nameCity": "Montpellier",  "genre": "M",   "xAxis": 0.3663325183074875,    "yAxis": 0.24385964912280703,   "color": "#de6154"  },
+    {   "activity": "taekwondo",    "practiceDate": ("2010-06-30T00:00:00.000Z"),    "radius": 20, "nbHour": 1,    "nameQuarter": "Halles de la paillade", "nameSubQuarter": "Mosson", "nameCity": "Montpellier",  "genre": "F",   "xAxis": 0.12573101454808897,   "yAxis": 0.3192982456140351,    "color": "#855d6d"  },
+    {   "activity": "swimming", "practiceDate": ("2011-04-30T00:00:00.000Z"),    "radius": 20, "nbHour": 1,    "nameQuarter": "Tonnelles", "nameSubQuarter": "Les Cevennes",   "nameCity": "Montpellier",  "genre": "M",   "xAxis": 0.33124479900924186,   "yAxis": 0.43082706766917295,   "color": "#d5df64"  },
+    {   "activity": "basket-ball",  "practiceDate": ("2011-04-25T00:00:00.000Z"),    "radius": 20, "nbHour": 1,    "nameQuarter": "Les Beaux Arts",    "nameSubQuarter": "Montpellier Centre", "nameCity": "Montpellier",  "genre": "M",   "xAxis": 0.4154553253250313,    "yAxis": 0.48370927318295737,   "color": "#291e9e"  },
+    {   "activity": "run",  "practiceDate": ("2014-04-30T14:00:00.000Z"),    "radius": 20, "nbHour": 1,    "nameQuarter": "Aiguelongues",  "nameSubQuarter": "Hopitaux Facultes",  "nameCity": "Montpellier",  "genre": "M",   "xAxis": 0.3663325183074875,    "yAxis": 0.24385964912280703,   "color": "#de6154"  },
+    {   "activity": "run",  "practiceDate": ("2014-04-30T14:00:00.000Z"),    "radius": 20, "nbHour": 1,    "nameQuarter": "Place Carnot",  "nameSubQuarter": "Pres d'Arenes",  "nameCity": "Montpellier",  "genre": "M",   "xAxis": 0.5688387839716479,    "yAxis": 0.6348370927318295,    "color": "#a0187b"  },
+    {   "activity": "run",  "practiceDate": ("2014-04-30T14:00:00.000Z"),    "radius": 20, "nbHour": 1,    "nameQuarter": "Saint Lazare",  "nameSubQuarter": "Hopitaux Facultes",  "nameCity": "Montpellier",  "genre": "M",   "xAxis": 0.5648287589089912,    "yAxis": 0.22180451127819548,   "color": "#de6154"  },
+    {   "activity": "run",  "practiceDate": ("2010-04-30T00:00:00.000Z"),    "radius": 20, "nbHour": 1,    "nameQuarter": "Saint Lazare",  "nameSubQuarter": "Hopitaux Facultes",  "nameCity": "Montpellier",  "genre": "M",   "xAxis": 0.5648287589089912,    "yAxis": 0.22180451127819548,   "color": "#de6154"  },
+    {   "activity": "soccer",   "practiceDate": ("2010-04-30T00:00:00.000Z"),    "radius": 20, "nbHour": 1,    "nameQuarter": "Celleneuve",    "nameSubQuarter": "Mosson", "nameCity": "Montpellier",  "genre": "M",   "xAxis": 0.15981622758067043,   "yAxis": 0.4546365914786967,    "color": "#855d6d"  },
+    {   "activity": "soccer",   "practiceDate": ("2010-04-30T00:00:00.000Z"),    "radius": 20, "nbHour": 1,    "nameQuarter": "Hotel de departement",  "nameSubQuarter": "Les Cevennes",   "nameCity": "Montpellier",  "genre": "M",   "xAxis": 0.27811196692904133,   "yAxis": 0.3506265664160401,    "color": "#d5df64"  },
+    {   "activity": "soccer",   "practiceDate": ("2010-04-30T00:00:00.000Z"),    "radius": 20, "nbHour": 1,    "nameQuarter": "Boutonnet", "nameSubQuarter": "Montpellier Centre", "nameCity": "Montpellier",  "genre": "M",   "xAxis": 0.46056810727991854,   "yAxis": 0.37543859649122807,   "color": "#291e9e"  },
+    {   "activity": "soccer",   "practiceDate": ("2010-04-30T00:00:00.000Z"),    "radius": 20, "nbHour": 1,    "nameQuarter": "Saint Lazare",  "nameSubQuarter": "Hopitaux Facultes",  "nameCity": "Montpellier",  "genre": "M",   "xAxis": 0.5648287589089912,    "yAxis": 0.22180451127819548,   "color": "#de6154"  },
+    {   "activity": "swimming", "practiceDate": ("2010-04-30T00:00:00.000Z"),    "radius": 20, "nbHour": 1,    "nameQuarter": "Saint Lazare",  "nameSubQuarter": "Hopitaux Facultes",  "nameCity": "Montpellier",  "genre": "M",   "xAxis": 0.5648287589089912,    "yAxis": 0.22180451127819548,   "color": "#de6154"  },
+    {   "activity": "swimming", "practiceDate": ("2010-04-30T00:00:00.000Z"),    "radius": 20, "nbHour": 1,    "nameQuarter": "Saint Lazare",  "nameSubQuarter": "Hopitaux Facultes",  "nameCity": "Montpellier",  "genre": "M",   "xAxis": 0.5648287589089912,    "yAxis": 0.22180451127819548,   "color": "#de6154"  },
+    {   "activity": "swimming", "practiceDate": ("2010-04-30T00:00:00.000Z"),    "radius": 20, "nbHour": 1,    "nameQuarter": "Saint Lazare",  "nameSubQuarter": "Hopitaux Facultes",  "nameCity": "Montpellier",  "genre": "M",   "xAxis": 0.5648287589089912,    "yAxis": 0.22180451127819548,   "color": "#de6154"  },
+    {   "activity": "swimming", "practiceDate": ("2010-04-30T00:00:00.000Z"),    "radius": 20, "nbHour": 1,    "nameQuarter": "Saint Lazare",  "nameSubQuarter": "Hopitaux Facultes",  "nameCity": "Montpellier",  "genre": "M",   "xAxis": 0.5648287589089912,    "yAxis": 0.22180451127819548,   "color": "#de6154"  },
+    {   "activity": "basket-ball",  "practiceDate": ("2010-04-30T00:00:00.000Z"),    "radius": 20, "nbHour": 1,    "nameQuarter": "Aiguelongues",  "nameSubQuarter": "Hopitaux Facultes",  "nameCity": "Montpellier",  "genre": "M",   "xAxis": 0.3663325183074875,    "yAxis": 0.24385964912280703,   "color": "#de6154"  },
+    {   "activity": "basket-ball",  "practiceDate": ("2010-04-30T00:00:00.000Z"),    "radius": 20, "nbHour": 1,    "nameQuarter": "Hotel de departement",  "nameSubQuarter": "Les Cevennes",   "nameCity": "Montpellier",  "genre": "M",   "xAxis": 0.27811196692904133,   "yAxis": 0.3506265664160401,    "color": "#d5df64"  },
+    {   "activity": "basket-ball",  "practiceDate": ("2010-04-30T00:00:00.000Z"),    "radius": 20, "nbHour": 1,    "nameQuarter": "Saint Lazare",  "nameSubQuarter": "Hopitaux Facultes",  "nameCity": "Montpellier",  "genre": "M",   "xAxis": 0.5648287589089912,    "yAxis": 0.22180451127819548,   "color": "#de6154"  },
+    {   "activity": "basket-ball",  "practiceDate": ("2010-04-30T00:00:00.000Z"),    "radius": 20, "nbHour": 1,    "nameQuarter": "Saint Lazare",  "nameSubQuarter": "Hopitaux Facultes",  "nameCity": "Montpellier",  "genre": "M",   "xAxis": 0.5648287589089912,    "yAxis": 0.22180451127819548,   "color": "#de6154"  },
+    {   "activity": "soccer",   "practiceDate": ("2010-04-30T00:00:00.000Z"),    "radius": 20, "nbHour": 1,    "nameQuarter": "Saint Lazare",  "nameSubQuarter": "Hopitaux Facultes",  "nameCity": "Montpellier",  "genre": "M",   "xAxis": 0.5648287589089912,    "yAxis": 0.22180451127819548,   "color": "#de6154"  },
+    {   "activity": "run",  "practiceDate": ("2010-04-30T00:00:00.000Z"),    "radius": 20, "nbHour": 1,    "nameQuarter": "Saint Lazare",  "nameSubQuarter": "Hopitaux Facultes",  "nameCity": "Montpellier",  "genre": "M",   "xAxis": 0.5648287589089912,    "yAxis": 0.22180451127819548,   "color": "#de6154"  },
+    {   "activity": "swimming", "practiceDate": ("2010-04-30T00:00:00.000Z"),    "radius": 20, "nbHour": 1,    "nameQuarter": "Saint Lazare",  "nameSubQuarter": "Hopitaux Facultes",  "nameCity": "Montpellier",  "genre": "M",   "xAxis": 0.5648287589089912,    "yAxis": 0.22180451127819548,   "color": "#de6154"  },
+    {   "activity": "basket-ball",  "practiceDate": ("2010-04-30T00:00:00.000Z"),    "radius": 20, "nbHour": 1,    "nameQuarter": "Saint Lazare",  "nameSubQuarter": "Hopitaux Facultes",  "nameCity": "Montpellier",  "genre": "M",   "xAxis": 0.5648287589089912,    "yAxis": 0.22180451127819548,   "color": "#de6154"  },
+    {   "activity": "run",  "practiceDate": ("2010-04-30T00:00:00.000Z"),    "radius": 20, "nbHour": 1,    "nameQuarter": "Saint Lazare",  "nameSubQuarter": "Hopitaux Facultes",  "nameCity": "Montpellier",  "genre": "M",   "xAxis": 0.5648287589089912,    "yAxis": 0.22180451127819548,   "color": "#de6154"  },
+    {   "activity": "taekwondo",    "practiceDate": ("2010-04-30T00:00:00.000Z"),    "radius": 20, "nbHour": 1,    "nameQuarter": "Saint Lazare",  "nameSubQuarter": "Hopitaux Facultes",  "nameCity": "Montpellier",  "genre": "M",   "xAxis": 0.5648287589089912,    "yAxis": 0.22180451127819548,   "color": "#de6154"  },
+    {   "activity": "taekwondo",    "practiceDate": ("2010-04-30T00:00:00.000Z"),    "radius": 20, "nbHour": 1,    "nameQuarter": "Saint Lazare",  "nameSubQuarter": "Hopitaux Facultes",  "nameCity": "Montpellier",  "genre": "M",   "xAxis": 0.5648287589089912,    "yAxis": 0.22180451127819548,   "color": "#de6154"  },
+    {   "activity": "taekwondo",    "practiceDate": ("2010-04-30T00:00:00.000Z"),    "radius": 20, "nbHour": 1,    "nameQuarter": "Saint Lazare",  "nameSubQuarter": "Hopitaux Facultes",  "nameCity": "Montpellier",  "genre": "M",   "xAxis": 0.5648287589089912,    "yAxis": 0.22180451127819548,   "color": "#de6154"  },
+    {   "activity": "taekwondo",    "practiceDate": ("2010-04-30T00:00:00.000Z"),    "radius": 20, "nbHour": 1,    "nameQuarter": "Saint Lazare",  "nameSubQuarter": "Hopitaux Facultes",  "nameCity": "Montpellier",  "genre": "M",   "xAxis": 0.5648287589089912,    "yAxis": 0.22180451127819548,   "color": "#de6154"  },
+    {   "activity": "run",  "practiceDate": ("2010-04-30T00:00:00.000Z"),    "radius": 20, "nbHour": 1,    "nameQuarter": "Saint Lazare",  "nameSubQuarter": "Hopitaux Facultes",  "nameCity": "Montpellier",  "genre": "M",   "xAxis": 0.5648287589089912,    "yAxis": 0.22180451127819548,   "color": "#de6154"  },
+    {   "activity": "swimming", "practiceDate": ("2010-04-30T00:00:00.000Z"),    "radius": 20, "nbHour": 1,    "nameQuarter": "Saint Lazare",  "nameSubQuarter": "Hopitaux Facultes",  "nameCity": "Montpellier",  "genre": "M",   "xAxis": 0.5648287589089912,    "yAxis": 0.22180451127819548,   "color": "#de6154"  },
+    {   "activity": "taekwondo",    "practiceDate": ("2010-04-30T00:00:00.000Z"),    "radius": 20, "nbHour": 1,    "nameQuarter": "Saint Lazare",  "nameSubQuarter": "Hopitaux Facultes",  "nameCity": "Montpellier",  "genre": "M",   "xAxis": 0.5648287589089912,    "yAxis": 0.22180451127819548,   "color": "#de6154"  },
+    {   "activity": "swimming", "practiceDate": ("2010-04-30T00:00:00.000Z"),    "radius": 20, "nbHour": 1,    "nameQuarter": "Saint Lazare",  "nameSubQuarter": "Hopitaux Facultes",  "nameCity": "Montpellier",  "genre": "M",   "xAxis": 0.5648287589089912,    "yAxis": 0.22180451127819548,   "color": "#de6154"  },
+    {   "activity": "soccer",   "practiceDate": ("2010-04-30T00:00:00.000Z"),    "radius": 20, "nbHour": 1,    "nameQuarter": "Saint Lazare",  "nameSubQuarter": "Hopitaux Facultes",  "nameCity": "Montpellier",  "genre": "M",   "xAxis": 0.5648287589089912,    "yAxis": 0.22180451127819548,   "color": "#de6154"  },
+    {   "activity": "soccer",   "practiceDate": ("2010-04-30T00:00:00.000Z"),    "radius": 20, "nbHour": 1,    "nameQuarter": "Saint Lazare",  "nameSubQuarter": "Hopitaux Facultes",  "nameCity": "Montpellier",  "genre": "M",   "xAxis": 0.5648287589089912,    "yAxis": 0.22180451127819548,   "color": "#de6154"  },
+    {   "activity": "soccer",   "practiceDate": ("2010-04-30T00:00:00.000Z"),    "radius": 20, "nbHour": 1,    "nameQuarter": "Saint Lazare",  "nameSubQuarter": "Hopitaux Facultes",  "nameCity": "Montpellier",  "genre": "M",   "xAxis": 0.5648287589089912,    "yAxis": 0.22180451127819548,   "color": "#de6154"  },
+    {   "activity": "taekwondo",    "practiceDate": ("2010-04-30T00:00:00.000Z"),    "radius": 20, "nbHour": 1,    "nameQuarter": "Saint Lazare",  "nameSubQuarter": "Hopitaux Facultes",  "nameCity": "Montpellier",  "genre": "M",   "xAxis": 0.5648287589089912,    "yAxis": 0.22180451127819548,   "color": "#de6154"  },
+    {   "activity": "run",  "practiceDate": ("2010-04-30T00:00:00.000Z"),    "radius": 20, "nbHour": 1,    "nameQuarter": "Saint Lazare",  "nameSubQuarter": "Hopitaux Facultes",  "nameCity": "Montpellier",  "genre": "M",   "xAxis": 0.5648287589089912,    "yAxis": 0.22180451127819548,   "color": "#de6154"  },
+    {   "activity": "run",  "practiceDate": ("2010-04-30T00:00:00.000Z"),    "radius": 20, "nbHour": 1,    "nameQuarter": "Saint Lazare",  "nameSubQuarter": "Hopitaux Facultes",  "nameCity": "Montpellier",  "genre": "M",   "xAxis": 0.5648287589089912,    "yAxis": 0.22180451127819548,   "color": "#de6154"  },
+    {   "activity": "swimming", "practiceDate": ("2010-04-30T00:00:00.000Z"),    "radius": 20, "nbHour": 1,    "nameQuarter": "Saint Lazare",  "nameSubQuarter": "Hopitaux Facultes",  "nameCity": "Montpellier",  "genre": "M",   "xAxis": 0.5648287589089912,    "yAxis": 0.22180451127819548,   "color": "#de6154"  },
+    {   "activity": "swimming", "practiceDate": ("2010-04-30T00:00:00.000Z"),    "radius": 20, "nbHour": 1,    "nameQuarter": "Saint Lazare",  "nameSubQuarter": "Hopitaux Facultes",  "nameCity": "Montpellier",  "genre": "M",   "xAxis": 0.5648287589089912,    "yAxis": 0.22180451127819548,   "color": "#de6154"  },
+    {   "activity": "soccer",   "practiceDate": ("2010-04-30T00:00:00.000Z"),    "radius": 20, "nbHour": 1,    "nameQuarter": "Saint Lazare",  "nameSubQuarter": "Hopitaux Facultes",  "nameCity": "Montpellier",  "genre": "M",   "xAxis": 0.5648287589089912,    "yAxis": 0.22180451127819548,   "color": "#de6154"  },
+    {   "activity": "taekwondo",    "practiceDate": ("2010-04-30T00:00:00.000Z"),    "radius": 20, "nbHour": 1,    "nameQuarter": "Saint Lazare",  "nameSubQuarter": "Hopitaux Facultes",  "nameCity": "Montpellier",  "genre": "M",   "xAxis": 0.5648287589089912,    "yAxis": 0.22180451127819548,   "color": "#de6154"  },
+    {   "activity": "taekwondo",    "practiceDate": ("2010-04-30T00:00:00.000Z"),    "radius": 20, "nbHour": 1,    "nameQuarter": "Saint Lazare",  "nameSubQuarter": "Hopitaux Facultes",  "nameCity": "Montpellier",  "genre": "M",   "xAxis": 0.5648287589089912,    "yAxis": 0.22180451127819548,   "color": "#de6154"  },
+    {   "activity": "soccer",   "practiceDate": ("2010-04-30T00:00:00.000Z"),    "radius": 20, "nbHour": 1,    "nameQuarter": "Saint Lazare",  "nameSubQuarter": "Hopitaux Facultes",  "nameCity": "Montpellier",  "genre": "M",   "xAxis": 0.5648287589089912,    "yAxis": 0.22180451127819548,   "color": "#de6154"  },
+    {   "activity": "soccer",   "practiceDate": ("2010-04-30T00:00:00.000Z"),    "radius": 20, "nbHour": 1,    "nameQuarter": "Saint Lazare",  "nameSubQuarter": "Hopitaux Facultes",  "nameCity": "Montpellier",  "genre": "M",   "xAxis": 0.5648287589089912,    "yAxis": 0.22180451127819548,   "color": "#de6154"  }
+];
 
-function updateStatistics2D()
+
+
+function updateLegend($rootScope)
+{
+    var resultHtml = "";
+    var arrControlDuplicates = [];
+    var columToDisplay = 'nameQuarter'; //'nameSubQuarter', 'nameSubQuarter'
+    var legend2DData = [];
+    for (i in $rootScope.data2D){
+        if( arrControlDuplicates.indexOf($rootScope.data2D[i][columToDisplay]) == -1 ){
+            arrControlDuplicates.push($rootScope.data2D[i][columToDisplay]);
+            legend2DData.push($rootScope.data2D[i]);
+            
+            //Jquery
+            //tmpRow = addColorToQuartier($rootScope.data2D[i], columToDisplay);
+            //resultHtml += "<div> " + tmpRow[columToDisplay] + " - " + tmpRow['nbHoursQ'] + " - " + tmpRow['percentageQ'] + " %</div>"
+        }
+    }
+    //Angular 
+    $rootScope.legend2DData = legend2DData;
+    //Jquery
+    //jQuery('#legend2D').html(resultHtml);
+}
+
+function updateStatistics2D($rootScope)
 {
     jQuery("#div_content_2d").html("");//Jimmy: Pending change to manage with the object
+    updateLegend($rootScope);
+
     var width = jQuery("#div_content_2d").width();
     var height = jQuery("#div_content_2d").height();
 
-    d3.select("#div_content_2d")
-        .on('click', function(){
-            var mouseCoords = d3.mouse(this);
-            //alert("x_axis: " +  mouseCoords);
-            //console.log(' {"x_axis": ' +  mouseCoords[0] + ', "y_axis": ' + mouseCoords[1] + ', "radius": 20, "color" : "red" }');
-            console.log(' {"x_axis": ' +  enconde2DToPercentageCoords(mouseCoords[0], width) + ', "y_axis": ' + enconde2DToPercentageCoords(mouseCoords[1], width) + ', "radius": 20, "color" : "red" }');
-        });
-
     var svg = getSvg2D();
-    //: Jimmy: colors -> http://www.color-hex.com/random.php
-    var jsonCircles = [
-        { "x_axis": 0.115, "y_axis": 0.197802197802198, "radius": 20, "color" : "#de6154", "id" : 01, "value" : 4, "text": "quartier_name_01"},
-        { "x_axis": 0.115, "y_axis": 0.351648351648352, "radius": 20, "color" : "#059788", "id" : 02, "value" : 4, "text": "quartier_name_02"},
-        { "x_axis": 0.148, "y_axis": 0.450549450549451, "radius": 20, "color" : "#0085c1", "id" : 03, "value" : 4, "text": "quartier_name_03"},
-        { "x_axis": 0.17, "y_axis": 0.582417582417582, "radius": 20, "color" : "#8ee35e", "id" : 04, "value" : 4, "text": "quartier_name_04"},
-        { "x_axis": 0.332, "y_axis": 0.225274725274725, "radius": 20, "color" : "#a7aebd", "id" : 05, "value" : 4, "text": "quartier_name_05"},
-        { "x_axis": 0.273, "y_axis": 0.352747252747253, "radius": 20, "color" : "#577355", "id" : 06, "value" : 4, "text": "quartier_name_06"},
-        { "x_axis": 0.345, "y_axis": 0.112087912087912, "radius": 20, "color" : "#97e007", "id" : 07, "value" : 4, "text": "quartier_name_07"},
-        { "x_axis": 0.33, "y_axis": 0.43956043956044, "radius": 20, "color" : "#855d6d", "id" : 08, "value" : 4, "text": "quartier_name_08"},
-        { "x_axis": 0.3, "y_axis": 0.538461538461538, "radius": 20, "color" : "#22b23d", "id" : 09, "value" : 4, "text": "quartier_name_09"},
-        { "x_axis": 0.29, "y_axis": 0.681318681318681, "radius": 20, "color" : "#efa199", "id" : 10, "value" : 4, "text": "quartier_name_10"},
-        { "x_axis": 0.38, "y_axis": 0.615384615384615, "radius": 20, "color" : "#dd91a6", "id" : 11, "value" : 4, "text": "quartier_name_11"},
-        { "x_axis": 0.425, "y_axis": 0.781318681318681, "radius": 20, "color" : "#a0187b", "id" : 12, "value" : 4, "text": "quartier_name_12"},
-        { "x_axis": 0.666, "y_axis": 0.434065934065934, "radius": 20, "color" : "#53b310", "id" : 13, "value" : 4, "text": "quartier_name_13"},
-        { "x_axis": 0.57, "y_axis": 0.647252747252747, "radius": 20, "color" : "#c2cea1", "id" : 14, "value" : 4, "text": "quartier_name_14"},
-        { "x_axis": 0.46, "y_axis": 0.381318681318681, "radius": 20, "color" : "#e378da", "id" : 15, "value" : 4, "text": "quartier_name_15"},
-        { "x_axis": 0.895, "y_axis": 0.406593406593407, "radius": 20, "color" : "#67cfaa", "id" : 16, "value" : 4, "text": "quartier_name_16"},
-        { "x_axis": 0.768, "y_axis": 0.447252747252747, "radius": 20, "color" : "#9078c9", "id" : 17, "value" : 4, "text": "quartier_name_17"},
-        { "x_axis": 0.81, "y_axis": 0.598901098901099, "radius": 20, "color" : "#f01bfd", "id" : 18, "value" : 4, "text": "quartier_name_18"},
-        { "x_axis": 0.646, "y_axis": 0.658241758241758, "radius": 20, "color" : "#3e36e1", "id" : 19, "value" : 4, "text": "quartier_name_19"},
-        { "x_axis": 0.531, "y_axis": 0.707692307692308, "radius": 20, "color" : "#a13a56", "id" : 20, "value" : 4, "text": "quartier_name_20"},
-        { "x_axis": 0.562, "y_axis": 0.553846153846154, "radius": 20, "color" : "#d5df64", "id" : 21, "value" : 4, "text": "quartier_name_21"},
-        { "x_axis": 0.545, "y_axis": 0.498901098901099, "radius": 20, "color" : "#5aa576", "id" : 22, "value" : 4, "text": "quartier_name_22"},
-        { "x_axis": 0.616, "y_axis": 0.502197802197802, "radius": 20, "color" : "#291e9e", "id" : 23, "value" : 4, "text": "quartier_name_23"},
-        { "x_axis": 0.579, "y_axis": 0.393406593406593, "radius": 20, "color" : "#2ba56c", "id" : 24, "value" : 4, "text": "quartier_name_24"},
-        { "x_axis": 0.492, "y_axis": 0.469230769230769, "radius": 20, "color" : "#b230c5", "id" : 25, "value" : 4, "text": "quartier_name_25"},
-        { "x_axis": 0.493, "y_axis": 0.568131868131868, "radius": 20, "color" : "#888879", "id" : 26, "value" : 4, "text": "quartier_name_26"},
-        { "x_axis": 0.423, "y_axis": 0.545054945054945, "radius": 20, "color" : "#f24992", "id" : 27, "value" : 4, "text": "quartier_name_27"},
-        { "x_axis": 0.421, "y_axis": 0.473626373626374, "radius": 20, "color" : "#c8f347", "id" : 28, "value" : 4, "text": "quartier_name_28"},
-        { "x_axis": 0.555, "y_axis": 0.268131868131868, "radius": 20, "color" : "#9d953a", "id" : 29, "value" : 4, "text": "quartier_name_29"}
-    ];
-    
     
     var circles = svg.selectAll("circle")
-        .data(jsonCircles)
+        .data($rootScope.data2D)
         .enter()
-        .append("circle")
-    ;
+        .append("circle");
     
-    var nodes = svg.append("g")
-        .attr("class", "nodes")
-        .selectAll("circle")
-        .data(jsonCircles)
-        .enter()
-        // Add one g element for each data node here.
-        .append("g")
-        // Position the g element like the circle element used to be.
-        .attr("transform", function(d, i) {
-            return "translate(" + d.x_axis + "," + d.y_axis + ")";
-        });
-    ;
-
-    
-    // Add a text element to the previously added g element.
-    nodes.append("text")
-         .attr("text-anchor", "middle")
-         .text(function(d) {
-           //return "" + d.x_axis + "," + d.y_axis + "";
-           //return "" + d.text + ":\n " + d.value + "";
-           return "" + d.id + ": " + d.value + "%";
-    });
-
-
     var circleAttributes = circles
-        .attr("cx", function (d) { return decode2DToPercentageCoordsTo2D(d.x_axis, width); })
-        .attr("cy", function (d) { return decode2DToPercentageCoordsTo2D(d.y_axis, height); })
-        .attr("r", function (d) { return d.radius; })
+        .attr("cx", function (d) { return decode2DToPercentageCoordsTo2D(d.xAxis, width); })
+        .attr("cy", function (d) { return decode2DToPercentageCoordsTo2D(d.yAxis, height); })
+        .attr("r", function (d) { return (15 + d.percentage * 0.25); })//Jimmy: circle's proportion
+        .attr("cursor", 'pointer')//Jimmy: Cursor
+        .on("click", function(d){
+            console.log(' Info ', d);
+        })
+        .on("mouseover", function(d){
+            console.log('nameQuarter: ', d.nameQuarter + ', nameSubQuarter: ', d.nameSubQuarter);
+            
+        })
+        .on("mouseenter", function(d){
+            d3.select(this)
+                .transition()
+                .duration(200)
+                .attr('stroke-width',3)
+                .attr("r", (15 + d.percentage * 0.25) * 1.5 );
+            
+        })
+        .on("mouseleave", function(d){
+            d3.select(this)
+                .transition()
+                .duration(200)
+                .attr('stroke-width',0)
+                .attr('stroke-width',0)
+                .attr("r", (15 + d.percentage * 0.25) );
+            
+        })
         .style("fill", function(d) { return d.color; });
+    
+    //Add the SVG Text Element to the svgContainer
+    var text = svg.selectAll("text")
+        .data($rootScope.data2D)
+        .enter()
+        .append("text");
+        
+    //Add SVG Text Element Attributes
+    var textLabels = text
+        .attr("x", function(d) { return decode2DToPercentageCoordsTo2D(d.xAxis, width); })
+        .attr("y", function(d) { return decode2DToPercentageCoordsTo2D(d.yAxis, height); })
+        .text( function (d) { return "" + d.percentage +"%"; })
+        .attr("text-anchor", "middle")
+        .attr("font-family", "sans-serif")
+        .attr("font-weight", "bold")
+        .attr("font-size", "10px")
+        .attr("fill", "white")
+
+    
 }
 
 function getSvg2D()
@@ -215,60 +334,50 @@ function getSvg2D()
 
 app.controller('controller2D', function($scope, $http, $rootScope){
     $rootScope.selectedAction = "2D";
+    $rootScope.formAction = "2D";
+    $rootScope.legend2DData = [];
+
     console.log("Dans controller2D");
-    $http.get(ARR_CONTROLLER_ULRS[VERSION_TO_USE]['1D']).then(function(response){
-        var filtersData = toObject(getFilterData(response.data));//Jimmy: toObject used to Cast a Array to a Object
-        filtersData = excludeFilerKeys(filtersData, notIncludeFilerKeys);
-        $scope.filtersData = filtersData;
-        $rootScope.city = response.data.city;
-        $rootScope.practice = response.data.practice;
-        updateStatistics2D();
+    if( $rootScope.filtersData == undefined ){
+        $http.get(ARR_CONTROLLER_ULRS[VERSION_TO_USE]['filters']).then(function(response){
+            var filtersData = toObject(getFilterData(response.data));//Jimmy: toObject used to Cast a Array to a Object
+            filtersData = excludeFilerKeys(filtersData, notIncludeFilerKeys);
+            $rootScope.filtersData = filtersData;
+            //$rootScope.city = response.data.city;
+            //$rootScope.practice = response.data.practice;
+        });
+    }
+     /* EVENTS 2D */
+    angular.element(document).ready(function () {
+        $rootScope.sendFilterForm();//Jimmy: Call sendFilterForm() when document it's ready to always update the information
+        //D3 Event Click
+        d3.select("#div_content_2d")
+            .on('click', function(){
+                var mouseCoords = d3.mouse(this);
+                console.log(' {"xAxis": ' +  enconde2DToPercentageCoords(mouseCoords[0], jQuery("#div_content_2d").width()) + ', "yAxis": ' + enconde2DToPercentageCoords(mouseCoords[1], jQuery("#div_content_2d").height()) + ', "radius": 20, "color" : "red" }');
+            });
     });
 });
 
 
 app.controller('controller3D', function($scope, $http, $rootScope){
     $rootScope.selectedAction = "3D";
+    $rootScope.formAction = "3D";
     console.log("Dans controller3D");
-    $http.get(ARR_CONTROLLER_ULRS[VERSION_TO_USE]['1D']).then(function(response){
-        var filtersData = toObject(getFilterData(response.data));//Jimmy: toObject used to Cast a Array to a Object
-        filtersData = excludeFilerKeys(filtersData, notIncludeFilerKeys);
-        $scope.filtersData = filtersData;
-        $rootScope.city = response.data.city;
-        $rootScope.practice = response.data.practice;
+    if( $rootScope.filtersData == undefined ){
+        $http.get(ARR_CONTROLLER_ULRS[VERSION_TO_USE]['1D']).then(function(response){
+            var filtersData = toObject(getFilterData(response.data));//Jimmy: toObject used to Cast a Array to a Object
+            filtersData = excludeFilerKeys(filtersData, notIncludeFilerKeys);
+            $rootScope.filtersData = filtersData;
+            $rootScope.city = response.data.city;
+            $rootScope.practice = response.data.practice;
 
-        $rootScope.data3D = [
-            { "x_axis": 0.115, "y_axis": 0.197802197802198, "radius": 20, "color" : "#de6154", "id" : 01, "value" : 4, "text": "quartier_name_01"},
-            { "x_axis": 0.115, "y_axis": 0.351648351648352, "radius": 20, "color" : "#059788", "id" : 02, "value" : 4, "text": "quartier_name_02"},
-            { "x_axis": 0.148, "y_axis": 0.450549450549451, "radius": 20, "color" : "#0085c1", "id" : 03, "value" : 4, "text": "quartier_name_03"},
-            { "x_axis": 0.17, "y_axis": 0.582417582417582, "radius": 20, "color" : "#8ee35e", "id" : 04, "value" : 4, "text": "quartier_name_04"},
-            { "x_axis": 0.332, "y_axis": 0.225274725274725, "radius": 20, "color" : "#a7aebd", "id" : 05, "value" : 4, "text": "quartier_name_05"},
-            { "x_axis": 0.273, "y_axis": 0.352747252747253, "radius": 20, "color" : "#577355", "id" : 06, "value" : 4, "text": "quartier_name_06"},
-            { "x_axis": 0.345, "y_axis": 0.112087912087912, "radius": 20, "color" : "#97e007", "id" : 07, "value" : 4, "text": "quartier_name_07"},
-            { "x_axis": 0.33, "y_axis": 0.43956043956044, "radius": 20, "color" : "#855d6d", "id" : 08, "value" : 4, "text": "quartier_name_08"},
-            { "x_axis": 0.3, "y_axis": 0.538461538461538, "radius": 20, "color" : "#22b23d", "id" : 09, "value" : 4, "text": "quartier_name_09"},
-            { "x_axis": 0.29, "y_axis": 0.681318681318681, "radius": 20, "color" : "#efa199", "id" : 10, "value" : 4, "text": "quartier_name_10"},
-            { "x_axis": 0.38, "y_axis": 0.615384615384615, "radius": 20, "color" : "#dd91a6", "id" : 11, "value" : 4, "text": "quartier_name_11"},
-            { "x_axis": 0.425, "y_axis": 0.781318681318681, "radius": 20, "color" : "#a0187b", "id" : 12, "value" : 4, "text": "quartier_name_12"},
-            { "x_axis": 0.666, "y_axis": 0.434065934065934, "radius": 20, "color" : "#53b310", "id" : 13, "value" : 4, "text": "quartier_name_13"},
-            { "x_axis": 0.57, "y_axis": 0.647252747252747, "radius": 20, "color" : "#c2cea1", "id" : 14, "value" : 4, "text": "quartier_name_14"},
-            { "x_axis": 0.46, "y_axis": 0.381318681318681, "radius": 20, "color" : "#e378da", "id" : 15, "value" : 4, "text": "quartier_name_15"},
-            { "x_axis": 0.895, "y_axis": 0.406593406593407, "radius": 20, "color" : "#67cfaa", "id" : 16, "value" : 4, "text": "quartier_name_16"},
-            { "x_axis": 0.768, "y_axis": 0.447252747252747, "radius": 20, "color" : "#9078c9", "id" : 17, "value" : 4, "text": "quartier_name_17"},
-            { "x_axis": 0.81, "y_axis": 0.598901098901099, "radius": 20, "color" : "#f01bfd", "id" : 18, "value" : 4, "text": "quartier_name_18"},
-            { "x_axis": 0.646, "y_axis": 0.658241758241758, "radius": 20, "color" : "#3e36e1", "id" : 19, "value" : 4, "text": "quartier_name_19"},
-            { "x_axis": 0.531, "y_axis": 0.707692307692308, "radius": 20, "color" : "#a13a56", "id" : 20, "value" : 4, "text": "quartier_name_20"},
-            { "x_axis": 0.562, "y_axis": 0.553846153846154, "radius": 20, "color" : "#d5df64", "id" : 21, "value" : 4, "text": "quartier_name_21"},
-            { "x_axis": 0.545, "y_axis": 0.498901098901099, "radius": 20, "color" : "#5aa576", "id" : 22, "value" : 4, "text": "quartier_name_22"},
-            { "x_axis": 0.616, "y_axis": 0.502197802197802, "radius": 20, "color" : "#291e9e", "id" : 23, "value" : 4, "text": "quartier_name_23"},
-            { "x_axis": 0.579, "y_axis": 0.393406593406593, "radius": 20, "color" : "#2ba56c", "id" : 24, "value" : 4, "text": "quartier_name_24"},
-            { "x_axis": 0.492, "y_axis": 0.469230769230769, "radius": 20, "color" : "#b230c5", "id" : 25, "value" : 4, "text": "quartier_name_25"},
-            { "x_axis": 0.493, "y_axis": 0.568131868131868, "radius": 20, "color" : "#888879", "id" : 26, "value" : 4, "text": "quartier_name_26"},
-            { "x_axis": 0.423, "y_axis": 0.545054945054945, "radius": 20, "color" : "#f24992", "id" : 27, "value" : 4, "text": "quartier_name_27"},
-            { "x_axis": 0.421, "y_axis": 0.473626373626374, "radius": 20, "color" : "#c8f347", "id" : 28, "value" : 4, "text": "quartier_name_28"},
-            { "x_axis": 0.555, "y_axis": 0.268131868131868, "radius": 20, "color" : "#9d953a", "id" : 29, "value" : 4, "text": "quartier_name_29"}
-            
-        ];
+            $rootScope.data3D = $rootScope.data2D;
+        });
+    }
+    /* EVENTS 3D */
+    angular.element(document).ready(function () {
+        $rootScope.sendFilterForm();//Jimmy: Call sendFilterForm() when document it's ready to always update the information
     });
 });
 
@@ -288,25 +397,31 @@ function addEventFilters(){
 }
  */
 
-//Jimmy: Angular Event onChange to send the filters 
-app.directive( 'filterReady', function( $parse ) {
-   return {
-       restrict: 'A',
-       link: function( $scope, elem, attrs ) {    
-            elem.change(function(){
+
+// ******** EVENTS **********
+/*
+
+
+ */
+
+    /*
+app.directive( 'displaySecondDimenstion', function( $parse ) {
+    console.log('display-second-dimenstion');
+    return {
+    
+        restrict: 'A',
+        link: function ($scope, elem, attrs){
+            elem.ready(function(){
                 $scope.$apply(function(){
-                    $scope.sendFilterForm();
-                    //sendFilterForm();
-                    //console.log(elem);
-                    //console.log(attrs);
-                    //var func = $parse(attrs.elemReady);
-                    //func($scope);
-                })
-            })
-            //addEventFilters();
+                    console.log('asas');
+                });
+            });
         }
     }
 });
+     */
+
+
 
 
 app.directive('displayThirdDimension', function(){
@@ -315,7 +430,7 @@ app.directive('displayThirdDimension', function(){
     return {
         restrict: 'A',
         link: function (scope, element) {
-            //displayThirdDimension(scope)
+            displayThirdDimension(scope)
         }
     }
 });
@@ -329,7 +444,7 @@ function displayThirdDimension(scope){
         //height = 910; //id ->div_content_2d.heith
         //Jimmy: For to create the graphs
         for ( i in data3D ){
-            coords3d = decode2DToPercentageCoordsTo3D( data3D[i]['x_axis'], width3D, data3D[i]['y_axis'], height3D);
+            coords3d = decode2DToPercentageCoordsTo3D( data3D[i]['xAxis'], width3D, data3D[i]['yAxis'], height3D);
             console.log(coords3d);
 
             var planeMat = new THREE.MeshLambertMaterial({color: data3D[i]['color'] }); // color — Line color in hexadecimal. Default is 0xffffff.

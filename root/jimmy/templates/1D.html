@@ -10,12 +10,11 @@
                 <div class="col-lg-12 col-md-12">
                     <h1>{{selectedAction}}</h1>
                     <p>
-                    Description 1D
-                    <div>
-                        {{filtered}}
-                    </div>
+                        Description {{selectedAction}}
+                        <div>
+                            {{filtered}}
+                        </div>
                     </p>
-                        
                     <div class="box-header well" data-original-title="">
                         <h2><i class="glyphicon glyphicon-th"></i> {{city}} Data</h2>
 
@@ -29,61 +28,23 @@
                         </div>
                     </div>
                     <div class="box-content">
-                        <div class="row">
-                            <div class="col-md-2"><h6><b>sport-activity</b></h6></div>
-                            <div class="col-md-1"><h6><b>practice_date</b></h6></div>
-                            <div class="col-md-1"><h6><b>practice_hour</b></h6></div>
-                            <div class="col-md-2"><h6><b>practice_location</b></h6></div>
-                            <div class="col-md-2"><h6><b>practice_sportsmans</b></h6></div>
-                            <div class="col-md-1"><h6><b>sportman_genre</b></h6></div>
-                            <div class="col-md-1"><h6><b>sportman_age</b></h6></div>
-                            <div class="col-md-1"><h6><b>result_seconds</b></h6></div>
+                        <div class="row" >
+                            <div class="col-md-2" ng-repeat="titre in titres">
+                                <h6><b>{{titre}}</b></h6>
+                            </div>
                         </div>
                         <div class="row" ng-repeat="row in practice">
-                            <div class="col-md-2"><h6>{{row['sport-activity']}}</h6></div>
-                            <div class="col-md-1"><h6>{{row['practice_date']}}</h6></div>
-                            <div class="col-md-1"><h6>{{row['practice_hour']}}</h6></div>
-                            <div class="col-md-2">
-                                <h6>x,y: ({{row['practice_location']['x1']}},  {{row['practice_location']['y1']}})</h6>
-                            </div>
-                            <div class="col-md-2">
-                                <div class="row" ng-repeat="sportman in row['practice_sportsmans']">
-                                    <div class="col-md-12"><h6>{{sportman['sportman_name']}}</h6></div>
-                                </div>
-                            </div>
-                            <div class="col-md-1">
-                                <div class="row" ng-repeat="sportman in row['practice_sportsmans']">
-                                    <div class="col-md-12"><h6>{{sportman['sportman_genre']}}</h6></div>
-                                </div>
-                            </div>
-                            <div class="col-md-1">
-                                <div class="row" ng-repeat="sportman in row['practice_sportsmans']">
-                                    <div class="col-md-12"><h6>{{sportman['sportman_age']}}</h6></div>
-                                </div>
-                            </div>
-                            <div class="col-md-1">
-                                <div class="row" ng-repeat="sportman in row['practice_sportsmans']">
-                                    <div class="col-md-12"><h6>{{sportman['sportman_results']['result_seconds']}}</h6></div>
-                                </div>
+                            <div class="col-md-2" ng-repeat="value in row">
+                                <h6>{{value}}</h6>
+                            
                             </div>
                         </div>
                     </div>
-                    <!-- 
-                        <div >
-                            <span><b>{{city}}</b> Data: </span>
-                            <table border="1">
-                                <tr>
-                                    <td>Sport</td>
-                                    <td>asas</td>
-                                </tr>
-                                <tr ng-repeat="row in practice" >
-                                    <td>{{row['sport-activity']}}</td>
-                                </tr>
-                            </table>
-                        <div>
-                    -->
                 </div>
             </div>
         </div>
     </div>
 </div>
+<!-- 
+<div ng-bind-html="renderHtml(practice.value)"></div>
+-->

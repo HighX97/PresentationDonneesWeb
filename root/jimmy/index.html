@@ -109,37 +109,33 @@
                         <div class="box col-md-12">
                             <div class="box-inner">
                                 <div class="box-header well">
-                                    <h2><i class="glyphicon glyphicon-edit"></i> Filters</h2>
-
-                                    <div class="box-icon">
-                                        <a href="#" class="btn btn-minimize btn-round btn-default">
-                                            <i class="glyphicon glyphicon-chevron-up"></i>
-                                        </a>
-                                    </div>
+                                    <h2><i class="glyphicon glyphicon-edit"></i> Filters {{formAction}}</h2>
                                 </div>
                                 <!-- App Filters -->
                                 <div class="box-content" ng-app="app">
                                     <!-- Form Filters  -->
                                     <form ng-controller="filterController" id="form_filters" >
                                         <!-- Angular  -->
-                                        <div class="row" ng-repeat="(filterKey, filterValue) in filtersData" >
-                                            <div class='col-md-1' style='width: auto;' >
-                                                {{filterKey}}: <br>
-                                                <select multiple='multiple' id='filter_select_{{filterKey}}' name='{{filterKey}}' filter-ready=''>
-                                                    <option ng-repeat="filterRow in filterValue" value='{{filterRow}}'  >{{filterRow}}</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <!-- 
                                         <div class="row">
+                                            <!-- 
                                             <div class="col-md-2" style="align: right;">
                                                 <button class="btn btn-default" type="submit" ng-click="sendFilterForm()" > Filter Data </button>
                                             </div>
+                                            -->
                                             <div class="col-md-2" style="align: right;">
-                                                <button class="btn btn-default" type="reset"> Clear Filters </button>
+                                                <button class="btn btn-default" type="reset" clear-filters> Clear Filters </button>
                                             </div>
                                         </div>
-                                        -->
+                                        <div class="row" ng-repeat="(filterKey, filterValue) in filtersData" >
+                                            <div class='col-md-1' style='width: auto;' >
+                                                <div class="form-group">
+                                                    <label for="{{filterKey}}"><b>{{filterKey}}</b></label>
+                                                    <select multiple='multiple' id='filter_select_{{filterKey}}' name='{{filterKey}}' class='form-control' filter-ready=''>
+                                                        <option ng-repeat="filterRow in filterValue" value='{{filterRow}}'  >{{filterRow}}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </form>
                                 </div>
                             </div>
@@ -164,9 +160,7 @@
                 </div>
                 <!-- Jimmy: Main view to load the templates-->
                 <div>
-                    main view
                     <ng-view></ng-view>
-                    
                 </div>
 
                 <div class="row">
@@ -178,7 +172,7 @@
         </div><!--/fluid-row-->
 
     <footer class="row">
-        <p class="col-md-9 col-sm-9 col-xs-12 copyright">&copy; <a href="mailto:myappeu@gmail.com" target="_blank">Jimmy Munoz</a> 2015</p>
+        <p class="col-md-9 col-sm-9 col-xs-12 copyright">&copy; <a href="mailto:jimmy.munoz-avendano@etu.umontpellier.fr" target="_blank">Jimmy Munoz</a> - <a href="mailto:redoine.el-ouasti@etu.umontpellier.fr" target="_blank">Redoine El Ouasti</a> 2015 - 2016</p>
         <p class="col-md-3 col-sm-3 col-xs-12 powered-by"> UM2 Faculté de Sciences</p>
     </footer>
 

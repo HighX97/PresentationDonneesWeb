@@ -45,16 +45,43 @@ function getFilterData(jsonData, arrFilters)
  */
 function excludeFilerKeys(filtersData, notIncludeFilerKeys)
 {
-    //console.log("notIncludeFilerKeys:"); // ["_id", "x1", "y1"]
-    //console.log(notIncludeFilerKeys);
     for(var key in notIncludeFilerKeys){
         if( filtersData[notIncludeFilerKeys[key]] != undefined ){
             delete filtersData[notIncludeFilerKeys[key]];
         }
     }
-    //console.log("filtersData:");
-    //console.log(filtersData);
     return filtersData;
+}
+
+function addColorToQuartier(row, columKey)
+{
+    row[columKey] = "<div style='width: 15px; height:15px; float: left; background-color: " + row['color'] + ";'></div> " + row[columKey];
+    return row;
+}
+
+/**
+ * [prepareDisplayData Method to filter the data]
+ * @param  {[type]} response_data [description]
+ * @return {[type]}               [description]
+ */
+function prepareDisplayData(response_data){
+    var resultData = {'titres': [], 'data': [ { } ] };
+    if( response_data.length > 0 ){
+        response_data[0] = ( response_data[0] == undefined )? response_data: response_data[0];//Jimmy: filter to use only a object
+        for(var row in response_data){
+            //response_data[row] = addColorToQuartier(response_data[row], 'nameQuarter');
+            for(var key in notInclude1DKeys){
+                if( response_data[row][notInclude1DKeys[key]] != undefined ){
+                    delete response_data[row][notInclude1DKeys[key]];
+                }
+            }
+        }
+        for (var i in response_data[0]){
+            resultData['titres'].push(i); 
+        }
+        resultData['data'] = response_data;
+    }
+    return resultData;
 }
 
 /**

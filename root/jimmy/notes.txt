@@ -47,9 +47,10 @@ use dbname
 > show collections
 
 # Import
-> /usr/local/bin/mongodb/bin/mongoimport --db test --collection restaurants --drop --file /Applications/XAMPP/xamppfiles/htdocs/projectpdw/jimmy/json/ex_json_mongo.json
 
-> /usr/local/bin/mongodb/bin/mongoimport --db pdwsports --collection sportsdata --drop --file /Applications/XAMPP/xamppfiles/htdocs/projectpdw/jimmy/json/sportData2.json
+/usr/local/bin/mongodb/bin/mongoimport --db pdwsports --collection sportsdata --drop --file /Applications/XAMPP/xamppfiles/htdocs/projectpdw/root/jimmy/json/donnees.json --jsonArray
+
+
 
 /usr/local/bin/mongodb/bin/mongoimport --db PresentationDW_Split --collection Region --drop --file /Applications/XAMPP/xamppfiles/htdocs/projectpdw/loic/Mini-Projet/Model/Data/Region.json --jsonArray
 
@@ -86,6 +87,89 @@ db.sportsdata.find( {"city" : "Montpellier"} )
 db.sportsdata.find( {"city" : "Montpellier"}, {"sport-activity": "run"} )
 
 db.sportsdata.find( {"practice.sport-activity" : "run"} )
+
+
+/*
+db.sportsdata.find({
+    practiceDate: {
+        $gte: ISODate("2010-04-29T00:00:00.000Z"),
+        $lt: ISODate("2010-05-01T00:00:00.000Z")
+    }})
+
+db.sportsdata.find( {"activity":["taekwondo"]} )
+db.sportsdata.find( {"activity": {$in :["taekwondo", "swimming"]} } )
+
+db.sportsdata.find({     practiceDate: {         $gte: ISODate("2010-04-29T00:00:00.000Z"),         $lt: ISODate("2011-01-01T00:00:00.000Z")     }},{practiceDate:1})
+
+https://docs.mongodb.org/v3.0/reference/operator/aggregation/sum/
+http://www.querymongo.com/
+
+
+Q1-Sum hours by $activity between $date1 and $date2
+
+=========================================================
+db.sportsdata.group({
+    "key": {
+        "activity": true
+    },
+    "initial": {
+        "sumnbHour": 0
+    },
+    "reduce": function(obj, prev) {
+        prev.sumnbHour = prev.sumnbHour + obj.nbHour - 0;
+    },
+    "cond": {
+        "activity": "run"
+    }
+});
+=========================================================
+
+=========================================================
+db.sportsdata.distinct("nameSubQuarter")
+=========================================================
+
+Q2-Sum hours by $activity between $date1 and $date2 by $location
+
+=========================================================
+db.sportsdata.group({
+    "key": {
+        "activity": true
+    },
+    "initial": {
+        "sumnbHour": 0
+    },
+    "reduce": function(obj, prev) {
+        prev.sumnbHour = prev.sumnbHour + obj.nbHour - 0;
+    },
+    "cond": {
+        "practiceDate": {
+            $gte: ISODate("2010-04-29T00:00:00.000Z"),
+	        $lt: ISODate("2019-05-01T00:00:00.000Z")
+        },
+        "activity": "run",
+        "nameSubQuarter": "Arceaux"
+    }
+});
+=========================================================
+
+Q3 -
+
+db.sportsdata.group({
+    "key": {
+        "nameSubQuarter": true
+    },
+    "initial": {
+        "nbHour": 0
+    },
+    "reduce": function(obj, prev) {
+        prev.nbHour = prev.nbHour + obj.nbHour - 0;
+    },
+    "cond": {
+        "activity": "run"
+    }
+});
+
+*/
 
 
 http://stackoverflow.com/questions/3985214/retrieve-only-the-queried-element-in-an-object-array-in-mongodb-collection
