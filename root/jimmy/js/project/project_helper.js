@@ -317,6 +317,14 @@ function displayThirdDimension(scope, scene){
 }
 
 jQuery( document ).ready(function( $ ) {
+    //jQuery('#table_data_1d').html("");
+    /*
+    
+    //datatable
+    jQuery('.datatable').dataTable({
+      "paging": false,  
+    });
+     */
     //Jimmy: Form filters event onChange
     
     //console.log(jQuery("body"));

@@ -70,8 +70,9 @@ app.controller('controller1D', function($scope, $http, $rootScope){
     /* EVENTS 1D */
     angular.element(document).ready(function () {
         $rootScope.sendFilterForm();//Jimmy: Call sendFilterForm() when document it's ready to always update the information
+        //datatable
+        
     });
-
 });
 
 app.controller('filterController', function($scope, $http, $rootScope){
