@@ -60,7 +60,7 @@ var CONFIG_VERSION = {
     }
     ,'3D': {
         'SportStatistics': {
-            'OrbitControls' : true,
+            'OrbitControls' : false,
             'enebleSky' : false
         },
         'SportSites': {}
