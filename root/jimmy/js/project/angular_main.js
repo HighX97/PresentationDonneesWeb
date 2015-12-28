@@ -3,7 +3,7 @@
 //https://docs.angularjs.org/api/ng/directive/ngSubmit
 
 /*****CONFIG*****/
-var VERSION_TO_USE = "SportStatistics"; //SportStatistics,SportSites
+var VERSION_TO_USE = "SportSites"; //SportStatistics,SportSites
 var CONFIG_VERSION = {
     'NAME_APP': {
         'SportStatistics': "Sport Statistics",
@@ -44,6 +44,10 @@ var CONFIG_VERSION = {
         'SportStatistics': "img/logo.png",
         'SportSites': "img/logo-2.png"
     }
+    ,'enableFiltersLeft': {
+        'SportStatistics': 1,
+        'SportSites': 0
+    }
     ,'CONTROLLER_ULRS': {
         'SportStatistics': {
             'filters': 'http://localhost:8888/getFiltersDataSportStatistics',
@@ -60,7 +64,7 @@ var CONFIG_VERSION = {
     }
     ,'3D': {
         'SportStatistics': {
-            'OrbitControls' : false,
+            'OrbitControls' : true,
             'enebleSky' : false
         },
         'SportSites': {}
@@ -110,6 +114,7 @@ app.run(function($rootScope, $location, $routeParams){
     $rootScope.html_titre = CONFIG_VERSION['TITRE_APP'][VERSION_TO_USE];
     $rootScope.css_template = CONFIG_VERSION['TEMPLATE'][VERSION_TO_USE];
     $rootScope.collaborators = CONFIG_VERSION['COLLABORATORS'][VERSION_TO_USE];
+    $rootScope.enableFiltersLeft = CONFIG_VERSION['enableFiltersLeft'][VERSION_TO_USE];
     $rootScope.selectedAction = "Home";
 });
 
@@ -141,6 +146,26 @@ app.controller('SportStatisticsController1D', function($scope, $http, $rootScope
     });
 });
 
+
+
+app.controller('SportSitesController1D', function($scope, $http, $rootScope){
+    $rootScope.selectedAction = "1D";
+    $rootScope.formAction = "1D";
+    console.log("Dans SportSitesController1D");
+    if( $rootScope.filtersData == undefined ){
+        $http.get(ARR_CONTROLLER_ULRS['filters']).then(function(response){
+            var filtersData = toObject(getFilterData(response.data));//Jimmy: toObject used to Cast a Array to a Object
+            filtersData = excludeFilerKeys(filtersData, NOT_INCLUDE_FILTER_KEYS);
+            $rootScope.filtersData = filtersData;
+        });
+    }
+    /* EVENTS 1D */
+    angular.element(document).ready(function () {
+        
+        
+    });
+});
+
 /**
  * [FilterController]
  * @param  {[type]} $scope        [description]
@@ -148,7 +173,7 @@ app.controller('SportStatisticsController1D', function($scope, $http, $rootScope
  * @return {[type]}               [description]
  * @author Jimmy
  */
-app.controller('filterController', function($scope, $http, $rootScope){
+app.controller('SportStatisticsfilterController', function($scope, $http, $rootScope){
     console.log("Dans filterController");
     $rootScope.sendFilterForm = function(){//https://docs.angularjs.org/api/ng/directive/ngSubmit
         var formData = jQuery("#form_filters").serialize();
@@ -169,7 +194,41 @@ app.controller('filterController', function($scope, $http, $rootScope){
                 default:
                     break;
             }
-            updateStatistics2D($rootScope);
+            //if( VERSION_TO_USE = "SportSites"; //SportStatistics ){
+                updateStatistics2D($rootScope);
+            //}
+        });
+    } 
+
+    $rootScope.resetForm = function ()
+    {
+        jQuery("#form_filters")[0].reset();
+        $rootScope.sendFilterForm()
+    }
+    /* EVENTS FILTER FORM  -> Directives filterReady, clearFilters*/
+});
+
+app.controller('SportSitesFilterController', function($scope, $http, $rootScope){
+    console.log("Dans SportSitesFilterController");
+    $rootScope.sendFilterForm = function(){//https://docs.angularjs.org/api/ng/directive/ngSubmit
+        var formData = jQuery("#form_filters").serialize();
+        var formAction = $scope.formAction;//1D, 2D, 3D
+
+        $http.get(ARR_CONTROLLER_ULRS[formAction] + '?' + formData ).then(function(response){
+            //https://api.jquery.com/jquery.extend/
+            //Clone object http://heyjavascript.com/4-creative-ways-to-clone-objects/
+            $rootScope.data2D = jQuery.extend(true, [], response.data);
+            console.log($rootScope.data2D);
+            switch(formAction){
+                case '2D':
+                case '3D':
+                case '1D':
+                default:
+                    break;
+            }
+            //if( VERSION_TO_USE = "SportSites"; //SportStatistics ){
+                //updateStatistics2D($rootScope);
+            //}
         });
     } 
 
@@ -225,8 +284,6 @@ app.directive( 'clearFilters', function( $parse ) {
 app.controller('SportStatisticsController2D', function($scope, $http, $rootScope){
     $rootScope.selectedAction = "2D";
     $rootScope.formAction = "2D";
-    $rootScope.legend2DData = [];
-
     console.log("Dans SportStatisticsController2D");
     if( $rootScope.filtersData == undefined ){
         $http.get(ARR_CONTROLLER_ULRS['filters']).then(function(response){
@@ -237,12 +294,38 @@ app.controller('SportStatisticsController2D', function($scope, $http, $rootScope
     }
      /* EVENTS 2D */
     angular.element(document).ready(function () {
-        $rootScope.sendFilterForm();//Jimmy: Call sendFilterForm() when document it's ready to always update the information
+        $scope.sendFilterForm();//Jimmy: Call sendFilterForm() when document it's ready to always update the information
         //D3 Event Click
+        /*
+        
         d3.select("#div_content_2d")
             .on('click', function(){
                 var mouseCoords = d3.mouse(this);
-                console.log(' {"xAxis": ' +  enconde2DToPercentageCoords(mouseCoords[0], jQuery("#div_content_2d").width()) + ', "yAxis": ' + enconde2DToPercentageCoords(mouseCoords[1], jQuery("#div_content_2d").height()) + ', "radius": 20, "color" : "red" }');
+                console.log(mouseCoords);
+            });
+         */
+    });
+});
+
+app.controller('SportSitesController2D', function($scope, $http, $rootScope){
+    $rootScope.selectedAction = "2D";
+    $rootScope.formAction = "2D";
+    console.log("Dans SportSitesController2D");
+    if( $rootScope.filtersData == undefined ){
+        $http.get(ARR_CONTROLLER_ULRS['filters']).then(function(response){
+            var filtersData = toObject(getFilterData(response.data));//Jimmy: toObject used to Cast a Array to a Object
+            filtersData = excludeFilerKeys(filtersData, NOT_INCLUDE_FILTER_KEYS);
+            $rootScope.filtersData = filtersData;
+        });
+    }
+     /* EVENTS 2D */
+    angular.element(document).ready(function () {
+        //D3 Event Click
+        
+        d3.select("#div_content_2d")
+            .on('click', function(){
+                var mouseCoords = d3.mouse(this);
+                console.log(mouseCoords);
             });
     });
 });
@@ -272,6 +355,27 @@ app.controller('SportStatisticsController3D', function($scope, $http, $rootScope
     /* EVENTS 3D */
     angular.element(document).ready(function () {
         $rootScope.sendFilterForm();//Jimmy: Call sendFilterForm() when document it's ready to always update the information
+    });
+});
+
+
+/**
+ * [3D Controller]
+ * @param  {[type]} $scope        [description]
+ * @param  {[type]} $http         [description]
+ * @return {[type]}               [description]
+ * @author Loïc
+ */
+app.controller('SportSitesController3D', function($scope, $http, $rootScope){
+    $rootScope.selectedAction = "3D";
+    $rootScope.formAction = "3D";
+    console.log("Dans SportStatisticsController3D");
+    if( $rootScope.filtersData == undefined ){
+        
+    }
+    /* EVENTS 3D */
+    angular.element(document).ready(function () {
+
     });
 });
 
@@ -405,28 +509,28 @@ app.config(function ($routeProvider){
     console.log("app config " + VERSION_TO_USE);
     $routeProvider
         .when('/1D', {
-            //controller: VERSION_TO_USE + 'Controller1D',
-            controller: 'SportStatisticsController1D',
+            controller: VERSION_TO_USE + 'Controller1D',
+            //controller: 'SportStatisticsController1D',
             templateUrl: 'templates/' + VERSION_TO_USE + '/1D.html'
         })
         .when('/2D', {
-            //controller: VERSION_TO_USE + 'Controller2D',
-            controller: 'SportStatisticsController2D',
+            controller: VERSION_TO_USE + 'Controller2D',
+            //controller: 'SportStatisticsController2D',
             templateUrl: 'templates/' + VERSION_TO_USE + '/2D.html'
         })
         .when('/3D', {
-            //controller: VERSION_TO_USE + 'Controller3D',
-            controller: 'SportStatisticsController3D',
+            controller: VERSION_TO_USE + 'Controller3D',
+            //controller: 'SportStatisticsController3D',
             templateUrl: 'templates/' + VERSION_TO_USE + '/3D.html'
         })
         .when('/map', {
-            //controller: VERSION_TO_USE + 'ControllerHome',
-            controller: 'SportStatisticsControllerHome',
+            controller: VERSION_TO_USE + 'ControllerHome',
+            //controller: 'SportStatisticsControllerHome',
             templateUrl: 'templates/' + VERSION_TO_USE + '/map.html'
         })
         .when('/', {//otherwhise
-            //controller: VERSION_TO_USE + 'ControllerHome',
-            controller: 'SportStatisticsControllerHome',//Definición del controlador
+            controller: VERSION_TO_USE + 'ControllerHome',
+            //controller: 'SportStatisticsControllerHome',//Definición del controlador
             templateUrl: 'templates/' + VERSION_TO_USE + '/home.html'//Template or templateUrl
         });
 });

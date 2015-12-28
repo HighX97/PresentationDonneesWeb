@@ -249,6 +249,11 @@ function updateStatistics2D($rootScope)
     jQuery("#div_content_2d").html("");//Jimmy: Pending change to manage with the object
     updateLegend($rootScope);
 
+    
+    var div = d3.select("#tooltip");
+    /*
+     */
+
     var width = jQuery("#div_content_2d").width();
     var height = jQuery("#div_content_2d").height();
 
@@ -264,31 +269,49 @@ function updateStatistics2D($rootScope)
         .attr("cy", function (d) { return decode2DToPercentageCoordsTo2D(d.yAxis, height); })
         .attr("r", function (d) { return (15 + d.percentage * 0.25); })//Jimmy: circle's proportion
         .attr("cursor", 'pointer')//Jimmy: Cursor
+        .attr("data-toggle", 'tooltip')//tooltip
+        .attr("titre", function (d) { return 'nameQuarter: ', d.nameQuarter + ', nameSubQuarter: ', d.nameSubQuarter; })//tooltip
         .on("click", function(d){
             console.log(' Info ', d);
             alert('' +  d.nameQuarter + ' - ' + d.nameSubQuarter + ' - ' + d.percentage);
         })
-        .on("mouseover", function(d){
-            console.log('nameQuarter: ', d.nameQuarter + ', nameSubQuarter: ', d.nameSubQuarter);
-            
-        })
-        .on("mouseenter", function(d){
+        .on("mouseover", function(d) {      
             d3.select(this)
                 .transition()
                 .duration(200)
                 .attr('stroke-width',3)
                 .attr("r", (15 + d.percentage * 0.25) * 1.5 );
-            
-        })
-        .on("mouseleave", function(d){
+            div.transition()        
+                .duration(200)      
+                .style("opacity", .9);      
+            div.html('' +  d.nameQuarter + ' - ' + d.nameSubQuarter + ' - <b>' + d.percentage + "%</b>")  
+                .style("left", (d3.event.pageX) + "px")     
+                .style("top", (d3.event.pageY - 28) + "px");    
+            })                  
+        .on("mouseout", function(d) {       
+            div.transition()        
+                .duration(500)      
+                .style("opacity", 0);   
             d3.select(this)
                 .transition()
                 .duration(200)
                 .attr('stroke-width',0)
                 .attr('stroke-width',0)
                 .attr("r", (15 + d.percentage * 0.25) );
+        })
+        /*
+        
+        .on("mouseover", function(d){
+            console.log('nameQuarter: ', d.nameQuarter + ', nameSubQuarter: ', d.nameSubQuarter);
             
         })
+        .on("mouseenter", function(d){
+            
+        })
+        .on("mouseleave", function(d){
+            
+        })
+         */
         .style("fill", function(d) { return d.color; });
     
     //Add the SVG Text Element to the svgContainer
@@ -307,6 +330,8 @@ function updateStatistics2D($rootScope)
         .attr("font-weight", "bold")
         .attr("font-size", "10px")
         .attr("fill", "white")
+
+    //jQuery('[data-toggle="tooltip"]').tooltip();
 }
 
 
@@ -393,6 +418,14 @@ function displayThirdDimension(scope, scene){
     });
 }
 
+function diaplayScoccerField(){
+    //alert("asas");
+    var div = d3.select("#tooltip_3d");
+    div.html('<iframe src="3D/soccer_field/soccer_field.html" style="width: 100%; height:100%; "></iframe>') 
+    div.transition()        
+        .duration(200)      
+        .style("opacity", .9);
+}
 
 jQuery( document ).ready(function( $ ) {
     //jQuery('#table_data_1d').html("");

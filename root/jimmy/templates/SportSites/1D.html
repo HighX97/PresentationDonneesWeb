@@ -15,7 +15,7 @@
             <div class="box-content row" ng-app="app">
                 <div class="col-lg-12 col-md-12">
                     <!-- Form Filters  -->
-                    <form ng-controller="filterController" id="form_filters" >
+                    <form ng-controller="SportSitesFilterController" id="form_filters" >
                     <!-- 
                     <form ng-submit="sendFilterForm()" id="form_filters" >
                     -->
@@ -26,7 +26,7 @@
                         <div class="row">
                             <div class='col-md-1' style='width: auto;' ng-repeat="(filterKey, filterValue) in filtersData">
                                 {{filterKey}}: <br>
-                                <select multiple='multiple' id='filter_select_{{filterKey}}' name='{{filterKey}}'>
+                                <select id='filter_select_{{filterKey}}' name='{{filterKey}}'>
                                     <option ng-repeat="filterRow in filterValue" value='{{filterRow}}'  >{{filterRow}}</option>
                                 </select>
                             </div>

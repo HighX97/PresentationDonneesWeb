@@ -15,6 +15,9 @@
     <script src="bower_components/jquery/jquery.min.js"></script>
     <!-- data table plugin -->
     <script src='js/jquery.dataTables.min.js'></script>
+    <!-- 
+    <script src='js/jquery-ui.js'></script>
+    -->
     <script>
         $.noConflict();
     </script>
@@ -72,7 +75,7 @@
         </div>
     </div>
     <!-- topbar ends -->
-    <div class="ch-container" >
+    <div class="ch-container">
         <div class="row">
 
             <!-- left menu starts -->
@@ -110,7 +113,7 @@
                 </div>
                 <div class="main-menu">
                     <!-- Filters -->
-                    <div class="row">
+                    <div class="row" ng-if="enableFiltersLeft">
                         <div class="box col-md-12">
                             <div class="box-inner">
                                 <div class="box-header well">
@@ -119,7 +122,7 @@
                                 <!-- App Filters -->
                                 <div class="box-content" ng-app="app">
                                     <!-- Form Filters  -->
-                                    <form ng-controller="filterController" id="form_filters" >
+                                    <form ng-controller="SportStatisticsfilterController" id="form_filters" >
                                         <!-- Angular  -->
                                         <div class="row">
                                             <!-- 
@@ -182,5 +185,36 @@
     </footer>
 
 </div><!--/.fluid-container-->
+<style type="text/css">
+div.tooltip {   
+  position: absolute;           
+  text-align: center;           
+  width: auto;                  
+  height: 30px;                 
+  padding: 2px;             
+  font: 12px sans-serif;        
+  background: lightsteelblue;   
+  border: 0px;      
+  border-radius: 8px;           
+  pointer-events: none;         
+}
+div.tooltip_3d {   
+  position: absolute;           
+  text-align: center;           
+  width: 1024px;                  
+  height: 768px;                 
+  padding: 2px;             
+  font: 12px sans-serif;        
+  background: white;   
+  border: 0px;
+  top: 50px;     
+  left: 50px;     
+  border-radius: 8px;           
+  pointer-events: none;
+  z-index: 1000;        
+}
+</style>
+<div id="tooltip" class="tooltip" style="opacity: 0;"></div>
+<div id="tooltip_3d" class="tooltip_3d" style="opacity: 0;"></div>
 </body>
 </html>
