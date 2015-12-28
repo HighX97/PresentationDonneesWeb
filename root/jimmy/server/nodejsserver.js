@@ -13,14 +13,14 @@ sudo npm install -g mongodb
 export NODE_PATH=/usr/local/lib/node_modules
 
 cd /usr/local/lib/node_modules
-node /Applications/XAMPP/xamppfiles/htdocs/projectpdw/root/jimmy/nodejsserver.js
+node /Applications/XAMPP/xamppfiles/htdocs/projectpdw/root/jimmy/server/nodejsserver.js
 
-//node nodejsserver.js
+//node server/nodejsserver.js
 
 
 // /usr/local/lib/node_modules/express
 */
-// node /Applications/XAMPP/xamppfiles/htdocs/projectpdw/root/jimmy/nodejsserver.js 
+// node /Applications/XAMPP/xamppfiles/htdocs/projectpdw/root/jimmy/server/nodejsserver.js 
 // Angular debug: https://addons.mozilla.org/en-US/firefox/addon/angscope-simple-angularjs-s/
 var http = require('http');//http://stackoverflow.com/questions/4720343/loading-basic-html-in-node-js
 var path = require('path');
@@ -30,46 +30,28 @@ var ext = /[\w\d_-]+\.[\w\d]+$/;
 var jsonPath = "json/";
 var app = express();
 
-var dbName = "pdwsports";
+var dbNameSportStatistics = "pdwsports";
+var dbNameSportSites = "PresentationDW_Split";
 
 var MongoClient = require('mongodb').MongoClient;
-var urlDb = 'mongodb://localhost:27017/' + dbName;
+var urlDbSportStatistics = 'mongodb://localhost:27017/' + dbNameSportStatistics;
+var urlDbSportSites = 'mongodb://localhost:27017/' + dbNameSportSites;
+
 var assert = require('assert');
 var ObjectId = require('mongodb').ObjectID;
 
 var httpPath = "";
 
-//localhost:8888/
-
-//Aplication Server Node.
-app.get('/', function(req, res){
-	//var html = fs.createReadStream('index.html');
-	res.writeHead(200, {'Content-Type': 'text/html'});
-	fs.createReadStream(httpPath + 	'index.html').pipe(res);
-	
-});
-
 /*
-http.createServer(function(req, res){
-    if (req.url === '/') {
-        res.writeHead(200, {'Content-Type': 'text/html'});
-        fs.createReadStream(httpPath +'index.html').pipe(res);
-    } else if (ext.test(req.url)) {
-        fs.exists(path.join(__dirname, req.url), function (exists) {
-            if (exists) {
-                res.writeHead(200, {'Content-Type': 'text/html'});
-                fs.createReadStream(httpPath +'index.html').pipe(res);
-            } else {
-                res.writeHead(404, {'Content-Type': 'text/html'});
-                fs.createReadStream(httpPath +'404.html').pipe(res);
-        });
-    } else {
-        //  add a RESTful service
-    }
-}).listen(8000);
-*/
-
-function testConnectionMongo()
+Method to test the connection width MongoDb
+ */
+/**
+ * [testConnectionMongo description]
+ * @param  {[type]} urlDb [description]
+ * @return {[type]}       [description]
+ * @author Jimmy
+ */
+function testConnectionMongo(urlDb)
 {
 	//Connect using the MongoClient to a running mongod instance by specifying the MongoDB uri. For example, the following code connects to a MongoDB instance that runs on the localhost interface on port 27017 and switch to the test database.
 	MongoClient.connect(urlDb, function(err, db) {
@@ -84,7 +66,12 @@ function testConnectionMongo()
 	});	
 }
 
-function getDataFromMongo()
+/**
+ * [getDataFromMongo Method to obtain information from a collection]
+ * @return {[array]} [JsonData]
+ * @author Jimmy
+ */
+function getDataFromMongo(urlDb, collection)
 {
 	var JsonData = [];
 	
@@ -97,7 +84,7 @@ function getDataFromMongo()
 			//console.log(db);
 			console.log('Connection established to', urlDb);
 			// Get the documents collection
-			var collection = db.collection('sportsdata');
+			var collection = db.collection(collection);
 			collection.find().toArray(function (err, result) {
 		      if (err) {
 		        console.log(err);
@@ -117,6 +104,12 @@ function getDataFromMongo()
 	return JsonData;
 }
 
+/**
+ * [createQuerySportStatistiques description]
+ * @param  {[type]} request_params [description]
+ * @return {[type]}                [description]
+ * @author Jimmy
+ */
 function createQuerySportStatistiques(request_params)
 {
 	var objectQuery = {};
@@ -133,6 +126,10 @@ function createQuerySportStatistiques(request_params)
 	return objectQuery;
 }
 
+/**
+ * [addPercentages description]
+ * @param {[type]} resultSporData [description]
+ */
 function addPercentages(resultSporData)
 {
     columToDisplay = 'nameQuarter';
@@ -179,8 +176,55 @@ function addPercentages(resultSporData)
     return resultSporData;
 }
 
-app.get('/getGroupedData', function(req, res){
-	console.log("serveur Node : /getGroupedData");
+//localhost:8888/
+
+//Aplication Server Node.
+/**
+ * [description]
+ * @param  {[type]} req                        [description]
+ * @param  {[type]} res){		res.writeHead(200, {'Content-Type': 'text/html'});	fs.createReadStream(httpPath + 	'index.html').pipe(res);	} [description]
+ * @return {[type]}                            [description]
+ * @author Jimmy
+ */
+app.get('/', function(req, res){
+	//var html = fs.createReadStream('index.html');
+	res.writeHead(200, {'Content-Type': 'text/html'});
+	fs.createReadStream(httpPath + 	'index.html').pipe(res);
+	
+});
+
+/*
+http.createServer(function(req, res){
+    if (req.url === '/') {
+        res.writeHead(200, {'Content-Type': 'text/html'});
+        fs.createReadStream(httpPath +'index.html').pipe(res);
+    } else if (ext.test(req.url)) {
+        fs.exists(path.join(__dirname, req.url), function (exists) {
+            if (exists) {
+                res.writeHead(200, {'Content-Type': 'text/html'});
+                fs.createReadStream(httpPath +'index.html').pipe(res);
+            } else {
+                res.writeHead(404, {'Content-Type': 'text/html'});
+                fs.createReadStream(httpPath +'404.html').pipe(res);
+        });
+    } else {
+        //  add a RESTful service
+    }
+}).listen(8000);
+*/
+
+/**
+ * [description]
+ * @param  {[type]} req                         [description]
+ * @param  {[type]} res){	console.log("serveur Node          :     /getSportStatisticsData1D");	console.log("query");	console.log(req.query);	/*	db.sportsdata.group({	    "key": {	                                                                   "nameSubQuarter": true	    } [description]
+ * @param  {[type]} "initial":                  {	                                                                                                                                     "nbHour":   0	                                }    [description]
+ * @param  {[type]} "reduce":                   function(obj, prev) {	                                                                                                                                    prev.nbHour [description]
+ * @param  {[type]} "cond":                     {	                                                                                                                                     "activity": "run"	                            }	} [description]
+ * @return {[type]}                             [description]
+ * @author Jimmy - Redoine
+ */
+app.get('/getSportStatisticsData1D', function(req, res){
+	console.log("serveur Node : /getSportStatisticsData1D");
 	console.log("query");
 	console.log(req.query);
 	/*
@@ -213,7 +257,6 @@ app.get('/getGroupedData', function(req, res){
 		'column': 'nbHour'
 	};
 
-
 	var objectQuery = createQuerySportStatistiques(req.query);
 
 	//var objectQuery = request_params;
@@ -227,24 +270,21 @@ app.get('/getGroupedData', function(req, res){
     groupObject["function"] = "function(obj, prev) { prev." + groupParams["column"] + " = prev." + groupParams["column"] + " + obj." + groupParams["column"] + "- 0;}"
     
 	groupObject["cond"] = objectQuery;
-	console.log("groupObject: ");
-	console.log(groupObject);
+	//console.log("groupObject: ");
+	//console.log(groupObject);
 	
-	
-
 	var collectionName = 'sportsdata';
 	
 	res.setHeader('Access-Control-Allow-Origin', '*');
 	res.setHeader('Content-Type', 'application/json');
-	//var JsonData = getDataFromMongo();
-	MongoClient.connect(urlDb, function (err, db) {
+	MongoClient.connect(urlDbSportStatistics, function (err, db) {
 		if (err) {
 			console.log('Unable to connect to the mongoDB server. Error:', err);
 		}
 		else 
 		{
 			var collection = db.collection(collectionName)
-			console.log('Connection established to', urlDb);
+			console.log('Connection established to', urlDbSportStatistics);
 			collection.group( groupObject["keys"], groupObject["cond"], groupObject["initial"], groupObject["function"], function (err, result) {
 		      if (err) {
 		        console.log(err);
@@ -269,8 +309,18 @@ app.get('/getGroupedData', function(req, res){
 	});
 });
 
-app.get('/getGroupedData2D', function(req, res){
-	console.log("serveur Node : /getGroupedData2D");
+/**
+ * [description]
+ * @param  {[type]} req                         [description]
+ * @param  {[type]} res){	console.log("serveur Node          :     /getSportStatisticsData2D");	console.log("query");	console.log(req.query);	/*	db.sportsdata.group({	    "key": {	                                                                                                                                                                                                                       "nameSubQuarter": true	                            } [description]
+ * @param  {[type]} "initial":                  {	                                                                                                                                     "nbHour":   0	                                }                           [description]
+ * @param  {[type]} "reduce":                   function(obj, prev) {	                                                                                                                                    prev.nbHour [description]
+ * @param  {[type]} "cond":                     {	                                                                                                                                     "activity": "run"	                            }	});	db.sportsdata.group( {"key":{"nameQuarter":0,"nameSubQuarter":1,"nameCity":0,"xAxis":0,"yAxis":0,"color":0},"initial":{"nbHour":0},"reduce":"function(obj, prev)             {    prev.nbHour [description]
+ * @return {[type]}                             [description]
+ * @author Jimmy - Redoine
+ */
+app.get('/getSportStatisticsData2D', function(req, res){
+	console.log("serveur Node : /getSportStatisticsData2D");
 	console.log("query");
 	console.log(req.query);
 	/*
@@ -303,10 +353,8 @@ app.get('/getGroupedData2D', function(req, res){
 		'column': 'nbHour'
 	};
 
-
 	var objectQuery = createQuerySportStatistiques(req.query);
 
-	//var objectQuery = request_params;
 	var groupObject = {};
 	groupObject["key"] = groupParams["key"];
 	groupObject["initial"] = {};
@@ -316,21 +364,19 @@ app.get('/getGroupedData2D', function(req, res){
 	console.log("groupObject: ");
 	console.log(groupObject);
 	
-
-
 	var collectionName = 'sportsdata';
 	
 	res.setHeader('Access-Control-Allow-Origin', '*');
 	res.setHeader('Content-Type', 'application/json');
-	//var JsonData = getDataFromMongo();
-	MongoClient.connect(urlDb, function (err, db) {
+	//var JsonData = getDataFromMongo(urlDbSportStatistics, 'sportsdata');
+	MongoClient.connect(urlDbSportStatistics, function (err, db) {
 		if (err) {
 			console.log('Unable to connect to the mongoDB server. Error:', err);
 		}
 		else 
 		{
 			var collection = db.collection(collectionName)
-			console.log('Connection established to', urlDb);
+			console.log('Connection established to', urlDbSportStatistics);
 			collection.group( groupObject["key"], groupObject["cond"], groupObject["initial"], groupObject["reduce"], function (err, result) {
 		      if (err) {
 		        console.log(err);
@@ -355,8 +401,15 @@ app.get('/getGroupedData2D', function(req, res){
 	});
 });
 
-app.get('/getDataMongoDb', function(req, res){
-	console.log("serveur Node : /getDataMongoDb");
+/**
+ * [description]
+ * @param  {[type]} req                         [description]
+ * @param  {[type]} res){	console.log("serveur Node          : /getFiltersDataSportStatistics");	console.log("query");	console.log(req.query);	var objectQuery [description]
+ * @return {[type]}                             [description]
+ * @author Jimmy - Redoine
+ */
+app.get('/getFiltersDataSportStatistics', function(req, res){
+	console.log("serveur Node : /getFiltersDataSportStatistics");
 	console.log("query");
 	console.log(req.query);
 
@@ -365,8 +418,8 @@ app.get('/getDataMongoDb', function(req, res){
 	
 	res.setHeader('Access-Control-Allow-Origin', '*');
 	res.setHeader('Content-Type', 'application/json');
-	//var JsonData = getDataFromMongo();
-	MongoClient.connect(urlDb, function (err, db) {
+	//var JsonData = getDataFromMongo(urlDbSportStatistics, 'sportsdata');
+	MongoClient.connect(urlDbSportStatistics, function (err, db) {
 		if (err) {
 			console.log('Unable to connect to the mongoDB server. Error:', err);
 		}
@@ -374,7 +427,7 @@ app.get('/getDataMongoDb', function(req, res){
 		{
 			var collection = db.collection(collectionName)
 			//console.log(db);
-			console.log('Connection established to', urlDb);
+			console.log('Connection established to', urlDbSportStatistics);
 			// Get the documents collection
 			//.sort('activity');//Sort by
 			collection.find( objectQuery ).toArray(function (err, result) {
@@ -401,15 +454,21 @@ app.get('/getDataMongoDb', function(req, res){
 	});
 });
 
-// http://localhost:8888/getDataFromMongoLoic
-app.get('/getDataFromMongoLoic', function(req, res){
-	console.log("/getDataFromMongoLoic");
-	var dbNameLoic = "PresentationDW_Split";
-	var urlDbLoic = 'mongodb://localhost:27017/' + dbNameLoic;
+// http://localhost:8888/getFiltersDataSportSites
+/**
+ * [description]
+ * @param  {[type]} req                                                                                            [description]
+ * @param  {String} res){	console.log("/getFiltersDataSportSites");		res.setHeader('Access-Control-Allow-Origin', '*');	res.setHeader('Content-type', 'application/json');	MongoClient.connect(urlDbSportSites, function (err, db) {		if (err) {			console.log('Unable to connect to the mongoDB server. Error:', err);		}		else 		{									var collectionName [description]
+ * @return {[type]}                                                                                                [description]
+ * @author Jimmy - Loïc
+ */
+app.get('/getFiltersDataSportSites', function(req, res){
+	console.log("/getFiltersDataSportSites");
+	
 	res.setHeader('Access-Control-Allow-Origin', '*');
 	res.setHeader('Content-type', 'application/json');
 
-	MongoClient.connect(urlDbLoic, function (err, db) {
+	MongoClient.connect(urlDbSportSites, function (err, db) {
 		if (err) {
 			console.log('Unable to connect to the mongoDB server. Error:', err);
 		}
@@ -421,7 +480,7 @@ app.get('/getDataFromMongoLoic', function(req, res){
 			var collection = db.collection(collectionName);
 			var objectQuery = { "nameRg":"Languedoc_Roussillon" };
 			//var collection2 = db.collection('City');
-			console.log('Connection established to', urlDb);
+			console.log('Connection established to', urlDbSportSites);
 
 			collection.find( objectQuery ).toArray(function (err, result) {
 		      if (err) {
@@ -442,7 +501,6 @@ app.get('/getDataFromMongoLoic', function(req, res){
 		    });
 		}
 	});
-	//res.send({'test': ''});
 });
 
 app.listen(8888);

@@ -3,21 +3,78 @@
 //https://docs.angularjs.org/api/ng/directive/ngSubmit
 
 /*****CONFIG*****/
-var VERSION_TO_USE = "jimmy"; //jimmy,loic
-var ARR_CONTROLLER_ULRS = {
-    'jimmy': {
-        'filters': 'http://localhost:8888/getDataMongoDb',
-        '1D': 'http://localhost:8888/getGroupedData',
-        '2D': 'http://localhost:8888/getGroupedData2D',
-        '3D': 'http://localhost:8888/getGroupedData2D'
-    },
-    'loic': {
-        'filters': 'http://localhost:8888/getDataFromMongoLoic',
-        '1D': 'http://localhost:8888/getDataFromMongoLoic',
-        '2D': 'http://localhost:8888/getDataFromMongoLoic',
-        '3D': 'http://localhost:8888/getDataFromMongoLoic'
+var VERSION_TO_USE = "SportStatistics"; //SportStatistics,SportSites
+var CONFIG_VERSION = {
+    'NAME_APP': {
+        'SportStatistics': "Sport Statistics",
+        'SportSites': "Sport Sites"
+    }
+    ,'COLLABORATORS': {
+        'SportStatistics': {
+            'name1': 'Jimmy Munoz',
+            'email1': 'jimmy.munoz-avendano@etu.umontpellier.fr',
+            'name2': 'Redoine El Ouasti',
+            'email2': 'redoine.el-ouasti@etu.umontpellier.fr',
+        },
+        'SportSites': {
+            'name1': 'Loïc Ortolé',
+            'email1': '@etu.umontpellier.fr',
+            'name2': 'Mariam',
+            'email2': '@etu.umontpellier.fr',
+        }
+    }
+    ,'TITRE_APP': {
+        'SportStatistics': "Projet de Présentation de Données Web - MUNOZ Jimmy EL OUASTI Redoine",
+        'SportSites': "Projet de Présentation de Données Web - "
+    }
+    ,'TEMPLATE': {
+        'SportStatistics': "bootstrap-lumen.min.css",
+        'SportSites': "bootstrap-slate.min.css"
+        /*
+        bootstrap-cerulean.min.css
+        bootstrap-darkly.min.css
+        bootstrap-cyborg.min.css
+        bootstrap-simplex.min.css
+        bootstrap-slate.min.css
+        bootstrap-spacelab.min.css
+        bootstrap-united.min.css
+         */
+    }
+    ,'IMAGE_APP': {
+        'SportStatistics': "img/logo.png",
+        'SportSites': "img/logo-2.png"
+    }
+    ,'CONTROLLER_ULRS': {
+        'SportStatistics': {
+            'filters': 'http://localhost:8888/getFiltersDataSportStatistics',
+            '1D': 'http://localhost:8888/getSportStatisticsData1D',
+            '2D': 'http://localhost:8888/getSportStatisticsData2D',
+            '3D': 'http://localhost:8888/getSportStatisticsData2D'
+        },
+        'SportSites': {
+            'filters': 'http://localhost:8888/getFiltersDataSportSites',
+            '1D': 'http://localhost:8888/getFiltersDataSportSites',
+            '2D': 'http://localhost:8888/getFiltersDataSportSites',
+            '3D': 'http://localhost:8888/getFiltersDataSportSites'
+        }
+    }
+    ,'3D': {
+        'SportStatistics': {
+            'OrbitControls' : true,
+            'enebleSky' : false
+        },
+        'SportSites': {}
+    }
+    ,'NOT_INCLUDE_FILTER_KEYS': {
+        'SportStatistics': ['_id', 'xAxis', 'yAxis', 'color', 'nameCity', 'practiceDate', 'percentage', 'nbHour', 'nbHoursQ', 'percentageQ'],
+        'SportSites': ['_id']
+    }
+    ,'NOT_INCLUDE_1D_KEYS': {
+        'SportStatistics': ['_id', 'xAxis', 'yAxis', 'color', 'nameCity', 'nbHoursQ', 'percentageQ'],
+        'SportSites': ['_id']
     }
 };
+var ARR_CONTROLLER_ULRS = CONFIG_VERSION['CONTROLLER_ULRS'][VERSION_TO_USE];
 var app = angular.module('app', ['ngRoute']);//Creation del modulo y los modulos requeridos para la aplicaicón
 /*MENUS*/
 var listMenuPaths = {//Pending selectedAction
@@ -27,46 +84,55 @@ var listMenuPaths = {//Pending selectedAction
     ,"3D" : "#/3D"
 };
 
-//Jimmy: Var with the json Keys that we can not show. -->getFilterData(jsonData, arrFilters, notIncludeFilerKeys)
-var notIncludeFilerKeys = ['_id', 'xAxis', 'yAxis', 'color', 'nameCity', 'practiceDate', 'percentage', 'nbHour', 'nbHoursQ', 'percentageQ'];
-var notInclude1DKeys = ['_id', 'xAxis', 'yAxis', 'color', 'nameCity', 'nbHoursQ', 'percentageQ'];
+//Jimmy: Var with the json Keys that we can not show. -->getFilterData(jsonData, arrFilters, NOT_INCLUDE_FILTER_KEYS)
+var NOT_INCLUDE_FILTER_KEYS = CONFIG_VERSION['NOT_INCLUDE_FILTER_KEYS'][VERSION_TO_USE];
+var NOT_INCLUDE_1D_KEYS = CONFIG_VERSION['NOT_INCLUDE_1D_KEYS'][VERSION_TO_USE];
 /*3D*/
 var SCREEN_WIDTH = jQuery("#div_content_3d").width();
 var SCREEN_HEIGHT = jQuery("#div_content_3d").width();
 var width3D = (1000) * (2);// width 2D
 var height3D = (910) * (2);// height 2D
-
-var container, stats;
-var camera, scene, renderer;
-
-var clock;
+/*****END CONFIG*****/
 
 
 //Cette fonction serait appelée au démarrage de l'application 
+/**
+ * [Default configuration]
+ * @param  {[type]} $rootScope      [description]
+ * @param  {[type]} $location       [description]
+ * @param  {[type]} $routeParams){                  $rootScope.project_name [description]
+ * @return {[type]}                 [description]
+ * @author Jimmy
+ */
 app.run(function($rootScope, $location, $routeParams){ 
+    $rootScope.project_name = CONFIG_VERSION['NAME_APP'][VERSION_TO_USE];
+    $rootScope.project_image = CONFIG_VERSION['IMAGE_APP'][VERSION_TO_USE];
+    $rootScope.html_titre = CONFIG_VERSION['TITRE_APP'][VERSION_TO_USE];
+    $rootScope.css_template = CONFIG_VERSION['TEMPLATE'][VERSION_TO_USE];
+    $rootScope.collaborators = CONFIG_VERSION['COLLABORATORS'][VERSION_TO_USE];
     $rootScope.selectedAction = "Home";
 });
 
-app.controller('controleur', function($scope, $http){});
+app.controller('SportStatisticsControllerHome', function($scope, $http){});
 
-app.controller('controller1D', function($scope, $http, $rootScope){
+/**
+ * [1D Controller]
+ * @param  {[type]} $scope        [description]
+ * @param  {[type]} $http         [description]
+ * @return {[type]}               [description]
+ * @author Jimmy
+ */
+app.controller('SportStatisticsController1D', function($scope, $http, $rootScope){
     $rootScope.selectedAction = "1D";
     $rootScope.formAction = "1D";
-    console.log("Dans controller1D");
+    console.log("Dans SportStatisticsController1D");
     if( $rootScope.filtersData == undefined ){
-        $http.get(ARR_CONTROLLER_ULRS[VERSION_TO_USE]['filters']).then(function(response){
+        $http.get(ARR_CONTROLLER_ULRS['filters']).then(function(response){
             var filtersData = toObject(getFilterData(response.data));//Jimmy: toObject used to Cast a Array to a Object
-            filtersData = excludeFilerKeys(filtersData, notIncludeFilerKeys);
+            filtersData = excludeFilerKeys(filtersData, NOT_INCLUDE_FILTER_KEYS);
             $rootScope.filtersData = filtersData;
-            //$rootScope.city = response.data.city;
-            //$rootScope.practice = response.data.practice;
         });
     }
-    /*
-    $scope.getContent = function(obj){
-         return obj.value + " " + obj.text;
-     }
-     */
     /* EVENTS 1D */
     angular.element(document).ready(function () {
         $rootScope.sendFilterForm();//Jimmy: Call sendFilterForm() when document it's ready to always update the information
@@ -75,20 +141,25 @@ app.controller('controller1D', function($scope, $http, $rootScope){
     });
 });
 
+/**
+ * [FilterController]
+ * @param  {[type]} $scope        [description]
+ * @param  {[type]} $http         [description]
+ * @return {[type]}               [description]
+ * @author Jimmy
+ */
 app.controller('filterController', function($scope, $http, $rootScope){
     console.log("Dans filterController");
     $rootScope.sendFilterForm = function(){//https://docs.angularjs.org/api/ng/directive/ngSubmit
         var formData = jQuery("#form_filters").serialize();
         var formAction = $scope.formAction;//1D, 2D, 3D
 
-        $http.get(ARR_CONTROLLER_ULRS[VERSION_TO_USE][formAction] + '?' + formData ).then(function(response){
-            //$scope.city = resultData['data'][0].nameCity;
-            
+        $http.get(ARR_CONTROLLER_ULRS[formAction] + '?' + formData ).then(function(response){
             //https://api.jquery.com/jquery.extend/
             //Clone object http://heyjavascript.com/4-creative-ways-to-clone-objects/
             $rootScope.data2D = jQuery.extend(true, [], response.data);
             $rootScope.filtered = formData;
-            resultData = prepareDisplayData(response.data);
+            resultData = prepareDisplayData(response.data, NOT_INCLUDE_1D_KEYS);
             $rootScope.titres = resultData['titres'];
             $rootScope.practice = resultData['data'];
             switch(formAction){
@@ -110,7 +181,11 @@ app.controller('filterController', function($scope, $http, $rootScope){
     /* EVENTS FILTER FORM  -> Directives filterReady, clearFilters*/
 });
 
-//Jimmy: Angular Event onChange to send the filters 
+/**
+ * [Jimmy: Angular Event onChange to send the filters]
+ * @return {[type]}        [description]
+ * @author Jimmy
+ */
 app.directive( 'filterReady', function( $parse ) {
    return {
        restrict: 'A',
@@ -124,7 +199,11 @@ app.directive( 'filterReady', function( $parse ) {
     }
 });
 
-//Jimmy: Angular Event onChange to send the filters 
+/**
+ * [Jimmy: Angular Event onChange to send the filters]
+ * @return {[type]}        [description]
+ * @author Jimmy
+ */
 app.directive( 'clearFilters', function( $parse ) {
    return {
        restrict: 'A',
@@ -136,19 +215,24 @@ app.directive( 'clearFilters', function( $parse ) {
     }
 });
 
-app.controller('controller2D', function($scope, $http, $rootScope){
+/**
+ * [2D Controller]
+ * @param  {[type]} $scope        [description]
+ * @param  {[type]} $http         [description]
+ * @return {[type]}               [description]
+ * @author Jimmy
+ */
+app.controller('SportStatisticsController2D', function($scope, $http, $rootScope){
     $rootScope.selectedAction = "2D";
     $rootScope.formAction = "2D";
     $rootScope.legend2DData = [];
 
-    console.log("Dans controller2D");
+    console.log("Dans SportStatisticsController2D");
     if( $rootScope.filtersData == undefined ){
-        $http.get(ARR_CONTROLLER_ULRS[VERSION_TO_USE]['filters']).then(function(response){
+        $http.get(ARR_CONTROLLER_ULRS['filters']).then(function(response){
             var filtersData = toObject(getFilterData(response.data));//Jimmy: toObject used to Cast a Array to a Object
-            filtersData = excludeFilerKeys(filtersData, notIncludeFilerKeys);
+            filtersData = excludeFilerKeys(filtersData, NOT_INCLUDE_FILTER_KEYS);
             $rootScope.filtersData = filtersData;
-            //$rootScope.city = response.data.city;
-            //$rootScope.practice = response.data.practice;
         });
     }
      /* EVENTS 2D */
@@ -163,15 +247,21 @@ app.controller('controller2D', function($scope, $http, $rootScope){
     });
 });
 
-
-app.controller('controller3D', function($scope, $http, $rootScope){
+/**
+ * [3D Controller]
+ * @param  {[type]} $scope        [description]
+ * @param  {[type]} $http         [description]
+ * @return {[type]}               [description]
+ * @author Jimmy
+ */
+app.controller('SportStatisticsController3D', function($scope, $http, $rootScope){
     $rootScope.selectedAction = "3D";
     $rootScope.formAction = "3D";
-    console.log("Dans controller3D");
+    console.log("Dans SportStatisticsController3D");
     if( $rootScope.filtersData == undefined ){
-        $http.get(ARR_CONTROLLER_ULRS[VERSION_TO_USE]['1D']).then(function(response){
+        $http.get(ARR_CONTROLLER_ULRS['1D']).then(function(response){
             var filtersData = toObject(getFilterData(response.data));//Jimmy: toObject used to Cast a Array to a Object
-            filtersData = excludeFilerKeys(filtersData, notIncludeFilerKeys);
+            filtersData = excludeFilerKeys(filtersData, NOT_INCLUDE_FILTER_KEYS);
             $rootScope.filtersData = filtersData;
             $rootScope.city = response.data.city;
             $rootScope.practice = response.data.practice;
@@ -189,6 +279,11 @@ var container, stats;
 var camera, scene, renderer;
 var COLUMN_LIST = [];
 
+/**
+ * [Directive displayThirdDimension]
+ * @return {[type]}     [description]
+ * @author Jimmy
+ */
 app.directive('displayThirdDimension', function(){
     //jQuery("#div_content_3d").html("");
     var SCREEN_WIDTH = jQuery("#div_content_3d").width();
@@ -222,7 +317,7 @@ app.directive('displayThirdDimension', function(){
         // CONTROLS
         /**/
 
-        if( false ){ //enable controls
+        if( CONFIG_VERSION['3D'][VERSION_TO_USE]['OrbitControls'] ){ //enable controls
             controls = new THREE.OrbitControls( camera );
             //controls.maxPolarAngle = 0.8 * Math.PI / 2;
             controls.enableZoom = false;
@@ -236,7 +331,7 @@ app.directive('displayThirdDimension', function(){
         scene.add( light );
 
 
-        if( false ){ //Jimmy: enable/disable SKY
+        if( CONFIG_VERSION['3D'][VERSION_TO_USE]['enebleSky'] ){ //Jimmy: enable/disable SKY
             // SKYDOME
             var vertexShader = document.getElementById( 'vertexShader' ).textContent;
             var fragmentShader = document.getElementById( 'fragmentShader' ).textContent;
@@ -269,11 +364,6 @@ app.directive('displayThirdDimension', function(){
         renderer.gammaInput = true;
         renderer.gammaOutput = true;
 
-        // STATS
-        //stats = new Stats();
-        //container.appendChild( stats.domElement );
-
-
         //Jimmy: Default plane
         //Jimmy: Add Map Texture
         var texLoader = new THREE.TextureLoader();
@@ -304,27 +394,39 @@ app.directive('displayThirdDimension', function(){
     }
 });
 
+/**
+ * [Application Config]
+ * @param  {[type]} $routeProvider                  
+ * @return {[type]}                   [description]
+ * @author Jimmy
+ */
 app.config(function ($routeProvider){
-    console.log("app config");
+    //SportStatistics,SportSites
+    console.log("app config " + VERSION_TO_USE);
     $routeProvider
         .when('/1D', {
-            controller: 'controller1D',
-            templateUrl: 'templates/1D.html'
+            //controller: VERSION_TO_USE + 'Controller1D',
+            controller: 'SportStatisticsController1D',
+            templateUrl: 'templates/' + VERSION_TO_USE + '/1D.html'
         })
         .when('/2D', {
-            controller: 'controller2D',
-            templateUrl: 'templates/2D.html'
+            //controller: VERSION_TO_USE + 'Controller2D',
+            controller: 'SportStatisticsController2D',
+            templateUrl: 'templates/' + VERSION_TO_USE + '/2D.html'
         })
         .when('/3D', {
-            controller: 'controller3D',
-            templateUrl: 'templates/3D.html'
+            //controller: VERSION_TO_USE + 'Controller3D',
+            controller: 'SportStatisticsController3D',
+            templateUrl: 'templates/' + VERSION_TO_USE + '/3D.html'
         })
         .when('/map', {
-            controller: 'controller1D',
-            templateUrl: 'templates/map.html'
+            //controller: VERSION_TO_USE + 'ControllerHome',
+            controller: 'SportStatisticsControllerHome',
+            templateUrl: 'templates/' + VERSION_TO_USE + '/map.html'
         })
         .when('/', {//otherwhise
-            controller: 'controleur',//Definición del controlador
-            templateUrl: 'templates/home.html'//Template or templateUrl
+            //controller: VERSION_TO_USE + 'ControllerHome',
+            controller: 'SportStatisticsControllerHome',//Definición del controlador
+            templateUrl: 'templates/' + VERSION_TO_USE + '/home.html'//Template or templateUrl
         });
 });

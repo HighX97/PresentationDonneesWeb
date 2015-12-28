@@ -1,0 +1,89 @@
+<!-- Filters -->
+<div class="row">
+    <div class="box col-md-12">
+        <div class="box-inner">
+            <div class="box-header well">
+                <h2><i class="glyphicon glyphicon-edit"></i> Filters</h2>
+
+                <div class="box-icon">
+                    <a href="#" class="btn btn-minimize btn-round btn-default">
+                        <i class="glyphicon glyphicon-chevron-up"></i>
+                    </a>
+                </div>
+            </div>
+            <!-- App Filters -->
+            <div class="box-content row" ng-app="app">
+                <div class="col-lg-12 col-md-12">
+                    <!-- Form Filters  -->
+                    <form ng-controller="filterController" id="form_filters" >
+                    <!-- 
+                    <form ng-submit="sendFilterForm()" id="form_filters" >
+                    -->
+                        <!-- JavaScript id -->
+                        <div class="row" id="filters_content">
+                        </div>
+                        <!-- Angular  -->
+                        <div class="row">
+                            <div class='col-md-1' style='width: auto;' ng-repeat="(filterKey, filterValue) in filtersData">
+                                {{filterKey}}: <br>
+                                <select multiple='multiple' id='filter_select_{{filterKey}}' name='{{filterKey}}'>
+                                    <option ng-repeat="filterRow in filterValue" value='{{filterRow}}'  >{{filterRow}}</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-2" style="align: right;">
+                                <button type="submit" ng-click="sendFilterForm()" > Filter Data </button>
+                                <button type="reset"> Clear Filters </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Content -->
+<div class="row">
+    <div class="box col-md-12">
+        <div class="box-inner">
+            <div class="box-header well">
+                <h2><i class="glyphicon glyphicon-info-sign"></i> {{selectedAction}} </h2>
+            </div>
+            <div class="box-content row">
+                <div class="col-lg-7 col-md-12">
+                    Design {{selectedAction}}
+                    <!-- 
+                        http://www.montpellier.fr/uploads/Image/b1/21476_941_DICRIM_FEUX_DE_FORET_3-plaquette-OLD.png
+                        http://images.google.fr/imgres?imgurl=http://www.montpellier.fr/uploads/Image/00/17235_450_plan.png&imgrefurl=http://www.montpellier.fr/3767-informations-geographiques.htm&h=240&w=709&tbnid=uOCPo1neuPbXaM:&docid=JHpSyOKiF9OCwM&ei=oOVWVoCrFoH8PMO_jpgI&tbm=isch&iact=rc&uact=3&page=6&start=95&ndsp=21&ved=0ahUKEwiA-8iK963JAhUBPg8KHcOfA4M4ZBCtAwgTMAU
+                        
+                    --> 
+                    <br/>
+                    <div style="">
+                        <button class="btn btn-default" type="submit" onclick="draw2d(); return false;">Draw {{selectedAction}}</button>
+                        <button class="btn btn-default" type="submit" onclick="drawCartesianPlane(jQuery('#div_content_2d')); return false;">drawCartesianPlane</button>
+                        <button class="btn btn-default" type="submit" onclick="testEvents(); return false;">Test Events {{selectedAction}}</button>
+                        <button class="btn btn-default" type="submit" onclick="updateStatistics(); return false;">updateStatistics {{selectedAction}}</button>
+                        <button class="btn btn-default" type="submit" onclick="createWall(); return false;">Elements Selection</button>
+                    </div>
+                    <br/>
+                    <div style="position: relative; width: 1000px; height: 910px;">
+                        <object data="svg/Montpellier_OSM_map_with_divisions.svg" type="image/svg+xml" style="position: absolute; top: 0px; left:0px; width: 100%; z-index: 1;" >
+                            <!-- 
+                            <img src="yourfallback.jpg" />
+                            -->
+                        </object>
+                        <div id="div_content_2d" style="position: absolute; top: 0px; left:0px; border: thin solid; color black; width: 100%; height: 100%; background-size: 600px auto; background-repeat: no-repeat; z-index: 2;">
+                        </div>
+                    </div>
+                    <!-- 
+                    <div id="div_content_2d_old" style="border: thin solid; color black; width: 600px; height: 400px; background-image: url('img/plan_montpellier.png'); background-size: 600px auto; background-repeat: no-repeat; z-index: -10;">
+                    </div>
+                    -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

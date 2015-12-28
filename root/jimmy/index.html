@@ -1,12 +1,12 @@
 <!doctype html>
-<html lang="en" >
+<html lang="en" ng-app="app">
 <head>
     <meta charset="utf-8">
-    <title>PDW Projet - MUNOZ Jimmy EL OUASTI Redoine</title>
+    <title>{{html_titre}}</title>
     
     <!-- The styles -->
-    <link id="bs-css" href="css/bootstrap-lumen.min.css" rel="stylesheet">
-
+    <link id="bs-css" href="css/{{css_template}}" rel="stylesheet">
+    
     <link href="css/charisma-app.css" rel="stylesheet">
     <link href='bower_components/chosen/chosen.min.css' rel='stylesheet'>
     <link href='bower_components/colorbox/example3/colorbox.css' rel='stylesheet'>
@@ -63,16 +63,16 @@
                 <span class="icon-bar"></span>
             </button>
             <a class="navbar-brand" style="width: auto; float: left; padding: 0px; padding-left: 20px;  margin: 0px;" href="index.html"> 
-                <img alt="Sport Statistics Project PDW" src="img/logo.png" class="hidden-xs" style="width: 60px; height: 60px; " />
+                <img alt="{{project_name}} Project PDW" src="{{project_image}}" class="hidden-xs" style="width: 60px; height: 60px; " />
             </a>
             <a class="navbar-brand" style="width: 250px; float: left;" href="index.html"> 
-                <span>Sport Statistics PDW Project</span>
+                <span>{{project_name}} PDW Project</span>
             </a>
             <!-- theme selector ends -->
         </div>
     </div>
     <!-- topbar ends -->
-    <div class="ch-container" ng-app="app">
+    <div class="ch-container" >
         <div class="row">
 
             <!-- left menu starts -->
@@ -177,7 +177,7 @@
         </div><!--/fluid-row-->
 
     <footer class="row">
-        <p class="col-md-9 col-sm-9 col-xs-12 copyright">&copy; <a href="mailto:jimmy.munoz-avendano@etu.umontpellier.fr" target="_blank">Jimmy Munoz</a> - <a href="mailto:redoine.el-ouasti@etu.umontpellier.fr" target="_blank">Redoine El Ouasti</a> 2015 - 2016</p>
+        <p class="col-md-9 col-sm-9 col-xs-12 copyright">&copy; <a href="mailto:{{collaborators['email1']}}" target="_blank">{{collaborators['name1']}}</a> - <a href="mailto:{{collaborators['email2']}}" target="_blank">{{collaborators['name2']}}</a> 2015 - 2016</p>
         <p class="col-md-3 col-sm-3 col-xs-12 powered-by"> UM2 Faculté de Sciences</p>
     </footer>
 

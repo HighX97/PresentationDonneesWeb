@@ -1,4 +1,10 @@
-
+/**
+ * [getFilterData Method to obtain a Associative Array from a Json]
+ * @param  {[type]} jsonData   [description]
+ * @param  {[type]} arrFilters [description]
+ * @return {[type]}            [description]
+ * @author Jimmmy - Loic
+ */
 function getFilterData(jsonData, arrFilters)
 {
     var arrFilters = (arrFilters == undefined)? []: arrFilters;
@@ -42,6 +48,7 @@ function getFilterData(jsonData, arrFilters)
  * @param  {[type]}
  * @param  {[type]}
  * @return {[type]}
+ * @author Jimmmy
  */
 function excludeFilerKeys(filtersData, notIncludeFilerKeys)
 {
@@ -53,6 +60,11 @@ function excludeFilerKeys(filtersData, notIncludeFilerKeys)
     return filtersData;
 }
 
+/**
+ * [addColorToQuartier Method to add the Html to a Quarter - SportStatistics]
+ * @param {[type]} row      [description]
+ * @param {[type]} columKey [description]
+ */
 function addColorToQuartier(row, columKey)
 {
     row[columKey] = "<div style='width: 15px; height:15px; float: left; background-color: " + row['color'] + ";'></div> " + row[columKey];
@@ -63,8 +75,9 @@ function addColorToQuartier(row, columKey)
  * [prepareDisplayData Method to filter the data]
  * @param  {[type]} response_data [description]
  * @return {[type]}               [description]
+ * @author Jimmmy
  */
-function prepareDisplayData(response_data){
+function prepareDisplayData(response_data, notInclude1DKeys){
     var resultData = {'titres': [], 'data': [ { } ] };
     if( response_data.length > 0 ){
         response_data[0] = ( response_data[0] == undefined )? response_data: response_data[0];//Jimmy: filter to use only a object
@@ -88,6 +101,7 @@ function prepareDisplayData(response_data){
  * Method to convert a array in object
  * @param  {[type]}
  * @return {[type]}
+ * @author Jimmmy
  */
 function toObject(arr) {
     var rv = {};
@@ -102,6 +116,7 @@ function toObject(arr) {
  * @param  {[type]}
  * @param  {[type]}
  * @return {[type]}
+ * @author Jimmmy
  */
 function createAllFilters(testJson, idFilters)
 {
@@ -130,16 +145,37 @@ function createAllFilters(testJson, idFilters)
 }
 
 /*2D*/
+/**
+ * [enconde2DToPercentageCoords Method to encode the coordones to percentage]
+ * @param  {[type]} px_coord     [description]
+ * @param  {[type]} max_px_coord [description]
+ * @return {[type]}              [description]
+ * @author Jimmmy
+ */
 function enconde2DToPercentageCoords (px_coord, max_px_coord)
 {
     return px_coord / max_px_coord;
 }
 
+/**
+ * [decode2DToPercentageCoordsTo2D Method to encode the coordones 2D from a percentage]
+ * @param  {[type]} per_coord    [description]
+ * @param  {[type]} max_px_coord [description]
+ * @return {[type]}              [description]
+ * @author Jimmmy
+ */
 function decode2DToPercentageCoordsTo2D(per_coord, max_px_coord)
 {
     return per_coord * max_px_coord;
 }
 
+/**
+ * [decode2DToPercentageCoordsTo3D Method to encode the coordones 3D from a percentage]
+ * @param  {[type]} per_coord    [description]
+ * @param  {[type]} max_px_coord [description]
+ * @return {[type]}              [description]
+ * @author Jimmmy
+ */
 function decode2DToPercentageCoordsTo3D(per_coord_x, new_px_coord_x, per_coord_y, new_px_coord_y)
 {
     var result = { x: 0, y: 0, z: 0};
@@ -154,7 +190,13 @@ function decode2DToPercentageCoordsTo3D(per_coord_x, new_px_coord_x, per_coord_y
     return result;
 }
 
-//: Jimmy: colors -> http://www.color-hex.com/random.php
+/**
+ * [updateLegend Method to update the legend in SportStatistics]
+ * Jimmy: colors -> http://www.color-hex.com/random.php
+ * @param  {[type]} $rootScope [description]
+ * @return {[type]}            [description]
+ * @author Jimmmy
+ */
 function updateLegend($rootScope)
 {
     var resultHtml = "";
@@ -176,6 +218,11 @@ function updateLegend($rootScope)
     //jQuery('#legend2D').html(resultHtml);
 }
 
+/**
+ * [getSvg2D Method to obtaid the Svg Objet in 2D]
+ * @return {[type]} [description]
+ * @author Jimmmy
+ */
 function getSvg2D()
 {
     var svg = d3.select("#div_content_2d svg");
@@ -191,6 +238,12 @@ function getSvg2D()
     return svg;
 }
 
+/**
+ * [updateStatistics2D Method to Update the Statistics]
+ * @param  {[type]} $rootScope [description]
+ * @return {[type]}            [description]
+ * @author Jimmmy
+ */
 function updateStatistics2D($rootScope)
 {
     jQuery("#div_content_2d").html("");//Jimmy: Pending change to manage with the object
@@ -256,23 +309,35 @@ function updateStatistics2D($rootScope)
         .attr("fill", "white")
 }
 
-function removeEntity3DByName(name) {
-    var selectedObject = scene.getObjectByName(name);
-    scene.remove( selectedObject );
-    animate();
-}
 
+/**
+ * [onWindowResize3D Method to controle the resize in 3D]
+ * @return {[type]} [description]
+ * @author Jimmmy
+ */
 function onWindowResize3D() {
     camera.aspect = document.getElementById('div_content_3d').innerWidth / document.getElementById('div_content_3d').innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize( document.getElementById('div_content_3d').innerWidth, document.getElementById('div_content_3d').innerHeight );
 }
+
+/**
+ * [animate Method to animate the 3D]
+ * @return {[type]} [description]
+ * @author Jimmmy
+ */
 function animate() {
     requestAnimationFrame( animate );
     renderer.render( scene, camera );
     //stats.update();
 }
 
+/**
+ * [removeEntity3DByName Method to remove a 3D objet by name]
+ * @param  {[type]} name [description]
+ * @return {[type]}      [description]
+ * @author Jimmmy
+ */
 function removeEntity3DByName(name, animate3D) {
     var animate3D = (animate3D == undefined)? false : animate3D;
     var selectedObject = scene.getObjectByName(name);
@@ -282,12 +347,24 @@ function removeEntity3DByName(name, animate3D) {
     }
 }
 
+/**
+ * [removeAll3DColumns Method to remove the 3D Columns]
+ * @return {[type]} [description]
+ * @author Jimmmy
+ */
 function removeAll3DColumns(){
     for ( i in COLUMN_LIST ){
         removeEntity3DByName(COLUMN_LIST[i], false);
     }
 }
 
+/**
+ * [displayThirdDimension Method to update the 3D SportStatistics]
+ * @param  {[type]} scope [description]
+ * @param  {[type]} scene [description]
+ * @return {[type]}       [description]
+ * @author Jimmmy
+ */
 function displayThirdDimension(scope, scene){
     scope.$watch('data2D', function (data2D) {
         //width = 1000; //id ->div_content_2d.width
@@ -315,6 +392,7 @@ function displayThirdDimension(scope, scene){
         animate();
     });
 }
+
 
 jQuery( document ).ready(function( $ ) {
     //jQuery('#table_data_1d').html("");
