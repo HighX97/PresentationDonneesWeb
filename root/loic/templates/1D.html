@@ -1,0 +1,179 @@
+<!-- Filters -->
+<div class="row">
+    <div class="box col-md-12">
+        <div class="box-inner">
+            <div class="box-header well">
+                <h2><i class="glyphicon glyphicon-edit"></i> Filters</h2>
+
+                <div class="box-icon">
+                    <a href="#" class="btn btn-minimize btn-round btn-default">
+                        <i class="glyphicon glyphicon-chevron-up"></i>
+                    </a>
+                </div>
+            </div>
+            <!-- App Filters -->
+            <div class="box-content row" ng-app="app">
+                <div class="col-lg-12 col-md-12">
+                    <!-- Form Filters  -->
+                    <form ng-controller="filterController" id="form_filters" >
+                    <!-- 
+                    <form ng-submit="sendFilterForm()" id="form_filters" >
+                    -->
+                        <!-- JavaScript id -->
+                        <div class="row" id="filters_content">
+                        </div>
+                        <!-- Angular  -->
+                        <div class="row">
+                            <div class='col-md-1' style='width: auto;' ng-repeat="(filterKey, filterValue) in filtersData">
+                                {{filterKey}}: <br>
+                                <select multiple='multiple' id='filter_select_{{filterKey}}' name='{{filterKey}}'>
+                                    <option ng-repeat="filterRow in filterValue" value='{{filterRow}}'  >{{filterRow}}</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-2" style="align: right;">
+                                <button type="submit" ng-click="sendFilterForm()" > Filter Data </button>
+                                <button type="reset"> Clear Filters </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Content -->
+<div class="row">
+    <div class="box col-md-12">
+        <div class="box-inner">
+            <div class="box-header well">
+                <h2><i class="glyphicon glyphicon-edit"></i> Filters</h2>
+
+                <div class="box-icon">
+                    <a href="#" class="btn btn-minimize btn-round btn-default">
+                        <i class="glyphicon glyphicon-chevron-up"></i>
+                    </a>
+                </div>
+            </div>
+            <!-- App Filters -->
+            <div class="box-content row" ng-app="app">
+                <div class="col-lg-12 col-md-12">
+                    <!-- Form Filters  -->
+                    <form ng-controller="filterController" id="form_filters" >
+                    <!-- 
+                    <form ng-submit="sendFilterForm()" id="form_filters" >
+                    -->
+                        <!-- JavaScript id -->
+                        <div class="row" id="filters_content">
+                        </div>
+                        <!-- Angular  -->
+                        <div class="row">
+                            <div class='col-md-1' style='width: auto;' ng-repeat="(filterKey, filterValue) in filtersData">
+                                {{filterKey}}: <br>
+                                <select multiple='multiple' id='filter_select_{{filterKey}}' name='{{filterKey}}'>
+                                    <option ng-repeat="filterRow in filterValue" value='{{filterRow}}'  >{{filterRow}}</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-2" style="align: right;">
+                                <button type="submit" ng-click="sendFilterForm()" > Filter Data </button>
+                                <button type="reset"> Clear Filters </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="box col-md-12">
+        <div class="box-inner">
+            <div class="box-header well">
+                <h2><i class="glyphicon glyphicon-info-sign"></i> {{selectedAction}} </h2>
+            </div>
+            <div class="box-content row">
+                <div class="col-lg-12 col-md-12">
+                    <h1>{{selectedAction}}</h1>
+                    <p>
+                    Description 1D
+                    <div>
+                        {{filtered}}
+                    </div>
+                    </p>
+                        
+                    <div class="box-header well" data-original-title="">
+                        <h2><i class="glyphicon glyphicon-th"></i> {{city}} Data</h2>
+
+                        <div class="box-icon">
+                            <a href="#" class="btn btn-setting btn-round btn-default"><i
+                                    class="glyphicon glyphicon-cog"></i></a>
+                            <a href="#" class="btn btn-minimize btn-round btn-default"><i
+                                    class="glyphicon glyphicon-chevron-up"></i></a>
+                            <a href="#" class="btn btn-close btn-round btn-default"><i
+                                    class="glyphicon glyphicon-remove"></i></a>
+                        </div>
+                    </div>
+                    <div class="box-content">
+                        <div class="row">
+                            <div class="col-md-2"><h6><b>sport-activity</b></h6></div>
+                            <div class="col-md-1"><h6><b>practice_date</b></h6></div>
+                            <div class="col-md-1"><h6><b>practice_hour</b></h6></div>
+                            <div class="col-md-2"><h6><b>practice_location</b></h6></div>
+                            <div class="col-md-2"><h6><b>practice_sportsmans</b></h6></div>
+                            <div class="col-md-1"><h6><b>sportman_genre</b></h6></div>
+                            <div class="col-md-1"><h6><b>sportman_age</b></h6></div>
+                            <div class="col-md-1"><h6><b>result_seconds</b></h6></div>
+                        </div>
+                        <div class="row" ng-repeat="row in practice">
+                            <div class="col-md-2"><h6>{{row['sport-activity']}}</h6></div>
+                            <div class="col-md-1"><h6>{{row['practice_date']}}</h6></div>
+                            <div class="col-md-1"><h6>{{row['practice_hour']}}</h6></div>
+                            <div class="col-md-2">
+                                <h6>x,y: ({{row['practice_location']['x1']}},  {{row['practice_location']['y1']}})</h6>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="row" ng-repeat="sportman in row['practice_sportsmans']">
+                                    <div class="col-md-12"><h6>{{sportman['sportman_name']}}</h6></div>
+                                </div>
+                            </div>
+                            <div class="col-md-1">
+                                <div class="row" ng-repeat="sportman in row['practice_sportsmans']">
+                                    <div class="col-md-12"><h6>{{sportman['sportman_genre']}}</h6></div>
+                                </div>
+                            </div>
+                            <div class="col-md-1">
+                                <div class="row" ng-repeat="sportman in row['practice_sportsmans']">
+                                    <div class="col-md-12"><h6>{{sportman['sportman_age']}}</h6></div>
+                                </div>
+                            </div>
+                            <div class="col-md-1">
+                                <div class="row" ng-repeat="sportman in row['practice_sportsmans']">
+                                    <div class="col-md-12"><h6>{{sportman['sportman_results']['result_seconds']}}</h6></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 
+                        <div >
+                            <span><b>{{city}}</b> Data: </span>
+                            <table border="1">
+                                <tr>
+                                    <td>Sport</td>
+                                    <td>asas</td>
+                                </tr>
+                                <tr ng-repeat="row in practice" >
+                                    <td>{{row['sport-activity']}}</td>
+                                </tr>
+                            </table>
+                        <div>
+                    -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

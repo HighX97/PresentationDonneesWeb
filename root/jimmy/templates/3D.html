@@ -1,0 +1,133 @@
+<!-- Filters 
+<div class="row">
+    <div class="box col-md-12">
+        <div class="box-inner">
+            <div class="box-header well">
+                <h2><i class="glyphicon glyphicon-edit"></i> Filters</h2>
+
+                <div class="box-icon">
+                    <a href="#" class="btn btn-minimize btn-round btn-default">
+                        <i class="glyphicon glyphicon-chevron-up"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="box-content row" ng-app="app">
+                <div class="col-lg-12 col-md-12">
+                    <form ng-controller="filterController" id="form_filters" >
+                        <div class="row">
+                            <div class='col-md-1' style='width: auto;' ng-repeat="(filterKey, filterValue) in filtersData">
+                                {{filterKey}}: <br>
+                                <select multiple='multiple' id='filter_select_{{filterKey}}' name='{{filterKey}}'>
+                                    <option ng-repeat="filterRow in filterValue" value='{{filterRow}}'  >{{filterRow}}</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-2" style="align: right;">
+                                <button class="btn btn-default" type="submit" ng-click="sendFilterForm()" > Filter Data </button>
+                            </div>
+                            <div class="col-md-2" style="align: right;">
+                                <button class="btn btn-default" type="reset"> Clear Filters </button>
+                            </div>
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+-->
+<style type="text/css">
+    svg{
+        position:relative;
+        top:0px;
+        left:0px;
+    }
+    .node {
+      stroke: #fff;
+      stroke-width: 1.5px;
+    }
+
+    .link {
+      stroke: #999;
+      stroke-opacity: .6;
+    }
+</style>
+<style>
+    #div_content_3d {
+        background:#fff;
+        padding:0;
+        margin:0;
+        font-family:georgia;
+        text-align:center;
+    }
+    h1 { }
+    a { color:skyblue }
+    #stats { position: absolute; top:0; left: 0 }
+    
+    #stats #fps { background: transparent !important }
+    #stats #fps #fpsText { color: #abc !important }
+    #stats #fps #fpsGraph { display: none }
+</style>
+<!-- Content -->
+<div class="row">
+    <div class="box col-md-12">
+        <div class="box-inner">
+            <div class="box-header well">
+                <h2><i class="glyphicon glyphicon-info-sign"></i> {{selectedAction}} </h2>
+            </div>
+            <div class="box-content row">
+                <div class="col-lg-7 col-md-12">
+                    Design {{selectedAction}}
+                    <br/>
+                    <!-- 
+                    <div style="">
+                        <button class="btn btn-default" type="submit" onclick="draw3d(); return false;">Draw {{selectedAction}}</button>
+                    </div>
+                    -->
+                    <!-- 
+                    -->
+                    <div style="position: relative; width: 1000px; height: 910px;">
+                        <div id="div_content_3d" style="position: absolute; top: 0px; left:0px; border: thin solid; color black; width: 100%; height: 100%; background-size: 600px auto; background-repeat: no-repeat; z-index: 2;">
+                        </div>
+                    </div>
+                    <script type="x-shader/x-vertex" id="vertexShader">
+                        varying vec3 vWorldPosition;
+                        void main() {
+                            vec4 worldPosition = modelMatrix * vec4( position, 1.0 );
+                            vWorldPosition = worldPosition.xyz;
+                            gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+                        }
+                    </script>
+
+                    <script type="x-shader/x-fragment" id="fragmentShader">
+                        uniform vec3 topColor;
+                        uniform vec3 bottomColor;
+                        uniform float offset;
+                        uniform float exponent;
+                        varying vec3 vWorldPosition;
+                        void main() {
+                            float h = normalize( vWorldPosition + offset ).y;
+                            gl_FragColor = vec4( mix( bottomColor, topColor, max( pow( max( h, 0.0 ), exponent ), 0.0 ) ), 1.0 );
+
+                        }
+                    </script>
+
+                    
+
+                    <!-- 
+                    <div ng-controller="AppCtrl" style="display: block; wid" >
+                        <div sports-statistics></div>
+                    </div>
+                    -->
+                    <div ng-controller="controller3D" style="display: block; wid" >
+                        <div display-third-dimension></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
