@@ -1,30 +1,31 @@
-{"x_axis": 0.36833753083881576, "y_axis": 0.11253132832080201,"radius": 20, "color" : "#de6154", "quartier": "Hopitaux Facultes", "subquartier": "Plan des quatre seigneurs"}  
-{"x_axis": 0.3663325183074875, "y_axis": 0.24385964912280703,"radius": 20, "color" : "#de6154", "quartier": "Hopitaux Facultes", "subquartier": "Aiguelongues"}
-{"x_axis": 0.5648287589089912, "y_axis": 0.22180451127819548,"radius": 20, "color" : "#de6154", "quartier": "Hopitaux Facultes", "subquartier": "Saint Lazare"} 
-{"x_axis": 0.11269843309445489, "y_axis": 0.1899749373433584,"radius": 20, "color" : "#855d6d", "quartier": "Mosson", "subquartier": "Hauts de Massane"}     
-{"x_axis": 0.12573101454808897, "y_axis": 0.3192982456140351,"radius": 20, "color" : "#855d6d", "quartier": "Mosson", "subquartier": "Halles de la paillade"} 
-{"x_axis": 0.15981622758067043, "y_axis": 0.4546365914786967,"radius": 20, "color" : "#855d6d", "quartier": "Mosson", "subquartier": "Celleneuve"} 
-{"x_axis": 0.27811196692904133, "y_axis": 0.3506265664160401,"radius": 20, "color" : "#d5df64", "quartier": "Les Cevennes", "subquartier": "Hotel de departement"} 
-{"x_axis": 0.33124479900924186, "y_axis": 0.43082706766917295,"radius": 20, "color" : "#d5df64", "quartier": "Les Cevennes", "subquartier": "Tonnelles"} 
-{"x_axis": 0.17786134036262533, "y_axis": 0.5822055137844612,"radius": 20, "color" : "#d5df64", "quartier": "Les Cevennes", "subquartier": "La Chamberte"}  
-{"x_axis": 0.2951545734453321, "y_axis": 0.5551378446115288,"radius": 20, "color" : "#d5df64", "quartier": "Les Cevennes", "subquartier": "La Martelle"} 
-{"x_axis": 0.46056810727991854, "y_axis": 0.37543859649122807,"radius": 20, "color" : "#291e9e", "quartier": "Montpellier Centre", "subquartier": "Boutonnet"} 
-{"x_axis": 0.4154553253250313, "y_axis": 0.48370927318295737,"radius": 20, "color" : "#291e9e", "quartier": "Montpellier Centre", "subquartier": "Les Beaux Arts"} 
-{"x_axis": 0.4846282576558584, "y_axis": 0.48471177944862154,"radius": 20, "color" : "#291e9e", "quartier": "Montpellier Centre", "subquartier": "Les Arceaux"}
-{"x_axis": 0.5588137213150063, "y_axis": 0.3994987468671679,"radius": 20, "color" : "#291e9e", "quartier": "Montpellier Centre", "subquartier": "Plan Cabanne"} 
-{"x_axis": 0.6289891599114975, "y_axis": 0.49473684210526314,"radius": 20, "color" : "#291e9e", "quartier": "Montpellier Centre", "subquartier": "Figuerolles"} 
-{"x_axis": 0.5517961774553571, "y_axis": 0.5135338345864662,"radius": 20, "color" : "#291e9e", "quartier": "Montpellier Centre", "subquartier": "Gambetta"} 
-{"x_axis": 0.4846282576558584, "y_axis": 0.5726817042606517,"radius": 20, "color" : "#291e9e", "quartier": "Montpellier Centre", "subquartier": "Saint Denis"} 
-{"x_axis": 0.575856327831297, "y_axis": 0.5616541353383459,"radius": 20, "color" : "#291e9e", "quartier": "Montpellier Centre", "subquartier": "Place Albert Premier"}
-{"x_axis": 0.40442775640272555, "y_axis": 0.5428571428571428,"radius": 20, "color" : "#291e9e", "quartier": "Montpellier Centre", "subquartier": "Corum"} 
-{"x_axis": 0.6851295107886904, "y_axis": 0.4052631578947368,"radius": 20, "color" : "#f01bfd", "quartier": "Port Marianne", "subquartier": "La Pompignane"}
-{"x_axis": 0.7903926686834273, "y_axis": 0.43333333333333335,"radius": 20, "color" : "#f01bfd", "quartier": "Port Marianne", "subquartier": "Millénaire"}
-{"x_axis": 0.8996658516408208, "y_axis": 0.39223057644110276,"radius": 20, "color" : "#f01bfd", "quartier": "Port Marianne", "subquartier": "Pablo Picasso"} 
-{"x_axis": 0.7903926686834273, "y_axis": 0.5827067669172933,"radius": 20, "color" : "#f01bfd", "quartier": "Port Marianne", "subquartier": "Odysseum"} 
-{"x_axis": 0.3713450496358083, "y_axis": 0.6225563909774436,"radius": 20, "color" : "#8ee35e", "quartier": "Croix d'Argent", "subquartier": "Estanove"} 
-{"x_axis": 0.29816209224232454, "y_axis": 0.6568922305764411,"radius": 20, "color" : "#8ee35e", "quartier": "Croix d'Argent", "subquartier": "Pas du Loup"} 
-{"x_axis": 0.40442775640272555, "y_axis": 0.7421052631578947,"radius": 20, "color" : "#8ee35e", "quartier": "Croix d'Argent", "subquartier": "Lemasson"}
-{"x_axis": 0.46959066367089597, "y_axis": 0.6849624060150376,"radius": 20, "color" : "#8ee35e", "quartier": "Croix d'Argent", "subquartier": "Mas Drevon"} 
-{"x_axis": 0.5688387839716479, "y_axis": 0.6348370927318295,"radius": 20, "color" : "#a0187b", "quartier": "Pres d'Arenes", "subquartier": "Place Carnot"} 
-{"x_axis": 0.6420217413651316, "y_axis": 0.6348370927318295,"radius": 20, "color" : "#a0187b", "quartier": "Pres d'Arenes", "subquartier": "Aiguerelle"} 
-{"x_axis": 0.581871365425282, "y_axis": 0.7451127819548872,"radius": 20, "color" : "#a0187b", "quartier": "Pres d'Arenes", "subquartier": "Garcia Lorca"} 
+
+0.36833753083881576	0.11253132832080201	"#de6154"	"Hopitaux Facultes"	"Plan des quatre seigneurs"
+0.3663325183074875	0.24385964912280703	"#de6154"	"Hopitaux Facultes"	"Aiguelongues"
+0.5648287589089912	0.22180451127819548	"#de6154"	"Hopitaux Facultes"	"Saint Lazare"
+0.11269843309445489	0.1899749373433584	"#855d6d"	"Mosson"	"Hauts de Massane"  
+0.12573101454808897	0.3192982456140351	"#855d6d"	"Mosson"	"Halles de la paillade"
+0.15981622758067043	0.4546365914786967	"#855d6d"	"Mosson"	"Celleneuve"
+0.27811196692904133	0.3506265664160401	"#d5df64"	"Les Cevennes"	"Hotel de departement"
+0.33124479900924186	0.43082706766917295	"#d5df64"	"Les Cevennes"	"Tonnelles"
+0.17786134036262533	0.5822055137844612	"#d5df64"	"Les Cevennes"	"La Chamberte"
+0.2951545734453321	0.5551378446115288	"#d5df64"	"Les Cevennes"	"La Martelle"
+0.46056810727991854	0.37543859649122807	"#291e9e"	"Montpellier Centre"	"Boutonnet"
+0.4154553253250313	0.48370927318295737	"#291e9e"	"Montpellier Centre"	"Les Beaux Arts"
+0.4846282576558584	0.48471177944862154	"#291e9e"	"Montpellier Centre"	"Les Arceaux"
+0.5588137213150063	0.3994987468671679	"#291e9e"	"Montpellier Centre"	"Plan Cabanne"
+0.6289891599114975	0.49473684210526314	"#291e9e"	"Montpellier Centre"	"Figuerolles"
+0.5517961774553571	0.5135338345864662	"#291e9e"	"Montpellier Centre"	"Gambetta"
+0.4846282576558584	0.5726817042606517	"#291e9e"	"Montpellier Centre"	"Saint Denis"
+0.575856327831297	0.5616541353383459	"#291e9e"	"Montpellier Centre"	"Place Albert Premier"
+0.40442775640272555	0.5428571428571428	"#291e9e"	"Montpellier Centre"	"Corum"
+0.6851295107886904	0.4052631578947368	"#f01bfd"	"Port Marianne"	"La Pompignane"
+0.7903926686834273	0.43333333333333335	"#f01bfd"	"Port Marianne"	"Millénaire"
+0.8996658516408208	0.39223057644110276	"#f01bfd"	"Port Marianne"	"Pablo Picasso"
+0.7903926686834273	0.5827067669172933	"#f01bfd"	"Port Marianne"	"Odysseum"
+0.3713450496358083	0.6225563909774436	"#8ee35e"	"Croix d'Argent"	"Estanove"
+0.29816209224232454	0.6568922305764411	"#8ee35e"	"Croix d'Argent"	"Pas du Loup"
+0.40442775640272555	0.7421052631578947	"#8ee35e"	"Croix d'Argent"	"Lemasson"
+0.46959066367089597	0.6849624060150376	"#8ee35e"	"Croix d'Argent"	"Mas Drevon"
+0.5688387839716479	0.6348370927318295	"#a0187b"	"Pres d'Arenes"	"Place Carnot"
+0.6420217413651316	0.6348370927318295	"#a0187b"	"Pres d'Arenes"	"Aiguerelle"
+0.581871365425282	0.7451127819548872	"#a0187b"	"Pres d'Arenes"	"Garcia Lorca"

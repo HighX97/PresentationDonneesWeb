@@ -3,7 +3,7 @@
 //https://docs.angularjs.org/api/ng/directive/ngSubmit
 
 /*****CONFIG*****/
-var VERSION_TO_USE = "SportSites"; //SportStatistics,SportSites
+var VERSION_TO_USE = "SportStatistics"; //SportStatistics,SportSites
 var CONFIG_VERSION = {
     'NAME_APP': {
         'SportStatistics': "Sport Statistics",
@@ -64,7 +64,7 @@ var CONFIG_VERSION = {
     }
     ,'3D': {
         'SportStatistics': {
-            'OrbitControls' : true,
+            'OrbitControls' : false,
             'enebleSky' : false
         },
         'SportSites': {}
@@ -486,6 +486,7 @@ app.directive('displayThirdDimension', function(){
         document.getElementById('div_content_3d').addEventListener( 'resize', onWindowResize3D, false );
     }
 
+    
     if(! started3D ){   
         init();
     }
