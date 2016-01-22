@@ -350,6 +350,111 @@ function updateSportSites2D($rootScope)
 
     var svg = getSvg2D();
     
+    //https://github.com/mbostock/d3/wiki/SVG-Shapes
+
+    //var symbs = d3.svg.symbol()
+    
+    /*
+    //# svg:rect x="0" y="0" width="0" height="0" rx="0" ry="0"
+    var rects = svg.selectAll("rect")
+        .data($rootScope.data2D)
+        .enter()
+        .append("rect");
+    
+    var rectAttributes = rects
+        .attr("x", function (d) { return decode2DToPercentageCoordsTo2D(d.xAxis, width); })
+        .attr("y", function (d) { return decode2DToPercentageCoordsTo2D(d.yAxis, height); })
+        .attr("width", 20)
+        .attr("height", 20)
+        .attr("rx", 0)
+        .attr("ry", 0)
+        .attr("d", d3.svg.symbol( "circle" ))
+        .attr("cursor", 'pointer')//Jimmy: Cursor
+        .attr("data-toggle", 'tooltip')//tooltip
+        .attr("titre", function (d) { return 'nameQuarter: ', d.nameQuarter + ', nameSubQuarter: ', d.nameSubQuarter; })//tooltip
+        .on("click", function(d){
+            displayScoccerField();
+        })
+*/
+
+    /*
+
+    circle - a circle.
+    cross - a Greek cross or plus sign.
+    diamond - a rhombus.
+    square - an axis-aligned square.
+    triangle-down - a downward-pointing equilateral triangle.
+    triangle-up - an upward-pointing equilateral triangle.
+
+    */
+    svg.selectAll("path")
+    .data($rootScope.data2D)
+    .enter().append("path")
+    .attr("transform", function(d) { return "translate(" + decode2DToPercentageCoordsTo2D(d.xAxis, width) + "," +  decode2DToPercentageCoordsTo2D(d.yAxis, height) + ")"; })
+    .attr("d", d3.svg.symbol().type(function(d) {
+        switch (d.TypeSite)
+        {
+            case "Salles de sports" :
+                return "circle";
+                break;
+            case "Gymnases" :
+                return "cross";
+                break;
+            case "Tennis" :
+                return "diamond";
+                break;
+            case "Parcours sportifs" :
+                return "square";
+                break;
+            case "Terrains de foot" :
+                return "triangle-down";
+                break;
+            case "Stades" :
+            default:
+                return "triangle-up";
+                break;
+        }
+    }).size(300))
+    .attr("data-toggle", 'tooltip')//tooltip
+
+    .on("mouseover", function(d) {      
+            d3.select(this)
+                .transition()
+                .duration(200)
+                .attr('stroke-width',3)
+                .attr("r", 10);
+            div.transition()        
+                .duration(200)      
+                .style("opacity", .9);      
+            div.html('' +  d.TypeSite + ' - ' + d.LibelleSite + ' - ' + d.AdresseSite + '') // + ' - ' + d.TypeSiteQuantity 
+                .style("left", (d3.event.pageX) + "px")     
+                .style("color", "#000000")
+                .style("font-size", "bold")      
+                .style("top", (d3.event.pageY - 28) + "px");    
+            })                  
+        .on("mouseout", function(d) {       
+            div.transition()        
+                .duration(500)      
+                .style("opacity", 0);   
+            d3.select(this)
+                .transition()
+                .duration(200)
+                .attr('stroke-width',0)
+                .attr('stroke-width',0)
+                .attr("r", 10);
+            })                  
+        .on("click", function(d){
+        switch (d.TypeSite)
+        {
+            case "Tennis" :
+                document.location.href = "#/3D-tennis.html"
+                break;
+            case "Terrains de foot" :
+                document.location.href = "#/3D-football.html"
+                break;
+        }})
+
+    /*
     var circles = svg.selectAll("circle")
         .data($rootScope.data2D)
         .enter()
@@ -364,7 +469,7 @@ function updateSportSites2D($rootScope)
         .attr("titre", function (d) { return 'nameQuarter: ', d.nameQuarter + ', nameSubQuarter: ', d.nameSubQuarter; })//tooltip
         .on("click", function(d){
             displayScoccerField();
-        })
+        })*/
         /*
         
         .on("mouseover", function(d) {      
@@ -402,6 +507,7 @@ function updateSportSites2D($rootScope)
         .append("text");
         
     //Add SVG Text Element Attributes
+    /*
     var textLabels = text
         .attr("x", function(d) { return decode2DToPercentageCoordsTo2D(d.xAxis, width); })
         .attr("y", function(d) { return decode2DToPercentageCoordsTo2D(d.yAxis, height); })
@@ -411,6 +517,7 @@ function updateSportSites2D($rootScope)
         .attr("font-weight", "bold")
         .attr("font-size", "10px")
         .attr("fill", "white")
+        */
 
     //jQuery('[data-toggle="tooltip"]').tooltip();
 }

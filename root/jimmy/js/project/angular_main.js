@@ -125,6 +125,8 @@ app.run(function($rootScope, $location, $routeParams){
 
 app.controller('SportStatisticsControllerHome', function($scope, $http){});
 
+app.controller('SportSitesControllerHome', function($scope, $http){});
+
 /**
  * [1D Controller]
  * @param  {[type]} $scope        [description]
