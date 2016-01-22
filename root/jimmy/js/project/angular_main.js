@@ -3,7 +3,7 @@
 //https://docs.angularjs.org/api/ng/directive/ngSubmit
 
 /*****CONFIG*****/
-var VERSION_TO_USE = "SportSites"; //SportStatistics,SportSites
+var VERSION_TO_USE = "SportStatistics"; //SportStatistics,SportSites
 var CONFIG_VERSION = {
     'NAME_APP': {
         'SportStatistics': "Sport Statistics",
@@ -45,6 +45,10 @@ var CONFIG_VERSION = {
         'SportSites': "img/logo-2.png"
     }
     ,'enableFiltersLeft': {
+        'SportStatistics': 1,
+        'SportSites': 0
+    }
+    ,'enableMenu3D': {
         'SportStatistics': 1,
         'SportSites': 0
     }
@@ -115,6 +119,7 @@ app.run(function($rootScope, $location, $routeParams){
     $rootScope.css_template = CONFIG_VERSION['TEMPLATE'][VERSION_TO_USE];
     $rootScope.collaborators = CONFIG_VERSION['COLLABORATORS'][VERSION_TO_USE];
     $rootScope.enableFiltersLeft = CONFIG_VERSION['enableFiltersLeft'][VERSION_TO_USE];
+    $rootScope.enableMenu3D = CONFIG_VERSION['enableMenu3D'][VERSION_TO_USE];
     $rootScope.selectedAction = "Home";
 });
 
@@ -178,7 +183,7 @@ app.controller('SportStatisticsfilterController', function($scope, $http, $rootS
     console.log("Dans filterController");
     $rootScope.sendFilterForm = function(){//https://docs.angularjs.org/api/ng/directive/ngSubmit
         var formData = jQuery("#form_filters").serialize();
-        var formData = formData.replace(/[^&]+=\.?(?:&|$)/g, '');//Remove empty values
+        formData = formData.replace(/[^&]+=\.?(?:&|$)/g, '');//Remove empty values
         var formAction = $scope.formAction;//1D, 2D, 3D
 
         $http.get(ARR_CONTROLLER_ULRS[formAction] + '?' + formData ).then(function(response){
@@ -196,11 +201,11 @@ app.controller('SportStatisticsfilterController', function($scope, $http, $rootS
                 default:
                     break;
             }
-            if( VERSION_TO_USE = "SportSites" ){ //SportStatistics ){
-                updateStatistics2D($rootScope);
+            if( VERSION_TO_USE == "SportSites" ){ //SportStatistics ){
+                updateSportSites2D($rootScope);
             }
             else{
-                updateStatisticsSportSites2D($rootScope);
+                updateStatistics2D($rootScope);
             }
         });
     } 
@@ -346,6 +351,42 @@ app.controller('SportSitesController2D', function($scope, $http, $rootScope){
     });
 });
 
+
+/**
+ * [displayThirdDimension Method to update the 3D SportStatistics]
+ * @param  {[type]} scope [description]
+ * @param  {[type]} scene [description]
+ * @return {[type]}       [description]
+ * @author Jimmmy
+ */
+function displayThirdDimension(scope, scene){
+    scope.$watch('data2D', function (data2D) {
+        //width = 1000; //id ->div_content_2d.width
+        //height = 910; //id ->div_content_2d.heith
+        //Jimmy: For to create the graphs
+        removeAll3DColumns();
+        COLUMN_LIST = [];
+        for ( i in data2D ){
+            var columnName = "column_" + i;
+            coords3d = decode2DToPercentageCoordsTo3D( data2D[i]['xAxis'], width3D, data2D[i]['yAxis'], height3D);
+            
+            var planeMat = new THREE.MeshLambertMaterial({color: data2D[i]['color'] }); // color — Line color in hexadecimal. Default is 0xffffff.
+            materialColum = new THREE.MeshBasicMaterial({map: planeMat});
+
+            geometry = new THREE.CubeGeometry( (100 + (50 * data2D[i]['percentage']/100) ), (data2D[i]['percentage'] * 10 ), (100 + (50 * data2D[i]['percentage']/100) ) );
+            mesh = new THREE.Mesh( geometry, planeMat );
+            mesh.position.x = coords3d['x'];
+            mesh.position.y = coords3d['y'];
+            mesh.position.z = coords3d['z'];
+            
+            COLUMN_LIST.push(columnName);
+            mesh.name = columnName;
+            scene.add( mesh );
+        }
+        animate();
+    });
+}
+
 /**
  * [3D Controller]
  * @param  {[type]} $scope        [description]
@@ -428,7 +469,7 @@ app.directive('displayThirdDimension', function(){
         camera = new THREE.PerspectiveCamera( 90, SCREEN_WIDTH / SCREEN_HEIGHT, 1, 10000 );
         //camera.position.set( 0, 600, 300 );
         camera.position.y = 1000;
-        camera.rotation.x = -45 * Math.PI / 180;
+        camera.rotation.x = -90 * Math.PI / 180;
         //Jimmy: position to have space to rotate
 
         // SCENE

@@ -15,7 +15,7 @@
             <div class="box-content row" ng-app="app">
                 <div class="col-lg-12 col-md-12">
                     <!-- Form Filters  -->
-                    <form ng-controller="SportSitesFilterController" id="form_filters" >
+                    <form ng-controller="SportStatisticsfilterController" id="form_filters" >
                     <!-- 
                     <form ng-submit="sendFilterForm()" id="form_filters" >
                     -->
@@ -27,15 +27,20 @@
                             <div class='col-md-1' style='width: auto;' ng-repeat="(filterKey, filterValue) in filtersData">
                                 {{filterKey}}: <br>
                                 <select id='filter_select_{{filterKey}}' name='{{filterKey}}'>
+                                    <option value="">--</option>
                                     <option ng-repeat="filterRow in filterValue" value='{{filterRow}}'  >{{filterRow}}</option>
                                 </select>
                             </div>
                         </div>
-
+                        <br/>
                         <div class="row">
                             <div class="col-md-2" style="align: right;">
+                                
                                 <button type="submit" ng-click="sendFilterForm()" > Filter Data </button>
+                                <!-- 
                                 <button type="reset"> Clear Filters </button>
+                                -->
+                                <button type="reset" clear-filters> Clear Filters </button>
                             </div>
                         </div>
                     </form>
@@ -56,9 +61,11 @@
                     <h1>{{selectedAction}}</h1>
                     <p>
                     Description 1D
+                    <!-- 
                     <div>
                         {{filtered}}
                     </div>
+                    -->
                     </p>
                         
                     <div class="box-content">

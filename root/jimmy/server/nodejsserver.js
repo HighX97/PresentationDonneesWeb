@@ -104,6 +104,8 @@ function getDataFromMongo(urlDb, collection)
 	return JsonData;
 }
 
+
+
 /**
  * [createQuerySportStatistiques description]
  * @param  {[type]} request_params [description]
@@ -341,7 +343,17 @@ app.get('/getSportStatisticsData2D', function(req, res){
 
 	db.sportsdata.group( {"key":{"nameQuarter":0,"nameSubQuarter":1,"nameCity":0,"xAxis":0,"yAxis":0,"color":0},"initial":{"nbHour":0},"reduce":"function(obj, prev) { prev.nbHour = prev.nbHour + obj.nbHour- 0;}","cond":{"activity":"taekwondo"}} )
 	 */
-	var groupParams = { };
+	var groupParams = { 
+		'key': {
+			'nameQuarter': 0,
+			'nameSubQuarter': 1,
+			'nameCity': 0,
+			'xAxis': 0,
+			'yAxis': 0,
+			'color': 0
+		},
+		'column': 'nbHour'
+	};
 
 	var objectQuery = createQuerySportStatistiques(req.query);
 
@@ -470,7 +482,7 @@ app.get('/getFiltersDataSportSites', function(req, res){
 		else 
 		{
 			var collection = db.collection(collectionName)
-			//console.log(db);
+			console.log(db);
 			console.log('Connection established to', urlDbSportSites);
 			// Get the documents collection
 			//.sort('activity');//Sort by
@@ -502,7 +514,7 @@ app.get('/getFiltersDataSportSites', function(req, res){
 ///////////////////////////
 
 app.get('/getSportSitesData1D', function(req, res){
-	console.log("serveur Node : /getFiltersDataSportSites");
+	console.log("serveur Node : /getSportSitesData1D");
 	console.log("query");
 	console.log(req.query);
 

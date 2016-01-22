@@ -267,7 +267,7 @@ function updateStatistics2D($rootScope)
     var circleAttributes = circles
         .attr("cx", function (d) { return decode2DToPercentageCoordsTo2D(d.xAxis, width); })
         .attr("cy", function (d) { return decode2DToPercentageCoordsTo2D(d.yAxis, height); })
-        .attr("r", function (d) { return (15 + d.percentage * 0.25); })//Jimmy: circle's proportion
+        .attr("r", function (d) { return (30 + d.percentage * 0.25); })//Jimmy: circle's proportion
         .attr("cursor", 'pointer')//Jimmy: Cursor
         .attr("data-toggle", 'tooltip')//tooltip
         .attr("titre", function (d) { return 'nameQuarter: ', d.nameQuarter + ', nameSubQuarter: ', d.nameSubQuarter; })//tooltip
@@ -280,7 +280,7 @@ function updateStatistics2D($rootScope)
                 .transition()
                 .duration(200)
                 .attr('stroke-width',3)
-                .attr("r", (15 + d.percentage * 0.25) * 1.5 );
+                .attr("r", (30 + d.percentage * 0.25) * 1.5 );
             div.transition()        
                 .duration(200)      
                 .style("opacity", .9);      
@@ -297,7 +297,7 @@ function updateStatistics2D($rootScope)
                 .duration(200)
                 .attr('stroke-width',0)
                 .attr('stroke-width',0)
-                .attr("r", (15 + d.percentage * 0.25) );
+                .attr("r", (30 + d.percentage * 0.25) );
         })
         /*
         
@@ -335,7 +335,7 @@ function updateStatistics2D($rootScope)
 }
 
 
-function updateStatisticsSportSites2D($rootScope)
+function updateSportSites2D($rootScope)
 {
     jQuery("#div_content_2d").html("");//Jimmy: Pending change to manage with the object
     updateLegend($rootScope);
@@ -358,21 +358,21 @@ function updateStatisticsSportSites2D($rootScope)
     var circleAttributes = circles
         .attr("cx", function (d) { return decode2DToPercentageCoordsTo2D(d.xAxis, width); })
         .attr("cy", function (d) { return decode2DToPercentageCoordsTo2D(d.yAxis, height); })
-        .attr("r", function (d) { return (15 + d.percentage * 0.30); })//Jimmy: circle's proportion
+        .attr("r", 30)//Jimmy: circle's proportion
         .attr("cursor", 'pointer')//Jimmy: Cursor
         .attr("data-toggle", 'tooltip')//tooltip
         .attr("titre", function (d) { return 'nameQuarter: ', d.nameQuarter + ', nameSubQuarter: ', d.nameSubQuarter; })//tooltip
         .on("click", function(d){
-            console.log(' Info ', d);
             displayScoccerField();
-
         })
+        /*
+        
         .on("mouseover", function(d) {      
             d3.select(this)
                 .transition()
                 .duration(200)
                 .attr('stroke-width',3)
-                .attr("r", (15 + d.percentage * 0.25) * 1.5 );
+                .attr("r", 10);
             div.transition()        
                 .duration(200)      
                 .style("opacity", .9);      
@@ -389,21 +389,10 @@ function updateStatisticsSportSites2D($rootScope)
                 .duration(200)
                 .attr('stroke-width',0)
                 .attr('stroke-width',0)
-                .attr("r", (15 + d.percentage * 0.25) );
-        })
-        /*
-        
-        .on("mouseover", function(d){
-            console.log('nameQuarter: ', d.nameQuarter + ', nameSubQuarter: ', d.nameSubQuarter);
-            
-        })
-        .on("mouseenter", function(d){
-            
-        })
-        .on("mouseleave", function(d){
-            
+                .attr("r", 10);
         })
          */
+        
         .style("fill", function(d) { return d.color; });
     
     //Add the SVG Text Element to the svgContainer
@@ -416,7 +405,7 @@ function updateStatisticsSportSites2D($rootScope)
     var textLabels = text
         .attr("x", function(d) { return decode2DToPercentageCoordsTo2D(d.xAxis, width); })
         .attr("y", function(d) { return decode2DToPercentageCoordsTo2D(d.yAxis, height); })
-        .text( function (d) { return "" + d.percentage +"%"; })
+        .text( function (d) { return " text "; })
         .attr("text-anchor", "middle")
         .attr("font-family", "sans-serif")
         .attr("font-weight", "bold")
@@ -476,40 +465,7 @@ function removeAll3DColumns(){
     }
 }
 
-/**
- * [displayThirdDimension Method to update the 3D SportStatistics]
- * @param  {[type]} scope [description]
- * @param  {[type]} scene [description]
- * @return {[type]}       [description]
- * @author Jimmmy
- */
-function displayThirdDimension(scope, scene){
-    scope.$watch('data2D', function (data2D) {
-        //width = 1000; //id ->div_content_2d.width
-        //height = 910; //id ->div_content_2d.heith
-        //Jimmy: For to create the graphs
-        removeAll3DColumns();
-        COLUMN_LIST = [];
-        for ( i in data2D ){
-            var columnName = "column_" + i;
-            coords3d = decode2DToPercentageCoordsTo3D( data2D[i]['xAxis'], width3D, data2D[i]['yAxis'], height3D);
-            
-            var planeMat = new THREE.MeshLambertMaterial({color: data2D[i]['color'] }); // color — Line color in hexadecimal. Default is 0xffffff.
-            materialColum = new THREE.MeshBasicMaterial({map: planeMat});
 
-            geometry = new THREE.CubeGeometry( (50 + (300 * data2D[i]['percentage']/100) ), (data2D[i]['percentage'] * 9 ), (50 + (300 * data2D[i]['percentage']/100) ) );
-            mesh = new THREE.Mesh( geometry, planeMat );
-            mesh.position.x = coords3d['x'];
-            mesh.position.y = coords3d['y'];
-            mesh.position.z = coords3d['z'];
-            
-            COLUMN_LIST.push(columnName);
-            mesh.name = columnName;
-            scene.add( mesh );
-        }
-        animate();
-    });
-}
 
 function closeSoccerField(){
     var div = d3.select("#tooltip_3d");
@@ -520,10 +476,10 @@ function closeSoccerField(){
 function displayScoccerField(){
     //alert("asas");
     var div = d3.select("#tooltip_3d");
-    d3.select("#container_iframe_3d").html('<iframe src="3D/soccer_field/soccer_field.html" style="width: 100%; height:100%; "></iframe>') 
+    //d3.select("#container_iframe_3d").html('<iframe src="3D/soccer_field/soccer_field.html" style="width: 100%; height:100%; "></iframe>') 
     div.transition()        
         .duration(200)      
-        .style("opacity", .9);
+        .style("opacity", 1);
 }
 
 jQuery( document ).ready(function( $ ) {
