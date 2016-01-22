@@ -41,7 +41,7 @@
                 <div class="col-lg-7 col-md-12">
                     <h1>{{selectedAction}}</h1>
                     <p>
-                        Description {{selectedAction}}
+                        Tennis {{selectedAction}}
                         <div>
                             {{filtered}}
                         </div>
@@ -49,39 +49,6 @@
                     <div style="position: relative; width: 1000px; height: 910px;">
                         <div id="div_content_3d" style="position: absolute; top: 0px; left:0px; border: thin solid; color black; width: 100%; height: 100%; background-size: 600px auto; background-repeat: no-repeat; z-index: 2;">
                         </div>
-                    </div>
-                    <!-- 
-                    <script type="x-shader/x-vertex" id="vertexShader">
-                        varying vec3 vWorldPosition;
-                        void main() {
-                            vec4 worldPosition = modelMatrix * vec4( position, 1.0 );
-                            vWorldPosition = worldPosition.xyz;
-                            gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
-                        }
-                    </script>
-
-                    <script type="x-shader/x-fragment" id="fragmentShader">
-                        uniform vec3 topColor;
-                        uniform vec3 bottomColor;
-                        uniform float offset;
-                        uniform float exponent;
-                        varying vec3 vWorldPosition;
-                        void main() {
-                            float h = normalize( vWorldPosition + offset ).y;
-                            gl_FragColor = vec4( mix( bottomColor, topColor, max( pow( max( h, 0.0 ), exponent ), 0.0 ) ), 1.0 );
-                        }
-                    </script>
-                    -->
-
-                    
-
-                    <!-- 
-                    <div ng-controller="AppCtrl" style="display: block; wid" >
-                        <div sports-statistics></div>
-                    </div>
-                    -->
-                    <div ng-controller="SportStatisticsController3D" style="display: block; wid" >
-                        <div display-third-dimension></div>
                     </div>
                 </div>
             </div>

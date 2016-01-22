@@ -338,8 +338,16 @@ function updateStatistics2D($rootScope)
 function updateSportSites2D($rootScope)
 {
     jQuery("#div_content_2d").html("");//Jimmy: Pending change to manage with the object
-    updateLegend($rootScope);
-
+    
+    var arrTypes = {
+        'circles': []
+    };
+    for (var row in $rootScope.data2D){
+       switch($rootScope.data2D[row]){
+            case 'Salles de sports':
+                break;
+       } 
+    }
     
     var div = d3.select("#tooltip");
     /*
@@ -363,7 +371,8 @@ function updateSportSites2D($rootScope)
         .attr("data-toggle", 'tooltip')//tooltip
         .attr("titre", function (d) { return 'nameQuarter: ', d.nameQuarter + ', nameSubQuarter: ', d.nameSubQuarter; })//tooltip
         .on("click", function(d){
-            displayScoccerField();
+            //displayScoccerField();
+            document.location.href = "#/3D"; 
         })
         /*
         

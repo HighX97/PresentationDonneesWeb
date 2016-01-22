@@ -52,6 +52,10 @@ var CONFIG_VERSION = {
         'SportStatistics': 1,
         'SportSites': 0
     }
+    ,'enableMenu3DSites': {
+        'SportStatistics': 0,
+        'SportSites': 1
+    }
     ,'CONTROLLER_ULRS': {
         'SportStatistics': {
             'filters': 'http://localhost:8888/getFiltersDataSportStatistics',
@@ -120,10 +124,12 @@ app.run(function($rootScope, $location, $routeParams){
     $rootScope.collaborators = CONFIG_VERSION['COLLABORATORS'][VERSION_TO_USE];
     $rootScope.enableFiltersLeft = CONFIG_VERSION['enableFiltersLeft'][VERSION_TO_USE];
     $rootScope.enableMenu3D = CONFIG_VERSION['enableMenu3D'][VERSION_TO_USE];
+    $rootScope.enableMenu3DSites = CONFIG_VERSION['enableMenu3DSites'][VERSION_TO_USE];
     $rootScope.selectedAction = "Home";
 });
 
 app.controller('SportStatisticsControllerHome', function($scope, $http){});
+app.controller('SportSitesControllerHome', function($scope, $http){});
 
 /**
  * [1D Controller]
@@ -592,6 +598,16 @@ app.config(function ($routeProvider){
             controller: VERSION_TO_USE + 'Controller3D',
             //controller: 'SportStatisticsController3D',
             templateUrl: 'templates/' + VERSION_TO_USE + '/3D.html'
+        })
+        .when('/3D-football', {
+            controller: VERSION_TO_USE + 'Controller3D',
+            //controller: 'SportStatisticsController3D',
+            templateUrl: 'templates/' + VERSION_TO_USE + '/3D-football.html'
+        })
+        .when('/3D-tennis', {
+            controller: VERSION_TO_USE + 'Controller3D',
+            //controller: 'SportStatisticsController3D',
+            templateUrl: 'templates/' + VERSION_TO_USE + '/3D-tennis.html'
         })
         .when('/map', {
             controller: VERSION_TO_USE + 'ControllerHome',
