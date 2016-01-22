@@ -3,7 +3,7 @@
 //https://docs.angularjs.org/api/ng/directive/ngSubmit
 
 /*****CONFIG*****/
-var VERSION_TO_USE = "SportStatistics"; //SportStatistics,SportSites
+var VERSION_TO_USE = "SportSites"; //SportStatistics,SportSites
 var CONFIG_VERSION = {
     'NAME_APP': {
         'SportStatistics': "Sport Statistics",
@@ -68,7 +68,7 @@ var CONFIG_VERSION = {
     }
     ,'3D': {
         'SportStatistics': {
-            'OrbitControls' : false,
+            'OrbitControls' : true,
             'enebleSky' : false
         },
         'SportSites': {}
@@ -373,7 +373,7 @@ function displayThirdDimension(scope, scene){
             var planeMat = new THREE.MeshLambertMaterial({color: data2D[i]['color'] }); // color — Line color in hexadecimal. Default is 0xffffff.
             materialColum = new THREE.MeshBasicMaterial({map: planeMat});
 
-            geometry = new THREE.CubeGeometry( (100 + (50 * data2D[i]['percentage']/100) ), (data2D[i]['percentage'] * 10 ), (100 + (50 * data2D[i]['percentage']/100) ) );
+            geometry = new THREE.CubeGeometry( (100 + (50 * data2D[i]['percentage']/100) ), (data2D[i]['percentage'] * 30 ), (100 + (50 * data2D[i]['percentage']/100) ) );
             mesh = new THREE.Mesh( geometry, planeMat );
             mesh.position.x = coords3d['x'];
             mesh.position.y = coords3d['y'];
@@ -468,8 +468,9 @@ app.directive('displayThirdDimension', function(){
          */
         camera = new THREE.PerspectiveCamera( 90, SCREEN_WIDTH / SCREEN_HEIGHT, 1, 10000 );
         //camera.position.set( 0, 600, 300 );
-        camera.position.y = 1000;
-        camera.rotation.x = -90 * Math.PI / 180;
+        camera.position.z = 600;
+        camera.position.y = 1200;
+        camera.rotation.x = -60 * Math.PI / 180;
         //Jimmy: position to have space to rotate
 
         // SCENE
@@ -484,7 +485,7 @@ app.directive('displayThirdDimension', function(){
             controls.enableZoom = false;
         }
 
-        if( true ){
+        if( false ){
             controls = new THREE.FlyControls( camera );
 
             controls.movementSpeed = 1000;
