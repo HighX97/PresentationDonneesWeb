@@ -3,7 +3,7 @@
 //https://docs.angularjs.org/api/ng/directive/ngSubmit
 
 /*****CONFIG*****/
-var VERSION_TO_USE = "SportStatistics"; //SportStatistics,SportSites
+var VERSION_TO_USE = "SportSites"; //SportStatistics,SportSites
 var CONFIG_VERSION = {
     'NAME_APP': {
         'SportStatistics': "Sport Statistics",
@@ -25,7 +25,7 @@ var CONFIG_VERSION = {
     }
     ,'TITRE_APP': {
         'SportStatistics': "Projet de Présentation de Données Web - MUNOZ Jimmy EL OUASTI Redoine",
-        'SportSites': "Projet de Présentation de Données Web - "
+        'SportSites': "Projet de Présentation de Données Web - Mariam Loïc"
     }
     ,'TEMPLATE': {
         'SportStatistics': "bootstrap-lumen.min.css",
@@ -71,11 +71,11 @@ var CONFIG_VERSION = {
     }
     ,'NOT_INCLUDE_FILTER_KEYS': {
         'SportStatistics': ['_id', 'xAxis', 'yAxis', 'color', 'nameCity', 'practiceDate', 'percentage', 'nbHour', 'nbHoursQ', 'percentageQ'],
-        'SportSites': ['_id']
+        'SportSites': ['_id', 'xAxis', 'yAxis', 'color']
     }
     ,'NOT_INCLUDE_1D_KEYS': {
         'SportStatistics': ['_id', 'xAxis', 'yAxis', 'color', 'nameCity', 'nbHoursQ', 'percentageQ'],
-        'SportSites': ['_id']
+        'SportSites': ['_id', 'xAxis', 'yAxis', 'color']
     }
 };
 var ARR_CONTROLLER_ULRS = CONFIG_VERSION['CONTROLLER_ULRS'][VERSION_TO_USE];
@@ -161,6 +161,7 @@ app.controller('SportSitesController1D', function($scope, $http, $rootScope){
     }
     /* EVENTS 1D */
     angular.element(document).ready(function () {
+        //$rootScope.sendFilterForm();//Jimmy: Call sendFilterForm() when document it's ready to always update the information
         
         
     });
@@ -177,6 +178,7 @@ app.controller('SportStatisticsfilterController', function($scope, $http, $rootS
     console.log("Dans filterController");
     $rootScope.sendFilterForm = function(){//https://docs.angularjs.org/api/ng/directive/ngSubmit
         var formData = jQuery("#form_filters").serialize();
+        var formData = formData.replace(/[^&]+=\.?(?:&|$)/g, '');//Remove empty values
         var formAction = $scope.formAction;//1D, 2D, 3D
 
         $http.get(ARR_CONTROLLER_ULRS[formAction] + '?' + formData ).then(function(response){
@@ -194,9 +196,12 @@ app.controller('SportStatisticsfilterController', function($scope, $http, $rootS
                 default:
                     break;
             }
-            //if( VERSION_TO_USE = "SportSites"; //SportStatistics ){
+            if( VERSION_TO_USE = "SportSites" ){ //SportStatistics ){
                 updateStatistics2D($rootScope);
-            //}
+            }
+            else{
+                updateStatisticsSportSites2D($rootScope);
+            }
         });
     } 
 
@@ -264,6 +269,17 @@ app.directive( 'filterReady', function( $parse ) {
  * @author Jimmy
  */
 app.directive( 'clearFilters', function( $parse ) {
+   return {
+       restrict: 'A',
+       link: function( $scope, elem, attrs ) {    
+            elem.click(function(){
+                $scope.resetForm();
+            })
+        }
+    }
+});
+
+app.directive( 'sendFilters', function( $parse ) {
    return {
        restrict: 'A',
        link: function( $scope, elem, attrs ) {    
@@ -388,6 +404,7 @@ var COLUMN_LIST = [];
  * @return {[type]}     [description]
  * @author Jimmy
  */
+var controls;
 app.directive('displayThirdDimension', function(){
     //jQuery("#div_content_3d").html("");
     var SCREEN_WIDTH = jQuery("#div_content_3d").width();
@@ -395,7 +412,6 @@ app.directive('displayThirdDimension', function(){
 
     var clock = new THREE.Clock();
     var started3D = false;
-
     function init() {
         started3D = true;
         container = document.getElementById('div_content_3d')
@@ -412,7 +428,7 @@ app.directive('displayThirdDimension', function(){
         camera = new THREE.PerspectiveCamera( 90, SCREEN_WIDTH / SCREEN_HEIGHT, 1, 10000 );
         //camera.position.set( 0, 600, 300 );
         camera.position.y = 1000;
-        camera.rotation.x = -90 * Math.PI / 180;
+        camera.rotation.x = -45 * Math.PI / 180;
         //Jimmy: position to have space to rotate
 
         // SCENE
@@ -425,6 +441,17 @@ app.directive('displayThirdDimension', function(){
             controls = new THREE.OrbitControls( camera );
             //controls.maxPolarAngle = 0.8 * Math.PI / 2;
             controls.enableZoom = false;
+        }
+
+        if( true ){
+            controls = new THREE.FlyControls( camera );
+
+            controls.movementSpeed = 1000;
+            controls.domElement = container;
+            controls.rollSpeed = Math.PI / 24;
+            controls.autoForward = false;
+            controls.dragToLook = false;
+  
         }
 
         // LIGHTS
@@ -486,7 +513,7 @@ app.directive('displayThirdDimension', function(){
         document.getElementById('div_content_3d').addEventListener( 'resize', onWindowResize3D, false );
     }
 
-    
+
     if(! started3D ){   
         init();
     }

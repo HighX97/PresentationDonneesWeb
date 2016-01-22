@@ -15,7 +15,7 @@
             <div class="box-content row" ng-app="app">
                 <div class="col-lg-12 col-md-12">
                     <!-- Form Filters  -->
-                    <form ng-controller="SportSitesFilterController" id="form_filters" >
+                    <form ng-controller="SportStatisticsfilterController" id="form_filters" >
                     <!-- 
                     <form ng-submit="sendFilterForm()" id="form_filters" >
                     -->
@@ -27,15 +27,20 @@
                             <div class='col-md-1' style='width: auto;' ng-repeat="(filterKey, filterValue) in filtersData">
                                 {{filterKey}}: <br>
                                 <select id='filter_select_{{filterKey}}' name='{{filterKey}}'>
+                                    <option value="">--</option>
                                     <option ng-repeat="filterRow in filterValue" value='{{filterRow}}'  >{{filterRow}}</option>
                                 </select>
                             </div>
                         </div>
-
+                        <br/>
                         <div class="row">
                             <div class="col-md-2" style="align: right;">
+                                
                                 <button type="submit" ng-click="sendFilterForm()" > Filter Data </button>
+                                <!-- 
                                 <button type="reset"> Clear Filters </button>
+                                -->
+                                <button type="reset" clear-filters> Clear Filters </button>
                             </div>
                         </div>
                     </form>
@@ -53,16 +58,19 @@
             </div>
             <div class="box-content row">
                 <div class="col-lg-7 col-md-12">
+                    <!-- 
                     <div style="">
-                        <button class="btn btn-default" type="submit" onclick="diaplayScoccerField(); return false;">Show 3D</button>
+                        <button class="btn btn-default" type="submit" onclick="displayScoccerField(); return false;">Show 3D</button>
                     </div>
                     <br/>
+                    -->
                     <div style="position: relative; width: 1000px; height: 910px;">
+                        <!-- 
                         <object data="svg/Montpellier_OSM_map_with_divisions.svg" type="image/svg+xml" style="position: absolute; top: 0px; left:0px; width: 100%; z-index: 1;" >
-                            <!-- 
-                            <img src="yourfallback.jpg" />
-                            -->
                         </object>
+                        -->
+
+                        <img src="img/Montpellier_OSM_map_with_divisions.png" style="position: absolute; top: 0px; left:0px; width: 100%; z-index: -5;" />
                         <div id="div_content_2d" style="position: absolute; top: 0px; left:0px; border: thin solid; color black; width: 100%; height: 100%; background-size: 600px auto; background-repeat: no-repeat; z-index: 2;">
                         </div>
                     </div>

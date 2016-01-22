@@ -40,6 +40,7 @@
     -->
     <!-- Jimmy 3d Plugins  -->
     <script src="js/d3/OrbitControls.js"></script>
+    <script src="js/d3/FlyControls.js"></script>
     <script src="js/d3/Detector.js"></script>
     <script src="js/d3/stats.min.js"></script>
 
@@ -69,8 +70,15 @@
                 <img alt="{{project_name}} Project PDW" src="{{project_image}}" class="hidden-xs" style="width: 60px; height: 60px; " />
             </a>
             <a class="navbar-brand" style="width: 250px; float: left;" href="index.html"> 
-                <span>{{project_name}} PDW Project</span>
+                <span>{{project_name}} <br/> Projet PDW</span>
             </a>
+            <!-- 
+            <div>
+                <select name="version_to_use" >
+                    <option>asas</option>
+                </select>
+            </div>
+            -->
             <!-- theme selector ends -->
         </div>
     </div>
@@ -102,10 +110,12 @@
                                 <a class="ajax-link" href="#/3D">
                                  <i class="glyphicon glyphicon-eye-open"></i><span> 3D</span></a>
                             </li>
+                            <!-- 
                             <li>
                                 <a class="ajax-link" href="#/map">
                                  <i class="glyphicon glyphicon-eye-open"></i><span> map</span></a>
                             </li>
+                            -->
                         </ul>
                     </div>
                 </div>
@@ -215,6 +225,9 @@ div.tooltip_3d {
 }
 </style>
 <div id="tooltip" class="tooltip" style="opacity: 0;"></div>
-<div id="tooltip_3d" class="tooltip_3d" style="opacity: 0;"></div>
+<div id="tooltip_3d" class="tooltip_3d" style="opacity: 0;">
+    <div style="float: left; position: absolute; color: red; font-size: 2em; z-index: 2; cursor: pointer; " onclick="closeSoccerField(); ">Close</div>
+    <div id="container_iframe_3d" style="width: 100%; height:95%;  z-index: 1;"></div>
+</div>
 </body>
 </html>

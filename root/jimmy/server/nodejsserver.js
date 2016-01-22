@@ -31,7 +31,7 @@ var jsonPath = "json/";
 var app = express();
 
 var dbNameSportStatistics = "pdwsports";
-var dbNameSportSites = "PresentationDW_Split";
+var dbNameSportSites = "dbSportSite";
 
 var MongoClient = require('mongodb').MongoClient;
 var urlDbSportStatistics = 'mongodb://localhost:27017/' + dbNameSportStatistics;
@@ -341,17 +341,7 @@ app.get('/getSportStatisticsData2D', function(req, res){
 
 	db.sportsdata.group( {"key":{"nameQuarter":0,"nameSubQuarter":1,"nameCity":0,"xAxis":0,"yAxis":0,"color":0},"initial":{"nbHour":0},"reduce":"function(obj, prev) { prev.nbHour = prev.nbHour + obj.nbHour- 0;}","cond":{"activity":"taekwondo"}} )
 	 */
-	var groupParams = { 
-		'key': {
-			'nameQuarter': 0,
-			'nameSubQuarter': 1,
-			'nameCity': 0,
-			'xAxis': 0,
-			'yAxis': 0,
-			'color': 0
-		},
-		'column': 'nbHour'
-	};
+	var groupParams = { };
 
 	var objectQuery = createQuerySportStatistiques(req.query);
 
@@ -463,25 +453,27 @@ app.get('/getFiltersDataSportStatistics', function(req, res){
  * @author Jimmy - Loïc
  */
 app.get('/getFiltersDataSportSites', function(req, res){
-	console.log("/getFiltersDataSportSites");
+	console.log("serveur Node : /getFiltersDataSportSites");
+	console.log("query");
+	console.log(req.query);
+
+	var objectQuery = createQuerySportStatistiques(req.query);
+	var collectionName = 'sportSiteData';
 	
 	res.setHeader('Access-Control-Allow-Origin', '*');
-	res.setHeader('Content-type', 'application/json');
-
+	res.setHeader('Content-Type', 'application/json');
+	//var JsonData = getDataFromMongo(urlDbSportStatistics, 'sportsdata');
 	MongoClient.connect(urlDbSportSites, function (err, db) {
 		if (err) {
 			console.log('Unable to connect to the mongoDB server. Error:', err);
 		}
 		else 
 		{
-			//var collectionName = 'Departement';
-			//var collectionName = 'City';
-			var collectionName = 'SubQuarter';
-			var collection = db.collection(collectionName);
-			var objectQuery = { "nameRg":"Languedoc_Roussillon" };
-			//var collection2 = db.collection('City');
+			var collection = db.collection(collectionName)
+			//console.log(db);
 			console.log('Connection established to', urlDbSportSites);
-
+			// Get the documents collection
+			//.sort('activity');//Sort by
 			collection.find( objectQuery ).toArray(function (err, result) {
 		      if (err) {
 		        console.log(err);
@@ -489,11 +481,155 @@ app.get('/getFiltersDataSportSites', function(req, res){
 		      } else if (result.length) {
 		        console.log('Found query :');
 		        console.log('db.' + collectionName + '.find( ' + JSON.stringify(objectQuery) + ' )');
-		        res.send(result);
+		        //Jimmy: Add Percentages
+		        resultSporData = addPercentages(result);
+		        res.send(resultSporData);
 		        //console.log(JsonData);
 		      } else {
 		        console.log('No document(s) found query: ' + JSON.stringify(objectQuery) );
 		        console.log('db.' + collectionName + '.find( ' + JSON.stringify(objectQuery) + ' )');
+		        //db.sportsdata.find( {"practice.practice_sportsmans.sportman_genre":"female"} )
+		        res.send([]);
+		      }
+		      //Close connection
+		      db.close();
+		    });
+		}
+	});
+});
+
+
+///////////////////////////
+
+app.get('/getSportSitesData1D', function(req, res){
+	console.log("serveur Node : /getFiltersDataSportSites");
+	console.log("query");
+	console.log(req.query);
+
+	var objectQuery = createQuerySportStatistiques(req.query);
+	var collectionName = 'sportSiteData';
+	
+	res.setHeader('Access-Control-Allow-Origin', '*');
+	res.setHeader('Content-Type', 'application/json');
+	//var JsonData = getDataFromMongo(urlDbSportStatistics, 'sportsdata');
+	MongoClient.connect(urlDbSportSites, function (err, db) {
+		if (err) {
+			console.log('Unable to connect to the mongoDB server. Error:', err);
+		}
+		else 
+		{
+			var collection = db.collection(collectionName)
+			//console.log(db);
+			console.log('Connection established to', urlDbSportSites);
+			// Get the documents collection
+			//.sort('activity');//Sort by
+			collection.find( objectQuery ).toArray(function (err, result) {
+		      if (err) {
+		        console.log(err);
+		        res.send([]);
+		      } else if (result.length) {
+		        console.log('Found query :');
+		        console.log('db.' + collectionName + '.find( ' + JSON.stringify(objectQuery) + ' )');
+		        //Jimmy: Add Percentages
+		        resultSporData = addPercentages(result);
+		        res.send(resultSporData);
+		        //console.log(JsonData);
+		      } else {
+		        console.log('No document(s) found query: ' + JSON.stringify(objectQuery) );
+		        console.log('db.' + collectionName + '.find( ' + JSON.stringify(objectQuery) + ' )');
+		        //db.sportsdata.find( {"practice.practice_sportsmans.sportman_genre":"female"} )
+		        res.send([]);
+		      }
+		      //Close connection
+		      db.close();
+		    });
+		}
+	});
+});
+
+/**
+ * [description]
+ * @param  {[type]} req                         [description]
+ * @param  {[type]} res){	console.log("serveur Node          :     /getSportSitesData2D");	console.log("query");	console.log(req.query);	/*	db.sportsdata.group({	    "key": {	                                                                                                                                                                                                                       "nameSubQuarter": true	                            } [description]
+ * @param  {[type]} "initial":                  {	                                                                                                                                     "nbHour":   0	                                }                           [description]
+ * @param  {[type]} "reduce":                   function(obj, prev) {	                                                                                                                                    prev.nbHour [description]
+ * @param  {[type]} "cond":                     {	                                                                                                                                     "activity": "run"	                            }	});	db.sportsdata.group( {"key":{"nameQuarter":0,"nameSubQuarter":1,"nameCity":0,"xAxis":0,"yAxis":0,"color":0},"initial":{"nbHour":0},"reduce":"function(obj, prev)             {    prev.nbHour [description]
+ * @return {[type]}                             [description]
+ * @author Jimmy - Redoine
+ */
+app.get('/getSportSitesData2D', function(req, res){
+	console.log("serveur Node : /getSportSitesData2D");
+	console.log("query");
+	console.log(req.query);
+	/*
+	db.sportsdata.group({
+	    "key": {
+	        "nameSubQuarter": true
+	    },
+	    "initial": {
+	        "nbHour": 0
+	    },
+	    "reduce": function(obj, prev) {
+	        prev.nbHour = prev.nbHour + obj.nbHour - 0;
+	    },
+	    "cond": {
+	        "activity": "run"
+	    }
+	});
+
+	db.sportsdata.group( {"key":{"nameQuarter":0,"nameSubQuarter":1,"nameCity":0,"xAxis":0,"yAxis":0,"color":0},"initial":{"nbHour":0},"reduce":"function(obj, prev) { prev.nbHour = prev.nbHour + obj.nbHour- 0;}","cond":{"activity":"taekwondo"}} )
+	 */
+	var groupParams = { 
+		'key': {
+			'nameQuarter': 0,
+			'nameSubQuarter': 1,
+			'nameCity': 0,
+			'xAxis': 0,
+			'yAxis': 0,
+			'color': 0
+		},
+		'column': 'nbHour'
+	};
+
+	var objectQuery = createQuerySportStatistiques(req.query);
+
+	var groupObject = {};
+	groupObject["key"] = groupParams["key"];
+	groupObject["initial"] = {};
+	groupObject["initial"][groupParams["column"]] = 0;
+	groupObject["reduce"] = "function(obj, prev) { prev." + groupParams["column"] + " = prev." + groupParams["column"] + " + obj." + groupParams["column"] + "- 0;}"
+    groupObject["cond"] = objectQuery;
+	console.log("groupObject: ");
+	console.log(groupObject);
+	
+	var collectionName = 'sportsdata';
+	
+	res.setHeader('Access-Control-Allow-Origin', '*');
+	res.setHeader('Content-Type', 'application/json');
+	//var JsonData = getDataFromMongo(urlDbSportSites, 'sportsdata');
+	MongoClient.connect(urlDbSportSites, function (err, db) {
+		if (err) {
+			console.log('Unable to connect to the mongoDB server. Error:', err);
+		}
+		else 
+		{
+			var collection = db.collection(collectionName)
+			console.log('Connection established to', urlDbSportSites);
+			collection.group( groupObject["key"], groupObject["cond"], groupObject["initial"], groupObject["reduce"], function (err, result) {
+		      if (err) {
+		        console.log(err);
+		        res.send([]);
+		      } else if (result.length) {
+		        console.log('Found query :');
+		        console.log('db.' + collectionName + '.group( ' + JSON.stringify(groupObject) + ' )');
+		        //Jimmy: Add Percentages
+		        resultSporData = addPercentages(result);
+		        res.send(resultSporData);
+		        //console.log(JsonData);
+		      } else {
+		        console.log('No document(s) found query: ' + JSON.stringify(groupObject) );
+		        console.log('db.' + collectionName + '.group( ' + JSON.stringify(groupObject) + ' )');
+		        //db.sportsdata.find( {"practice.practice_sportsmans.sportman_genre":"female"} )
 		        res.send([]);
 		      }
 		      //Close connection

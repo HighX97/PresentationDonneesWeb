@@ -335,6 +335,98 @@ function updateStatistics2D($rootScope)
 }
 
 
+function updateStatisticsSportSites2D($rootScope)
+{
+    jQuery("#div_content_2d").html("");//Jimmy: Pending change to manage with the object
+    updateLegend($rootScope);
+
+    
+    var div = d3.select("#tooltip");
+    /*
+     */
+
+    var width = jQuery("#div_content_2d").width();
+    var height = jQuery("#div_content_2d").height();
+
+    var svg = getSvg2D();
+    
+    var circles = svg.selectAll("circle")
+        .data($rootScope.data2D)
+        .enter()
+        .append("circle");
+    
+    var circleAttributes = circles
+        .attr("cx", function (d) { return decode2DToPercentageCoordsTo2D(d.xAxis, width); })
+        .attr("cy", function (d) { return decode2DToPercentageCoordsTo2D(d.yAxis, height); })
+        .attr("r", function (d) { return (15 + d.percentage * 0.30); })//Jimmy: circle's proportion
+        .attr("cursor", 'pointer')//Jimmy: Cursor
+        .attr("data-toggle", 'tooltip')//tooltip
+        .attr("titre", function (d) { return 'nameQuarter: ', d.nameQuarter + ', nameSubQuarter: ', d.nameSubQuarter; })//tooltip
+        .on("click", function(d){
+            console.log(' Info ', d);
+            displayScoccerField();
+
+        })
+        .on("mouseover", function(d) {      
+            d3.select(this)
+                .transition()
+                .duration(200)
+                .attr('stroke-width',3)
+                .attr("r", (15 + d.percentage * 0.25) * 1.5 );
+            div.transition()        
+                .duration(200)      
+                .style("opacity", .9);      
+            div.html('' +  d.nameQuarter + ' - ' + d.nameSubQuarter + ' - <b>' + d.percentage + "%</b>")  
+                .style("left", (d3.event.pageX) + "px")     
+                .style("top", (d3.event.pageY - 28) + "px");    
+            })                  
+        .on("mouseout", function(d) {       
+            div.transition()        
+                .duration(500)      
+                .style("opacity", 0);   
+            d3.select(this)
+                .transition()
+                .duration(200)
+                .attr('stroke-width',0)
+                .attr('stroke-width',0)
+                .attr("r", (15 + d.percentage * 0.25) );
+        })
+        /*
+        
+        .on("mouseover", function(d){
+            console.log('nameQuarter: ', d.nameQuarter + ', nameSubQuarter: ', d.nameSubQuarter);
+            
+        })
+        .on("mouseenter", function(d){
+            
+        })
+        .on("mouseleave", function(d){
+            
+        })
+         */
+        .style("fill", function(d) { return d.color; });
+    
+    //Add the SVG Text Element to the svgContainer
+    var text = svg.selectAll("text")
+        .data($rootScope.data2D)
+        .enter()
+        .append("text");
+        
+    //Add SVG Text Element Attributes
+    var textLabels = text
+        .attr("x", function(d) { return decode2DToPercentageCoordsTo2D(d.xAxis, width); })
+        .attr("y", function(d) { return decode2DToPercentageCoordsTo2D(d.yAxis, height); })
+        .text( function (d) { return "" + d.percentage +"%"; })
+        .attr("text-anchor", "middle")
+        .attr("font-family", "sans-serif")
+        .attr("font-weight", "bold")
+        .attr("font-size", "10px")
+        .attr("fill", "white")
+
+    //jQuery('[data-toggle="tooltip"]').tooltip();
+}
+
+
 /**
  * [onWindowResize3D Method to controle the resize in 3D]
  * @return {[type]} [description]
@@ -354,6 +446,7 @@ function onWindowResize3D() {
 function animate() {
     requestAnimationFrame( animate );
     renderer.render( scene, camera );
+    controls
     //stats.update();
 }
 
@@ -404,7 +497,7 @@ function displayThirdDimension(scope, scene){
             var planeMat = new THREE.MeshLambertMaterial({color: data2D[i]['color'] }); // color — Line color in hexadecimal. Default is 0xffffff.
             materialColum = new THREE.MeshBasicMaterial({map: planeMat});
 
-            geometry = new THREE.CubeGeometry( (50 + (30 * data2D[i]['percentage']/100) ), (data2D[i]['percentage'] * 9 ), (50 + (30 * data2D[i]['percentage']/100) ) );
+            geometry = new THREE.CubeGeometry( (50 + (300 * data2D[i]['percentage']/100) ), (data2D[i]['percentage'] * 9 ), (50 + (300 * data2D[i]['percentage']/100) ) );
             mesh = new THREE.Mesh( geometry, planeMat );
             mesh.position.x = coords3d['x'];
             mesh.position.y = coords3d['y'];
@@ -418,10 +511,16 @@ function displayThirdDimension(scope, scene){
     });
 }
 
-function diaplayScoccerField(){
+function closeSoccerField(){
+    var div = d3.select("#tooltip_3d");
+    d3.select("#container_iframe_3d").html('') 
+    div.style("opacity", 0);
+}
+
+function displayScoccerField(){
     //alert("asas");
     var div = d3.select("#tooltip_3d");
-    div.html('<iframe src="3D/soccer_field/soccer_field.html" style="width: 100%; height:100%; "></iframe>') 
+    d3.select("#container_iframe_3d").html('<iframe src="3D/soccer_field/soccer_field.html" style="width: 100%; height:100%; "></iframe>') 
     div.transition()        
         .duration(200)      
         .style("opacity", .9);
